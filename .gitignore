@@ -207,3 +207,4 @@ docker-data/
 restClient/
 jest-stare/
 coverage/
+build
