@@ -202,3 +202,8 @@ coverage/
 ## volumes
 docker-data/
 
+
+## non essential
+restClient/
+jest-stare/
+coverage/
