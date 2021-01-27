@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
 
+@Service
 export default class AuthService {
     constructor() {}
 
@@ -63,7 +64,7 @@ export default class AuthService {
         return account;
     }
 
-    private async insertUser(params) {
+    private async insertUser(params: IUserInput) {
         const {
             first_name,
             last_name,
@@ -102,7 +103,7 @@ export default class AuthService {
         return crypto.randomBytes(40).toString("hex");
     }
 
-    private basicDetails(account) {
+    private basicDetails(account: IUser) {
         const {
             id,
             first_name,
