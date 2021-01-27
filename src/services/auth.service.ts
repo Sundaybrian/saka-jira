@@ -128,15 +128,27 @@ export default class AuthService {
         };
     }
 
-    public async verifyEmail({ token}) {
+    public async verifyEmail({ token }) {
         const account = await this.getAccount({ verificationToken: token });
-    
+
         if (!account) throw "Verification failed";
-        
+
         // account verified
         await account.$query().patch({
             verified: Date.now(),
             isVerified: true,
             verificationToken: null,
         });
+    }
+
+    public async create(params: IUserInput) {
+        // validate
+        if (await this.getAccount({ email: params.email })) {
+            throw 'Email "' + params.email + '" is already registered';
+        }
+
+        const account = await this.insertUser(params);
+
+        return this.basicDetails(account);
+    }
 }
