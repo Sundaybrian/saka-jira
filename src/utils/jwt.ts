@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
+const config = require("../config/index");
 
 function sign(payload) {
     return new Promise((resolve, reject) => {
         jwt.sign(
             payload,
-            process.env.JWT_SECRET,
+            config.JWT_SECRET,
             {
                 expiresIn: "3h",
             },
