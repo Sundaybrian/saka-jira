@@ -20,6 +20,9 @@ function addDefaultColumnsUser(table) {
     table.datetime("verified");
     table.boolean("isVerified").notNullable().defaultTo(false);
     table.string("verificationToken", 300);
+    table.string("resetToken", 300);
+    table.datetime("resetTokenExpires");
+    table.datetime("passwordReset");
     table.string("image_url", 2000);
 }
 
