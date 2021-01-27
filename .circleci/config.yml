@@ -7,7 +7,7 @@ executors:
         environment:
           POSTGRES_USER: sundaypriest
           POSTGRES_PASSWORD: belter
-          POSTGRES_DB: urady-test
+          POSTGRES_DB: urady_test
   postgres-executor:
     docker:
       - image: postgres:10

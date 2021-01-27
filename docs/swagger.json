@@ -1,0 +1,18 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Urady JOBs Management Api",
+        "description": "Apis for the Urady JOBs application",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000/api/v1",
+            "description": "Local development server"
+        },
+        {
+            "url": "https://urady.herokuapp.com/api/v1",
+            "description": "Development Server"
+        }
+    ]
+}

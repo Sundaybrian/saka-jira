@@ -1,3 +1,17 @@
+## knex migrations and seeds commands
+
+-   `npx knex migrate:make migration_name` create a migration file
+-   `npx knex migrate:latest` migrate the most recent migration file
+-   `npx knex migrate:latest --debug` show the sql while migrating
+-   `npx knex migrate:rollback` rollback migrations
+-   `npx knex seed:make initial` create seed file
+-   `npx knex seed:run` seed db with data
+-   `npx knex migrate:rollback --env <environment>` rollback db on a given env e.g prod, dev test
+
+## if psql refuses to expand a table or claim it is not ther
+
+-   use this command and replace city with the table name`SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_name = 'city';`
+
 # Objection js
 
 -   ORM. This is an example model with various table relations, you can use it a reference while creating models
