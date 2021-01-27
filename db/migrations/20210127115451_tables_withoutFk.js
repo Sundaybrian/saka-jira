@@ -16,6 +16,15 @@ exports.up = async function (knex) {
             addDefaultColumnsUser(table);
             addDefaultColumns(table);
         }),
+        knex.schema.createTable(tableNames.refresh_token, (table) => {
+            table.string("token");
+            table.dateTime("expires");
+            table.string("createdByIp");
+            table.dateTime("revoked");
+            table.string("revokedByIp");
+            table.string("replacedByToken");
+            addDefaultColumns(table);
+        }),
         knex.schema.createTable(tableNames.subscription_type, (table) => {
             table.increments().notNullable();
             table.string("subcription_type_name", 25).notNullable();
