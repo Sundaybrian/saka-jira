@@ -1,7 +1,6 @@
 const { Service, Inject } = require("typedi");
 import { IUser, IUserInput } from "../interfaces/IUser";
 const jwt = require("../utils/jwt");
-const config = require("../config/index");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
@@ -54,6 +53,71 @@ export default class AuthService {
         } catch (error) {
             throw error;
         }
+    }
+
+    public async verifyEmail({ token }) {
+        const account = await this.getAccount({ verificationToken: token });
+
+        if (!account) throw "Verification failed";
+
+        // account verified
+        await account.$query().patch({
+            verified: Date.now(),
+            isVerified: true,
+            verificationToken: null,
+        });
+    }
+
+    public async create(params: IUserInput) {
+        // validate
+        if (await this.getAccount({ email: params.email })) {
+            throw 'Email "' + params.email + '" is already registered';
+        }
+
+        const account = await this.insertUser(params);
+
+        return this.basicDetails(account);
+    }
+
+    public async update(id: number, params: Partial<IUserInput>) {
+        const account = await this.getAccount({ id });
+
+        // validate if email was changed
+        if (
+            params.email &&
+            account.email !== params.email &&
+            (await this.getAccount({ email: params.email }))
+        ) {
+            const error = new Error(`Email ${params.email} is already taken`);
+            throw error;
+        }
+
+        // hash password if it was entered
+        if (params.password) {
+            params.password = await this.hash(params.password);
+        }
+
+        const updatedUser = await User.query().patchAndFetchById(id, {
+            ...params,
+        });
+
+        return this.basicDetails(updatedUser);
+    }
+
+    // TODO MAKE SO IT CAN QUERY FOR DIFFERENT TYPES OF USERS
+    public async getAll() {
+        const accounts = await User.query();
+        return accounts.map((x: IUser) => this.basicDetails(x));
+    }
+
+    public async getById(id: number) {
+        const account = await this.getAccount({ id });
+        return this.basicDetails(account);
+    }
+
+    // TODO MAKE IT ACCEPT AN ARRAY OF ID
+    public async _delete(id: number) {
+        await User.query().deleteById(id);
     }
 
     private async getAccount(params) {
@@ -126,29 +190,5 @@ export default class AuthService {
             updated,
             isVerified,
         };
-    }
-
-    public async verifyEmail({ token }) {
-        const account = await this.getAccount({ verificationToken: token });
-
-        if (!account) throw "Verification failed";
-
-        // account verified
-        await account.$query().patch({
-            verified: Date.now(),
-            isVerified: true,
-            verificationToken: null,
-        });
-    }
-
-    public async create(params: IUserInput) {
-        // validate
-        if (await this.getAccount({ email: params.email })) {
-            throw 'Email "' + params.email + '" is already registered';
-        }
-
-        const account = await this.insertUser(params);
-
-        return this.basicDetails(account);
     }
 }
