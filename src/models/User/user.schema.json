@@ -38,6 +38,11 @@
             "type": "string",
             "title": "The phone_number of the user."
         },
+        "password": {
+            "$id": "#/properties/password",
+            "type": "string",
+            "title": "The password of the user."
+        },
         "role": {
             "$id": "#/properties/role",
             "type": "string",
