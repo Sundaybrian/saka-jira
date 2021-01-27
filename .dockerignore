@@ -1,0 +1,5 @@
+node_modules
+## non essential
+restClient/
+jest-stare/
+coverage/
