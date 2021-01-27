@@ -10,7 +10,7 @@ module.exports = {
     // with fk reference
     freelancer: "freelancer",
     hiring_manager: "hiring_manager",
-    freelancer_subcriptions: "freelancer_subcriptions",
+    freelancer_subscriptions: "freelancer_subscriptions",
     has_skill: "has_skill",
     freelancer_payments: "freelancer_payments",
     // with multiple fk references
