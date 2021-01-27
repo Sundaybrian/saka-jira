@@ -3,6 +3,11 @@ function addDefaultColumns(table) {
     table.datetime("deleted_at");
 }
 
+function addDefaultGeoLocations(table) {
+    table.double("latitude");
+    table.double("longitude");
+}
+
 function addDefaultColumnsUser(table) {
     table.increments().notNullable();
     table.string("firstName", 50).notNullable();
@@ -44,6 +49,7 @@ function email(table, columnName) {
 module.exports = {
     addDefaultColumns,
     addDefaultColumnsUser,
+    addDefaultGeoLocations,
     references,
     url,
     email,
