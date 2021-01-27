@@ -5,7 +5,9 @@ export interface IUser {
     email: string;
     role: string;
     phone_number: string;
-    password: string;
+    created: Date;
+    updated: Date;
+    isVerified: boolean;
 }
 
 export interface IUserInput {
