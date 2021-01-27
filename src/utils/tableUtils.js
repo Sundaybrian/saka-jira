@@ -10,19 +10,19 @@ function addDefaultGeoLocations(table) {
 
 function addDefaultColumnsUser(table) {
     table.increments().notNullable();
-    table.string("firstName", 50).notNullable();
-    table.string("lastName", 50).notNullable();
+    table.string("first_name", 50).notNullable();
+    table.string("last_name", 50).notNullable();
     table.string("email", 254).notNullable().unique();
-    table.string("phoneNumber", 15).notNullable().unique();
+    table.string("phone_number", 15).notNullable().unique();
     table.string("password", 180).notNullable();
     table.string("role", 10).notNullable().defaultTo("user");
     table.boolean("active").notNullable().defaultTo(false);
     table.datetime("verified");
     table.boolean("isVerified").notNullable().defaultTo(false);
-    table.string("verificationToken", 300);
+    table.string("verification_token", 300);
     table.string("resetToken", 300);
-    table.datetime("resetTokenExpires");
-    table.datetime("passwordReset");
+    table.datetime("reset_token_expires");
+    table.datetime("password_reset");
     table.string("image_url", 2000);
 }
 
