@@ -1,13 +1,14 @@
 const { Service, Inject } = require("typedi");
 import { IUser, IUserInput } from "../interfaces/IUser";
+import MailerService from "./email.service";
+import crypto from "crypto";
 const jwt = require("../utils/jwt");
-const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
 
 @Service
 export default class AuthService {
-    constructor() {}
+    constructor(private mailer: MailerService) {}
 
     public async login(
         email: string,
