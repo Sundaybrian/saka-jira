@@ -1,6 +1,7 @@
 module.exports = {
     //jobs module without fk references
     user: "user",
+    refresh_token: "refresh_token",
     subscription_type: "subscription_type",
     job_status: "job_status",
     industry: "industry",

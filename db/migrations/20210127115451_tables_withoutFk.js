@@ -74,12 +74,13 @@ exports.down = async function (knex) {
     await Promise.all(
         [
             tableNames.user,
+            tableNames.refresh_token,
             tableNames.subscription_type,
             tableNames.job_status,
             tableNames.industry,
             tableNames.skill,
             tableNames.proposal_status,
             tableNames.payment_type,
-        ].map((tableName) => knex.schema.dropSchemaIfExists(tableName))
+        ].map((tableName) => knex.schema.dropTableIfExists(tableName))
     );
 };
