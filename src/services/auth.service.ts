@@ -1,6 +1,6 @@
 const { Service, Inject } = require("typedi");
 import { IUser, IUserInput } from "../interfaces/IUser";
-import jwt from "../utils/jwt";
+const jwt = require("../utils/jwt");
 const config = require("../config/index");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
@@ -8,6 +8,28 @@ const User = require("../models/User/User.Model");
 
 export default class AuthService {
     constructor() {}
+
+    public async login(
+        email: string,
+        password: string
+    ): Promise<{ user: IUser; token: string }> {
+        const account = await this.getAccount({ email });
+        if (
+            !account ||
+            // !account.isVerified ||
+            !(await bcrypt.compare(password, account.password))
+        ) {
+            const error = new Error("Email or password is incorrect");
+            throw error;
+        }
+
+        const token = await jwt.sign(account.toJSON());
+
+        return {
+            user: this.basicDetails(account),
+            token,
+        };
+    }
 
     public async register(
         userInput: IUserInput,
