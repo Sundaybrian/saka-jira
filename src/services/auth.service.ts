@@ -34,7 +34,7 @@ export default class AuthService {
 
     public async register(
         userInput: IUserInput,
-        origin: string
+        origin: any
     ): Promise<{ user: IUser; token: string }> {
         try {
             const account = await this.getAccount({ email: userInput.email });
