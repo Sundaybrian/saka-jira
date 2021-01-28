@@ -1,19 +1,13 @@
-const { Service, Inject } = require("typedi");
-import { IUser, IUserInput } from "../interfaces/IUser";
-import MailerService from "./email.service";
-import crypto from "crypto";
+const MailerService = require("./email.service");
+const crypto = require("crypto");
 const jwt = require("../utils/jwt");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
 
-@Service
-export default class AuthService {
-    constructor(private mailer: MailerService) {}
+class AuthService {
+    constructor() {}
 
-    public async login(
-        email: string,
-        password: string
-    ): Promise<{ user: IUser; token: string }> {
+    static async login(email, password) {
         const account = await this.getAccount({ email });
         if (
             !account ||
@@ -32,15 +26,12 @@ export default class AuthService {
         };
     }
 
-    public async register(
-        userInput: IUserInput,
-        origin: any
-    ): Promise<{ user: IUser; token: string }> {
+    static async register(userInput, origin) {
         try {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
                 throw new Error(
-                    "Email" + userInput.email + "is already registered"
+                    "Email" + " " + userInput.email + "is already registered"
                 );
             }
 
@@ -56,8 +47,8 @@ export default class AuthService {
         }
     }
 
-    public async verifyEmail({ token }) {
-        const account = await this.getAccount({ verificationToken: token });
+    static async verifyEmail({ token }) {
+        const account = await this.getAccount({ verification_token: token });
 
         if (!account) throw "Verification failed";
 
@@ -69,7 +60,7 @@ export default class AuthService {
         });
     }
 
-    public async create(params: IUserInput) {
+    static async create(params) {
         // validate
         if (await this.getAccount({ email: params.email })) {
             throw 'Email "' + params.email + '" is already registered';
@@ -80,7 +71,7 @@ export default class AuthService {
         return this.basicDetails(account);
     }
 
-    public async update(id: number, params: Partial<IUserInput>) {
+    static async update(id, params) {
         const account = await this.getAccount({ id });
 
         // validate if email was changed
@@ -106,22 +97,22 @@ export default class AuthService {
     }
 
     // TODO MAKE SO IT CAN QUERY FOR DIFFERENT TYPES OF USERS
-    public async getAll() {
+    static async getAll() {
         const accounts = await User.query();
-        return accounts.map((x: IUser) => this.basicDetails(x));
+        return accounts.map((x) => this.basicDetails(x));
     }
 
-    public async getById(id: number) {
+    static async getById(id) {
         const account = await this.getAccount({ id });
         return this.basicDetails(account);
     }
 
     // TODO MAKE IT ACCEPT AN ARRAY OF ID
-    public async _delete(id: number) {
+    static async _delete(id) {
         await User.query().deleteById(id);
     }
 
-    private async getAccount(params) {
+    static async getAccount(params) {
         const account = await User.query()
             .where({ ...params })
             .first();
@@ -129,7 +120,7 @@ export default class AuthService {
         return account;
     }
 
-    private async insertUser(params: IUserInput) {
+    static async insertUser(params) {
         const {
             first_name,
             last_name,
@@ -141,7 +132,7 @@ export default class AuthService {
 
         // hash password and verification token
         const hashedPassword = await this.hash(password);
-        const verificationToken = this.randomTokenString();
+        const verification_token = this.randomTokenString();
 
         // create account
         const account = await User.query().insert({
@@ -154,21 +145,21 @@ export default class AuthService {
             active: true,
             isVerified: false,
             verified: new Date().toISOString(),
-            verificationToken,
+            verification_token,
         });
 
         return this.basicDetails(account);
     }
 
-    private async hash(password: string) {
+    static async hash(password) {
         return await bcrypt.hash(password, 10);
     }
 
-    private randomTokenString() {
+    static randomTokenString() {
         return crypto.randomBytes(40).toString("hex");
     }
 
-    private basicDetails(account: IUser) {
+    static basicDetails(account) {
         const {
             id,
             first_name,
@@ -193,3 +184,5 @@ export default class AuthService {
         };
     }
 }
+
+module.exports = AuthService;

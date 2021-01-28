@@ -1,6 +1,6 @@
 const { Model } = require("objection");
 
-const tableNames = require("../../../src/constants/tableNames");
+const tableNames = require("../../constants/tableNames");
 const db = require("../../db");
 const schema = require("./user.schema.json");
 

@@ -1,21 +1,18 @@
-import { Service, Inject } from "typedi";
-import { IUser } from "../interfaces/IUser";
-import sendEmail from "../utils/email";
+const sendEmail = require("../utils/email");
 
-@Service()
-export default class MailService {
+class MailService {
     constructor() {}
 
-    public async sendVerificationEmail(account, origin) {
+    static async sendVerificationEmail(account, origin) {
         let message;
         if (origin) {
-            const verifyUrl = `${origin}/auth/verify-email?token=${account.verificationToken}`;
+            const verifyUrl = `${origin}/auth/verify-email?token=${account.verification_token}`;
             message = `<p> Please click the below link to verify your email address:</p>
             <p><a href="${verifyUrl}">${verifyUrl}</a></p>
             `;
         } else {
             message = `<p>Please use the below token to verify your email address with the <code>/auth/verify-email</code> api route:</p>
-                       <p><code>${account.verificationToken}</code></p>`;
+                       <p><code>${account.verification_token}</code></p>`;
         }
 
         const data = {
@@ -29,7 +26,7 @@ export default class MailService {
         await sendEmail(data);
     }
 
-    public async sendAlreadyRegisteredEmail(email: string, origin) {
+    static async sendAlreadyRegisteredEmail(email, origin) {
         let message;
         if (origin) {
             message = `<p>If you don't know your password please visit the <a href="${origin}/auth/forgot-password">forgot password</a> page.</p>`;
@@ -47,3 +44,5 @@ export default class MailService {
         await sendEmail(data);
     }
 }
+
+module.exports = MailService;

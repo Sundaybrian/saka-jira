@@ -1,8 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import Joi from "joi";
-import validateRequest from "../../_middlewares/validateRequest";
+const Joi = require("joi");
+const validateRequest = require("../../_middlewares/validateRequest");
 
-export function signupSchema(req: Request, res: Response, next: NextFunction) {
+exports.signupSchema = (req, res, next) => {
     const schema = Joi.object({
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
@@ -13,17 +12,17 @@ export function signupSchema(req: Request, res: Response, next: NextFunction) {
         // confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     });
     validateRequest(req, next, schema);
-}
+};
 
-export function signinSchema(req: Request, res: Response, next: NextFunction) {
+exports.signinSchema = (req, res, next) => {
     const schema = Joi.object({
         email: Joi.string().email().required(),
         password: Joi.string().min(8).required(),
     });
     validateRequest(req, next, schema);
-}
+};
 
-export function updateSchema(req: Request, res: Response, next: NextFunction) {
+exports.updateSchema = (req, res, next) => {
     const schemaRules = {
         first_name: Joi.string().empty(""),
         last_name: Joi.string().empty(""),
@@ -38,15 +37,11 @@ export function updateSchema(req: Request, res: Response, next: NextFunction) {
     const schema = Joi.object(schemaRules).with("password", "confirmPassword");
 
     validateRequest(req, next, schema);
-}
+};
 
-export function verifyEmailSchema(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
+exports.verifyEmailSchema = (req, res, next) => {
     const schema = Joi.object({
         token: Joi.string().required(),
     });
     validateRequest(req, next, schema);
-}
+};

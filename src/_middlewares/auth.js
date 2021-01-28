@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const User = require("../api/user/user.model");
+const User = require("../models/User/User.Model");
 
 module.exports = {
-    Auth,
+    Auth: auth,
 };
 
 function auth(roles = []) {

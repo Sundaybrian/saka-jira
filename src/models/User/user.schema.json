@@ -4,14 +4,14 @@
     "title": "User",
     "description": "The User",
     "required": [
-        "firstName",
+        "first_name",
         "last_name",
         "phone_number",
         "email",
         "password",
         "role"
     ],
-    "additionalProperties": false,
+    "additionalProperties": true,
     "properties": {
         "id": {
             "$id": "#/properties/id",
