@@ -64,14 +64,18 @@ class AuthService {
     }
 
     static async create(params, origin) {
-        // validate
-        if (await this.getAccount({ email: params.email })) {
-            throw 'Email "' + params.email + '" is already registered';
+        try {
+            if (await this.getAccount({ email: params.email })) {
+                throw 'Email "' + params.email + '" is already registered';
+            }
+
+            const account = await this.insertUser(params, origin);
+
+            return this.basicDetails(account);
+        } catch (error) {
+            throw error;
         }
-
-        const account = await this.insertUser(params, origin);
-
-        return this.basicDetails(account);
+        // validate
     }
 
     static async update(id, params) {
@@ -152,7 +156,7 @@ class AuthService {
         });
 
         // send email
-        await MailerService.sendVerificationEmail(account, origin);
+        // await MailerService.sendVerificationEmail(account, origin);
 
         return this.basicDetails(account);
     }

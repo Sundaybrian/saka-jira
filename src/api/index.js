@@ -9,5 +9,9 @@ router.get("/", (req, res) => {
 });
 
 router.use("/accounts", require("./auth/auth.routes"));
+router.use(
+    "/subscriptionType",
+    require("./subcriptionType/subscriptionType.routes")
+);
 
 module.exports = router;

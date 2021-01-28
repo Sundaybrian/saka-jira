@@ -2,59 +2,6 @@ const request = require("supertest");
 const app = require("../src/app");
 const Role = require("../src/constants/roles");
 
-describe("POST /api/v1/accounts/register-staff", () => {
-    it("should fail to create a user with missing fields", async () => {
-        await request(app)
-            .post("/api/v1/accounts/register-staff")
-            .send({
-                first_name: "test",
-                last_name: "user",
-                phone_number: "0778986544",
-                email: "first@user.com",
-                role: Role.staff,
-            })
-            .expect("Content-Type", /json/)
-            .expect(400);
-    });
-
-    it("should fail to signup user with existing email", async () => {
-        const res = await request(app)
-            .post("/api/v1/accounts/register-staff")
-            .send({
-                first_name: "test",
-                last_name: "user",
-                phone_number: "0778986544",
-                email: "sunday@owner.com",
-                password: "localtestuser",
-                confirmPassword: "localtestuser",
-                role: Role.staff,
-            })
-            .expect("Content-Type", /json/)
-            .expect(500);
-    });
-
-    it("should signup a user ", async () => {
-        const res = await request(app)
-            .post("/api/v1/accounts/register-staff")
-            .send({
-                first_name: "goof",
-                last_name: "doctor",
-                phone_number: "0778976544",
-                password: "localtestuser",
-                confirmPassword: "localtestuser",
-                email: "goof@staff.com",
-                role: Role.staff,
-            })
-            .expect("Content-Type", /json/)
-            .expect(200);
-
-        expect(res.body.message).toEqual(
-            "Registration successfull, please check your email for verification instructions"
-        );
-        expect(res.body.user.email).toEqual("goof@staff.com");
-    });
-});
-
 describe("POST /api/v1/accounts/login", () => {
     it("Should login user", async () => {
         const res = await request(app)
@@ -192,6 +139,37 @@ describe("POST /api/v1/accounts/create-staff ", () => {
             });
     });
 
+    it("should fail to create a user with missing fields", async () => {
+        await request(app)
+            .post("/api/v1/accounts/create-staff")
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                first_name: "test",
+                last_name: "user",
+                phone_number: "0778986544",
+                role: Role.staff,
+            })
+            .expect("Content-Type", /json/)
+            .expect(400);
+    });
+
+    it("should fail to signup user with existing email", async () => {
+        const res = await request(app)
+            .post("/api/v1/accounts/create-staff")
+            .set("Authorization", `Bearer ${token}`)
+            .send({
+                first_name: "test",
+                last_name: "user",
+                phone_number: "0778986544",
+                email: "sunday@owner.com",
+                password: "localtestuser",
+            })
+            .expect("Content-Type", /json/)
+            .expect(400);
+
+        expect(res.body.message).toContain("Email");
+    });
+
     it("staff should create a new user", async () => {
         const res = await request(app)
             .post("/api/v1/accounts/create-staff")
@@ -202,8 +180,6 @@ describe("POST /api/v1/accounts/create-staff ", () => {
                 phone_number: "0718986544",
                 email: "staffwasunday@staff.com",
                 password: "localtestuser",
-                confirmPassword: "localtestuser",
-                role: Role.staff,
             })
             .expect("Content-Type", /json/)
             .expect(200);

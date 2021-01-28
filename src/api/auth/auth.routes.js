@@ -12,7 +12,6 @@ const { Auth } = require("../../_middlewares/auth");
 module.exports = router;
 
 router.post("/login", signinSchema, login);
-router.post("/register-staff", signupSchema, registerStaff);
 router.post("/register", signupSchema, register);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
 router.get("/", Auth([Role.admin]), getAll);
