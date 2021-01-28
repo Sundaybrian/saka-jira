@@ -8,6 +8,10 @@ class SubscriptionTypeService {
         return subscriptionType;
     }
 
+    static async getAllSubscriptionType() {
+        subscriptionTypes = SubscriptionType.query();
+        return subscriptionTypes;
+    }
     static async updateSubscriptionType(id, params) {
         const updatedSubscriptionType = SubscriptionType.query().patchAndFetchById(
             id,
@@ -17,11 +21,6 @@ class SubscriptionTypeService {
         );
 
         return updatedSubscriptionType;
-    }
-
-    static async getAllSubscriptionType() {
-        subscriptionTypes = SubscriptionType.query();
-        return subscriptionTypes;
     }
 
     static async getSubscriptionTypeById(id) {
