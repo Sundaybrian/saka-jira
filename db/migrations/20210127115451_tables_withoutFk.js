@@ -29,7 +29,7 @@ exports.up = async function (knex) {
             table.increments().notNullable();
             table.string("subcription_type_name", 25).notNullable();
             table.integer("amount").notNullable();
-            table.enum("subcription_duration", [
+            table.enum("subscription_duration", [
                 "Day",
                 "Week",
                 "Month",
