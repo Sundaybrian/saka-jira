@@ -6,7 +6,7 @@ module.exports = {
     job_status: "job_status",
     industry: "industry",
     skill: "skill",
-    proposal_status: "propasal_status",
+    proposal_status: "proposal_status",
     payment_type: "payment_type",
     // with fk reference
     freelancer: "freelancer",
@@ -17,6 +17,6 @@ module.exports = {
     // with multiple fk references
     job: "job",
     proposal: "proposal",
-    proposal_history: "history",
+    proposal_history: " proposal_history",
     contract: "contract",
 };
