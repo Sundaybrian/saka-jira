@@ -16,4 +16,4 @@ class SubscriptionType extends Model {
 
 Model.knex(db);
 
-module.exports = User;
+module.exports = SubscriptionType;
