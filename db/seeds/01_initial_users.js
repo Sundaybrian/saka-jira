@@ -44,6 +44,16 @@ exports.seed = async function (knex) {
         phone_number: "0712382367",
     };
 
+    const staff = {
+        email: "diff@staff.com",
+        first_name: "diff",
+        last_name: "staff",
+        password,
+        role: Role.staff,
+        active: true,
+        phone_number: "0711382367",
+    };
+
     const adminUser = {
         email: "admin@admin.com",
         first_name: "admin",
@@ -60,4 +70,5 @@ exports.seed = async function (knex) {
     // });
     await knex(tableNames.user).insert(diffOwner);
     await knex(tableNames.user).insert(adminUser);
+    await knex(tableNames.user).insert(staff);
 };

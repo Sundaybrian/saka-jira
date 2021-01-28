@@ -1,9 +1,6 @@
 const request = require("supertest");
-const app = require("../../app");
-const User = require("../user/user.model");
-const Role = require("../../utils/role");
-const jwt = require("../../utils/jwt");
-const bcrypt = require("bcrypt");
+const app = require("../src/app");
+const Role = require("../src/constants/roles");
 
 describe("POST /api/v1/accounts/register-staff", () => {
     it("should fail to create a user with missing fields", async () => {
@@ -17,7 +14,7 @@ describe("POST /api/v1/accounts/register-staff", () => {
                 role: Role.staff,
             })
             .expect("Content-Type", /json/)
-            .expect(500);
+            .expect(400);
     });
 
     it("should fail to signup user with existing email", async () => {
@@ -27,7 +24,7 @@ describe("POST /api/v1/accounts/register-staff", () => {
                 first_name: "test",
                 last_name: "user",
                 phone_number: "0778986544",
-                email: "sunday@staff.com",
+                email: "sunday@owner.com",
                 password: "localtestuser",
                 confirmPassword: "localtestuser",
                 role: Role.staff,
@@ -63,7 +60,7 @@ describe("POST /api/v1/accounts/login", () => {
         const res = await request(app)
             .post("/api/v1/accounts/login")
             .send({
-                email: "sunday@staff.com",
+                email: "sunday@owner.com",
                 password: "12345678yh",
             })
             .expect("Content-Type", /json/)
@@ -76,7 +73,7 @@ describe("POST /api/v1/accounts/login", () => {
         await request(app)
             .post("/api/v1/accounts/login")
             .send({
-                email: "sunday@omwami.com",
+                email: "sunday@owner.com",
                 password: "sunday omwami",
             })
             .expect("Content-Type", /json/)
@@ -147,44 +144,45 @@ describe("PUT/GET /api/v1/accounts/:id fetch account by id", () => {
             .expect(200);
 
         expect(res.body.id).toEqual(1);
+        expect(res.body.first_name).toEqual("sunday");
     });
 
     it("Should not update the account of the admin", async () => {
         const res = await request(app)
-            .put("/api/v1/accounts/2")
+            .patch("/api/v1/accounts/3")
             .set("Authorization", `Bearer ${token}`)
             .send({
-                email: "sunday@staff.com",
+                email: "sunday@owner.com",
             })
             .expect("Content-Type", /json/)
             .expect(500);
 
         expect(res.body.message).toEqual(
-            "Email sunday@staff.com is already taken"
+            "Email sunday@owner.com is already taken"
         );
     });
 
-    it("Should update the account of the staff", async () => {
+    it("admin Should update the account of the staff", async () => {
         const res = await request(app)
-            .put("/api/v1/accounts/1")
+            .patch("/api/v1/accounts/2")
             .set("Authorization", `Bearer ${token}`)
             .send({
-                first_name: "sunday 1",
+                first_name: "new user name",
             })
             .expect("Content-Type", /json/)
             .expect(200);
 
-        expect(res.body.first_name).toEqual("sunday 1");
+        expect(res.body.first_name).toEqual("new user name");
     });
 });
 
-describe("POST /api/v1/accounts/ create staff ", () => {
+describe("POST /api/v1/accounts/create-staff ", () => {
     let token;
     beforeEach(function (done) {
         request(app)
             .post("/api/v1/accounts/login")
             .send({
-                email: "sunday@staff.com",
+                email: "admin@admin.com",
                 password: "12345678yh",
             })
             .end(function (err, res) {

@@ -18,7 +18,7 @@ router.post("/verify-email", verifyEmailSchema, verifyEmail);
 router.get("/", Auth([Role.admin]), getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
-router.put("/:id", Auth(), updateSchema, update);
+router.patch("/:id", Auth(), updateSchema, update);
 router.delete("/:id", Auth(), _delete);
 
 function login(req, res, next) {
@@ -83,6 +83,7 @@ function getById(req, res, next) {
 }
 
 function create(req, res, next) {
+    req.body.role = Role.staff;
     AuthService.create(req.body)
         .then((account) => res.json(account))
         .catch(next);
