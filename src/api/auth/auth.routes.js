@@ -32,7 +32,8 @@ function login(req, res, next) {
 
 function register(req, res, next) {
     req.body.role = Role.user;
-    AuthService.register(req.body, req.get("origin"))
+
+    AuthService.register(req.body, req.hostname)
         .then(({ user, token }) => {
             return res.status(201).json({
                 user,
@@ -46,7 +47,7 @@ function register(req, res, next) {
 
 function registerStaff(req, res, next) {
     req.body.role = req.body.role || Role.admin;
-    AuthService.register(req.body, req.get("origin"))
+    AuthService.register(req.body, req.hostname)
         .then(({ user, token }) => {
             return res.json({
                 user,
@@ -84,7 +85,7 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     req.body.role = Role.staff;
-    AuthService.create(req.body, req.get("origin"))
+    AuthService.create(req.body, req.hostname)
         .then((account) => res.json(account))
         .catch(next);
 }

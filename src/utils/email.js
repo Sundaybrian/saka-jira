@@ -1,13 +1,18 @@
 const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+sgMail.setApiKey(
+    "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"
+);
 
-// const nodemailer = require("nodemailer");
-// const config = require("../config.json");
-// const sendgridTransport = require("nodemailer-sendgrid-transport");
+const nodemailer = require("nodemailer");
 
 module.exports = sendEmail;
 
-async function sendEmail({ to, subject, html, from = "test@example.com" }) {
+async function sendEmail({
+    to,
+    subject,
+    html,
+    from = "sundaypriest@outlook.com",
+}) {
     const msg = {
         to,
         subject,
@@ -16,4 +21,11 @@ async function sendEmail({ to, subject, html, from = "test@example.com" }) {
     };
 
     await sgMail.send(msg);
+    // const transporter = nodemailer.createTransport({
+    //     server: "smtp.sendgrid.net",
+    //     port: 587,
+    //     username: "apikey",
+    //     password: process.env.SEND_GRID_API_KEY,
+    // });
+    // await transporter.sendMail(msg);
 }
