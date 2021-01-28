@@ -14,5 +14,6 @@ router.use(
     require("./subcriptionType/subscriptionType.routes")
 );
 router.use("/jobStatus", require("./jobStatus/jobStatus.routes"));
+router.use("/industry", require("./industry/industry.routes"));
 
 module.exports = router;
