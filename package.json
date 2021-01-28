@@ -25,6 +25,7 @@
         "url": ""
     },
     "dependencies": {
+        "@sendgrid/mail": "^7.4.2",
         "bcrypt": "^5.0.0",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.5",
@@ -40,6 +41,7 @@
         "mailgun-js": "^0.22.0",
         "morgan": "^1.10.0",
         "nodemailer": "^6.4.14",
+        "nodemailer-sendgrid-transport": "^0.2.0",
         "objection": "^2.2.3",
         "pg": "^8.3.0",
         "rootpath": "^0.1.2",
