@@ -30,9 +30,12 @@ class AuthService {
         try {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
-                throw new Error(
-                    "Email" + " " + userInput.email + "is already registered"
+                await MailerService.sendAlreadyRegisteredEmail(
+                    userInput.email,
+                    origin
                 );
+
+                throw `Email ${userInput.email} is already registered`;
             }
 
             const newUser = await this.insertUser(userInput);
@@ -134,7 +137,7 @@ class AuthService {
         const hashedPassword = await this.hash(password);
         const verification_token = this.randomTokenString();
 
-        // create account
+        // save account
         const account = await User.query().insert({
             email,
             first_name,
@@ -147,6 +150,9 @@ class AuthService {
             verified: new Date().toISOString(),
             verification_token,
         });
+
+        // send email
+        await MailerService.sendVerificationEmail(account, origin);
 
         return this.basicDetails(account);
     }
