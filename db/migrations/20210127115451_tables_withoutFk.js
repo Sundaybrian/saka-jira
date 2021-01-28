@@ -41,7 +41,7 @@ exports.up = async function (knex) {
         }),
         knex.schema.createTable(tableNames.job_status, (table) => {
             table.increments().notNullable();
-            table.string("job_status_name", 25).notNullable();
+            table.string("job_status_name", 25).unique().notNullable();
             addDefaultColumns(table);
         }),
         knex.schema.createTable(tableNames.industry, (table) => {
