@@ -109,99 +109,6 @@
                 }
             }
         },
-        "/accounts/register-staff": {
-            "post": {
-                "tags": ["accounts"],
-                "summary": "Create a staff/admin return details and jwt token",
-                "operationId": "register staff",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "first_name": {
-                                        "type": "string",
-                                        "example": "sunday"
-                                    },
-                                    "last_name": {
-                                        "type": "string",
-                                        "example": "owner"
-                                    },
-                                    "phone_number": {
-                                        "type": "string",
-                                        "example": "0714382367"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "sunday@owner.com"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "myverysuperiorpass"
-                                    }
-                                },
-                                "required": [
-                                    "first_name",
-                                    "last_name",
-                                    "email",
-                                    "password",
-                                    "phone_number"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "The registration request was succesfull and a verification email has been sent to the specified email address",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "user": {
-                                            "type": "object",
-                                            "properties": {
-                                                "first_name": {
-                                                    "type": "string",
-                                                    "example": "sunday"
-                                                },
-                                                "last_name": {
-                                                    "type": "string",
-                                                    "example": "oliseh"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "sunday@oliseh.com"
-                                                },
-                                                "role": {
-                                                    "type": "string",
-                                                    "example": "owner"
-                                                },
-                                                "phone_number": {
-                                                    "type": "string",
-                                                    "example": "0714382367"
-                                                }
-                                            }
-                                        },
-                                        "token": {
-                                            "type": "string",
-                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiYWRtaW4iLCJsYXN0TmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiYWRtaW4iLCJpc1ZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNjA2MTU4MDkwLCJleHAiOjE2MDYxNjg4OTB9.o7npZt_wsUvvGiLW7Bu08zhzxKmM9I3enQ2X48m1b9U"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Registration successfull, please check your email for verification instructions"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/accounts/verify-email": {
             "post": {
                 "tags": ["accounts"],
@@ -729,6 +636,334 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Account deleted successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/subscriptionType/": {
+            "post": {
+                "tags": ["subscriptionType"],
+                "summary": "Create a subscription",
+                "operationId": "createsubscriptiontype",
+                "description": "Admin users can create subscriptions",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Day"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "daily subscription model"
+                                    },
+                                    "amount": {
+                                        "type": "integer",
+                                        "example": 20
+                                    },
+                                    "subscription_duration": {
+                                        "type": "string",
+                                        "example": "Day"
+                                    },
+                                    "duration_in_days": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "amoount",
+                                    "subscription_duration",
+                                    "duration_in_days"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subscription was correctly inserted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Day"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "daily subscription model"
+                                        },
+                                        "amount": {
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "subscription_duration": {
+                                            "type": "string",
+                                            "example": "Day"
+                                        },
+                                        "duration_in_days": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptionType": {
+            "get": {
+                "tags": ["subscriptionType"],
+                "summary": "Get a list of all subscriptions",
+                "description": "Open to all users",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "getallsubscriptionstypes",
+                "responses": {
+                    "200": {
+                        "description": "An array of all subscriptions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Day"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "daily subscription model"
+                                            },
+                                            "amount": {
+                                                "type": "integer",
+                                                "example": 20
+                                            },
+                                            "subscription_duration": {
+                                                "type": "string",
+                                                "example": "Day"
+                                            },
+                                            "duration_in_days": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "example": "2020-05-05T09:12:57.848Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "example": "2020-05-08T03:11:21.553Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    }
+                }
+            }
+        },
+        "/subscriptionType/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "subscriptionType id",
+                    "required": true,
+                    "example": 1,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }
+            ],
+            "get": {
+                "tags": ["subscriptionType"],
+                "summary": "Get a single subscriptionType by id",
+                "description": "Open to all user",
+                "operationId": "getsubscriptionTypeid",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Details of the specified subscriptionType",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Day"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "daily subscription model"
+                                        },
+                                        "amount": {
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "subscription_duration": {
+                                            "type": "string",
+                                            "example": "Day"
+                                        },
+                                        "duration_in_days": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["subscriptionType"],
+                "summary": "Update a subscriptionType",
+                "description": "Admin users can update any subscriptionType",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Day"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "daily subscription model"
+                                    },
+                                    "amount": {
+                                        "type": "integer",
+                                        "example": 20
+                                    },
+                                    "subscription_duration": {
+                                        "type": "string",
+                                        "example": "Day"
+                                    },
+                                    "duration_in_days": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "subscriptionType updated successfully. The details of the subscriptionType are returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Day"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "daily subscription model"
+                                        },
+                                        "amount": {
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "subscription_duration": {
+                                            "type": "string",
+                                            "example": "Day"
+                                        },
+                                        "duration_in_days": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["subscriptionType"],
+                "summary": "Delete a subscriptionType",
+                "description": "Admin users can delete any subscriptionType, regular users are restricted.",
+                "operationId": "deletesubscriptionType",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "subscriptionType deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
                                         }
                                     }
                                 }
