@@ -1,40 +1,20 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "subscription_type",
-    "description": "The subscription_type",
-    "required": ["name", "amount", "subscription_duration", "duration_in_days"],
-    "additionalProperties": true,
+    "title": "job_status",
+    "description": "The job_status",
+    "required": ["job_status_name"],
+    "additionalProperties": false,
     "properties": {
         "id": {
             "$id": "#/properties/id",
             "type": "integer",
-            "title": "The database ID of the subscription_type."
+            "title": "The database ID of the job_status."
         },
-        "name": {
-            "$id": "#/properties/name",
+        "job_status_name": {
+            "$id": "#/properties/job_status_name",
             "type": "string",
-            "title": "The name of the subscription_type."
-        },
-        "description": {
-            "$id": "#/properties/description",
-            "type": "string",
-            "title": "The description of the subscription_type."
-        },
-        "amount": {
-            "$id": "#/properties/amount",
-            "type": "integer",
-            "title": "The amount of the subscription_type."
-        },
-        "duration_in_days": {
-            "$id": "#/properties/duration_in_days",
-            "type": "integer",
-            "title": "The duration_in_days of the subscription_type."
-        },
-        "subscription_duration": {
-            "$id": "#/properties/subscription_duration",
-            "type": "string",
-            "title": "The subscription_duration of the subscription_type. e.g Day, Week"
+            "title": "The job_status_name of the job_status."
         },
         "created_at": {
             "$id": "#/properties/created_at",
@@ -49,7 +29,7 @@
         "deleted_at": {
             "$id": "#/properties/deleted_at",
             "type": "string",
-            "title": "The date when the subscription_type was deleted."
+            "title": "The date when the job_status was deleted."
         }
     }
 }
