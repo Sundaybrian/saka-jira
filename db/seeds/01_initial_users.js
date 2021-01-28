@@ -24,14 +24,11 @@ exports.seed = async function (knex) {
         phone_number: "0712382366",
     };
 
-    const companyUser = {
-        name: "my-company",
-        logo_url: "https://mylogourl-com",
-        website_url: "https://mywebsitelog.com",
-        email: "dummyemail@gmail.com",
-        description: "my something comapny",
-        email: "mycompany@gmail.com",
-        active: true,
+    const subscriptionType = {
+        name: "Day",
+        amount: 20,
+        subscription_duration: "Day",
+        duration_in_days: 1,
     };
 
     const diffOwner = {
@@ -68,6 +65,7 @@ exports.seed = async function (knex) {
     //     ...companyUser,
     //     owner_id: userr[0].id,
     // });
+    await knex(tableNames.subscription_type).insert(subscriptionType);
     await knex(tableNames.user).insert(diffOwner);
     await knex(tableNames.user).insert(adminUser);
     await knex(tableNames.user).insert(staff);

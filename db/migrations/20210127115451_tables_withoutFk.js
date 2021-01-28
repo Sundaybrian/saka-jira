@@ -27,7 +27,8 @@ exports.up = async function (knex) {
         }),
         knex.schema.createTable(tableNames.subscription_type, (table) => {
             table.increments().notNullable();
-            table.string("subcription_type_name", 25).notNullable();
+            table.string("name", 25).notNullable();
+            table.string("description", 250);
             table.integer("amount").notNullable();
             table.enum("subscription_duration", [
                 "Day",

@@ -3,12 +3,7 @@
     "type": "object",
     "title": "subscription_type",
     "description": "The subscription_type",
-    "required": [
-        "subscription_type_name",
-        "amount",
-        "subscription_duration",
-        "duration_in_days"
-    ],
+    "required": ["name", "amount", "subscription_duration", "duration_in_days"],
     "additionalProperties": true,
     "properties": {
         "id": {
@@ -16,10 +11,15 @@
             "type": "integer",
             "title": "The database ID of the subscription_type."
         },
-        "subscription_type_name": {
-            "$id": "#/properties/subscription_type_name",
+        "name": {
+            "$id": "#/properties/name",
             "type": "string",
-            "title": "The subscription_type_name of the subscription_type."
+            "title": "The name of the subscription_type."
+        },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "string",
+            "title": "The description of the subscription_type."
         },
         "amount": {
             "$id": "#/properties/amount",
@@ -28,7 +28,7 @@
         },
         "duration_in_days": {
             "$id": "#/properties/duration_in_days",
-            "type": "string",
+            "type": "integer",
             "title": "The duration_in_days of the subscription_type."
         },
         "subscription_duration": {

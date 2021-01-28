@@ -4,16 +4,24 @@ class SubscriptionTypeService {
     constructor() {}
 
     static async createSubscriptionType(params) {
-        subscriptionType = SubscriptionType.query().insert(params);
-        return subscriptionType;
+        try {
+            const subscriptionType = await SubscriptionType.query().insert(
+                params
+            );
+
+            return this.basicDetails(subscriptionType);
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 
     static async getAllSubscriptionType() {
-        subscriptionTypes = SubscriptionType.query();
+        const subscriptionTypes = await SubscriptionType.query();
         return subscriptionTypes;
     }
     static async updateSubscriptionType(id, params) {
-        const updatedSubscriptionType = SubscriptionType.query().patchAndFetchById(
+        const updatedSubscriptionType = await SubscriptionType.query().patchAndFetchById(
             id,
             {
                 ...params,
@@ -24,21 +32,30 @@ class SubscriptionTypeService {
     }
 
     static async getSubscriptionTypeById(id) {
-        subscriptionType = await this.getSubscriptionType({ id });
+        try {
+            const subscriptionType = await this.getSubscriptionType({ id });
+            if (!subscriptionType) {
+                return null;
+            }
+
+            return this.basicDetails(subscriptionType);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async _delete(id) {
+        const subscriptionType = await this.getSubscriptionType({ id });
         if (!subscriptionType) {
             return null;
         }
-        return basicDetails(subscriptionType);
-    }
 
-    static async _delete(queryParams) {
-        SubscriptionType.query()
-            .delete()
-            .where({ ...queryParams });
+        await SubscriptionType.query().deleteById(id);
+        return true;
     }
 
     static async getSubscriptionType(params) {
-        subscriptionType = SubscriptionType.query()
+        const subscriptionType = await SubscriptionType.query()
             .where({ ...params })
             .first();
 
@@ -47,14 +64,16 @@ class SubscriptionTypeService {
 
     static async basicDetails(subscriptionType) {
         const {
-            subscription_type_name,
+            id,
+            name,
             amount,
             subscription_duration,
             duration_in_days,
         } = subscriptionType;
 
         return {
-            subscription_type_name,
+            id,
+            name,
             amount,
             subscription_duration,
             duration_in_days,

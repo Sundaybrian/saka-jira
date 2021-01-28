@@ -8,7 +8,7 @@ router.post("/", Auth([Role.admin]), createSchema, create);
 router.get("/", getAllSubscriptionType);
 router.get("/:id", getSubscriptionTypeById);
 router.patch("/:id", Auth([Role.admin]), updateSchema, update);
-router.delete("/:id", Auth([Role.owner]), deleteSubscriptionType);
+router.delete("/:id", Auth([Role.admin]), deleteSubscriptionType);
 
 module.exports = router;
 
@@ -49,12 +49,11 @@ function update(req, res, next) {
 
 function deleteSubscriptionType(req, res, next) {
     // only admin can delete a subscription type
+
     const id = parseInt(req.params.id);
-    SubscriptionTypeService._delete({
-        id,
-    })
-        .then(() => {
-            res.json({ id });
+    SubscriptionTypeService._delete(id)
+        .then((sub) => {
+            return !sub ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
 }
