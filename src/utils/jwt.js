@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const config = require("../config");
 
 function sign(payload) {
     return new Promise((resolve, reject) => {
@@ -6,7 +7,7 @@ function sign(payload) {
             payload,
             process.env.JWT_SECRET,
             {
-                expiresIn: "3h",
+                expiresIn: "2h",
             },
             (error, token) => {
                 if (error) return reject(error);

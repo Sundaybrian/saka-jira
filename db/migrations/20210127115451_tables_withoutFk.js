@@ -16,11 +16,21 @@ exports.up = async function (knex) {
             addDefaultColumnsUser(table);
             addDefaultColumns(table);
         }),
+        knex.schema.createTable(tableNames.refresh_token, (table) => {
+            table.string("token");
+            table.dateTime("expires");
+            table.string("createdByIp");
+            table.dateTime("revoked");
+            table.string("revokedByIp");
+            table.string("replacedByToken");
+            addDefaultColumns(table);
+        }),
         knex.schema.createTable(tableNames.subscription_type, (table) => {
             table.increments().notNullable();
-            table.string("subcription_type_name", 25).notNullable();
+            table.string("name", 25).notNullable();
+            table.string("description", 250);
             table.integer("amount").notNullable();
-            table.enum("subcription_duration", [
+            table.enum("subscription_duration", [
                 "Day",
                 "Week",
                 "Month",
@@ -31,12 +41,12 @@ exports.up = async function (knex) {
         }),
         knex.schema.createTable(tableNames.job_status, (table) => {
             table.increments().notNullable();
-            table.string("job_status_name", 25).notNullable();
+            table.string("job_status_name", 25).unique().notNullable();
             addDefaultColumns(table);
         }),
         knex.schema.createTable(tableNames.industry, (table) => {
             table.increments().notNullable();
-            table.string("industry_name", 100).notNullable();
+            table.string("industry_name", 100).unique().notNullable();
             addDefaultColumns(table);
         }),
         knex.schema.createTable(tableNames.skill, (table) => {
@@ -65,12 +75,13 @@ exports.down = async function (knex) {
     await Promise.all(
         [
             tableNames.user,
+            tableNames.refresh_token,
             tableNames.subscription_type,
             tableNames.job_status,
             tableNames.industry,
             tableNames.skill,
             tableNames.proposal_status,
             tableNames.payment_type,
-        ].map((tableName) => knex.schema.dropSchemaIfExists(tableName))
+        ].map((tableName) => knex.schema.dropTableIfExists(tableName))
     );
 };

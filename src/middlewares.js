@@ -11,6 +11,10 @@ function errorHandler(err, req, res, next) {
     const error = err.message || err;
     res.status(statusCode);
 
+    if (process.env.NODE_ENV == "development") {
+        console.log(error);
+    }
+
     switch (true) {
         case typeof err === "string":
             // custom application error

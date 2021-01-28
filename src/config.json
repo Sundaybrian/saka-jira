@@ -1,0 +1,9 @@
+{
+    "emailFrom": "info@urady-signup-verication.com",
+    "smtpOptions": {
+        "server": "smtp.sendgrid.net",
+        "port": 587,
+        "username": "apikey",
+        "password": "process.env.SEND_GRID_API_KEY"
+    }
+}
