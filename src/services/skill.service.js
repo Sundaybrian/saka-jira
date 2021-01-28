@@ -13,7 +13,7 @@ class SkillService {
         }
     }
 
-    static async getAllIndustries() {
+    static async getAllSkills() {
         const skill = await Skill.query();
         return skill;
     }
