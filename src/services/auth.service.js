@@ -38,7 +38,7 @@ class AuthService {
                 throw `Email ${userInput.email} is already registered`;
             }
 
-            const newUser = await this.insertUser(userInput);
+            const newUser = await this.insertUser(userInput, origin);
             const token = await jwt.sign(newUser);
 
             return {
@@ -63,13 +63,13 @@ class AuthService {
         });
     }
 
-    static async create(params) {
+    static async create(params, origin) {
         // validate
         if (await this.getAccount({ email: params.email })) {
             throw 'Email "' + params.email + '" is already registered';
         }
 
-        const account = await this.insertUser(params);
+        const account = await this.insertUser(params, origin);
 
         return this.basicDetails(account);
     }
@@ -123,7 +123,7 @@ class AuthService {
         return account;
     }
 
-    static async insertUser(params) {
+    static async insertUser(params, origin) {
         const {
             first_name,
             last_name,

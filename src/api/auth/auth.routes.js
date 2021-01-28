@@ -84,7 +84,7 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     req.body.role = Role.staff;
-    AuthService.create(req.body)
+    AuthService.create(req.body, req.get("origin"))
         .then((account) => res.json(account))
         .catch(next);
 }
