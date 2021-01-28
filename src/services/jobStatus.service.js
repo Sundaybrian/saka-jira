@@ -5,17 +5,17 @@ class JobStatusService {
 
     static async createJobStatus(params) {
         try {
-            const JobStatus = await JobStatus.query().insert(params);
+            const jobStatus = await JobStatus.query().insert(params);
 
-            return this.basicDetails(JobStatus);
+            return this.basicDetails(jobStatus);
         } catch (error) {
             throw error;
         }
     }
 
     static async getAllJobStatuses() {
-        const JobStatuss = await JobStatus.query();
-        return JobStatuss;
+        const jobStatus = await JobStatus.query();
+        return jobStatus;
     }
     static async updateJobStatus(id, params) {
         const updatedJobStatus = await JobStatus.query().patchAndFetchById(id, {
@@ -27,20 +27,20 @@ class JobStatusService {
 
     static async getJobStatusById(id) {
         try {
-            const JobStatus = await this.getJobStatus({ id });
-            if (!JobStatus) {
+            const jobStatus = await this.getJobStatus({ id });
+            if (!jobStatus) {
                 return null;
             }
 
-            return this.basicDetails(JobStatus);
+            return this.basicDetails(jobStatus);
         } catch (error) {
             throw error;
         }
     }
 
     static async _delete(id) {
-        const JobStatus = await this.getJobStatus({ id });
-        if (!JobStatus) {
+        const jobStatus = await this.getJobStatus({ id });
+        if (!jobStatus) {
             return null;
         }
 
@@ -49,19 +49,19 @@ class JobStatusService {
     }
 
     static async getJobStatus(params) {
-        const JobStatus = await JobStatus.query()
+        const jobStatus = await JobStatus.query()
             .where({ ...params })
             .first();
 
-        return JobStatus;
+        return jobStatus;
     }
 
     static async basicDetails(JobStatus) {
-        const { id, name } = JobStatus;
+        const { id, job_status_name } = JobStatus;
 
         return {
             id,
-            name,
+            job_status_name,
         };
     }
 }

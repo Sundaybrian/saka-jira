@@ -13,7 +13,7 @@ router.delete("/:id", Auth([Role.admin]), deleteJobStatus);
 module.exports = router;
 
 function create(req, res, next) {
-    JobStatusService.createJobsStatus(req.body)
+    JobStatusService.createJobStatus(req.body)
         .then((jobStatus) => res.json(jobStatus))
         .catch(next);
 }
@@ -38,7 +38,7 @@ function getJobStatusById(req, res, next) {
 
 function update(req, res, next) {
     const id = parseInt(req.params.id);
-    JobStatusService.updatejobStatus(id, req.body)
+    JobStatusService.updateJobStatus(id, req.body)
         .then((jobStatus) =>
             jobStatus ? res.json(jobStatus) : res.sendStatus(404)
         )

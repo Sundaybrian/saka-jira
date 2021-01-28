@@ -13,5 +13,6 @@ router.use(
     "/subscriptionType",
     require("./subcriptionType/subscriptionType.routes")
 );
+router.use("/jobStatus", require("./jobStatus/jobStatus.routes"));
 
 module.exports = router;
