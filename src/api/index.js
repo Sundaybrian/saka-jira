@@ -20,5 +20,6 @@ router.use(
     "/proposalStatus",
     require("./proposalStatus/proposalStatus.routes")
 );
+router.use("/paymentType", require("./paymentType/paymentType.routes"));
 
 module.exports = router;
