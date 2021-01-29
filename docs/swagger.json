@@ -1994,6 +1994,251 @@
                }
             }
          }
+      },
+      "/paymentType": {
+         "get": {
+            "tags": [
+               "paymentType"
+            ],
+            "summary": "Get a list of all paymentType types",
+            "description": "Open to all users",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "operationId": "getallpaymentTypes",
+            "responses": {
+               "200": {
+                  "description": "An array of all paymentType",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "array",
+                           "items": {
+                              "type": "object",
+                              "properties": {
+                                 "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                 },
+                                 "payment_type_name": {
+                                    "type": "string",
+                                    "example": "Fixed"
+                                 },
+                                 "created_at": {
+                                    "type": "string",
+                                    "example": "2020-05-05T09:12:57.848Z"
+                                 },
+                                 "updated_at": {
+                                    "type": "string",
+                                    "example": "2020-05-08T03:11:21.553Z"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               }
+            }
+         },
+         "post": {
+            "tags": [
+               "paymentType"
+            ],
+            "summary": "Add a new paymentType",
+            "operationId": "createpaymentType",
+            "description": "Admin users can create a new paymentType",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "requestBody": {
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "payment_type_name": {
+                              "type": "string",
+                              "example": "PerMonth"
+                           }
+                        },
+                        "required": [
+                           "payment_type_name"
+                        ]
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "paymentType was correctly inserted",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "payment_type_name": {
+                                 "type": "string",
+                                 "example": "PerMonth"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/paymentType/{id}": {
+         "parameters": [
+            {
+               "in": "path",
+               "name": "id",
+               "description": "paymentType id",
+               "required": true,
+               "example": 1,
+               "schema": {
+                  "type": "integer"
+               }
+            }
+         ],
+         "get": {
+            "tags": [
+               "paymentType"
+            ],
+            "summary": "Get a single paymentType by id",
+            "description": "Open to all user",
+            "operationId": "getpaymentTypeByID",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Details of the specified paymentType",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "id": {
+                                 "type": "integer",
+                                 "example": 1
+                              },
+                              "payment_type_name": {
+                                 "type": "string",
+                                 "example": "PerHour"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               },
+               "404": {
+                  "$ref": "#/components/responses/NotFoundError"
+               }
+            }
+         },
+         "put": {
+            "tags": [
+               "paymentType"
+            ],
+            "summary": "Update a paymentType name",
+            "description": "Admin users can update any paymentType",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "requestBody": {
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "payment_type_name": {
+                              "type": "string",
+                              "example": "PerHour"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "paymentType updated successfully. The details of the paymentType are returned",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "payment_type_name": {
+                                 "type": "string",
+                                 "example": "PerHour"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               },
+               "404": {
+                  "$ref": "#/components/responses/NotFoundError"
+               }
+            }
+         },
+         "delete": {
+            "tags": [
+               "paymentType"
+            ],
+            "summary": "Delete a paymentType",
+            "description": "Admin users can delete any paymentType, regular users are restricted. Future implementation is making sure we dont cascade dependent tables when a paymentType is removed",
+            "operationId": "deletepaymentType",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "paymentType deleted successfully",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "id": {
+                                 "type": "integer",
+                                 "example": 1
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               },
+               "404": {
+                  "$ref": "#/components/responses/NotFoundError"
+               }
+            }
+         }
       }
    },
    "components": {
