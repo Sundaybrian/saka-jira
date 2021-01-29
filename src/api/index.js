@@ -16,5 +16,9 @@ router.use(
 router.use("/jobStatus", require("./jobStatus/jobStatus.routes"));
 router.use("/industry", require("./industry/industry.routes"));
 router.use("/skill", require("./skill/skill.routes"));
+router.use(
+    "/proposalStatus",
+    require("./proposalStatus/proposalStatus.routes")
+);
 
 module.exports = router;
