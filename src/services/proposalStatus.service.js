@@ -13,7 +13,7 @@ class ProposalStatusService {
         }
     }
 
-    static async getAllProposalStatuss() {
+    static async getAllProposalStatuses() {
         const proposalStatus = await ProposalStatus.query();
         return proposalStatus;
     }
