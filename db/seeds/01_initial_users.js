@@ -73,5 +73,13 @@ exports.seed = async function (knex) {
     await knex(tableNames.user).insert(diffOwner);
     await knex(tableNames.user).insert(adminUser);
     await knex(tableNames.user).insert(staff);
-    await knex(tableNames.industry).insert(industry);
+
+    const industryy = await knex(tableNames.industry)
+        .insert(industry)
+        .returning("*");
+    // insert freelancer
+    await knex(tableNames.freelancer).insert({
+        user_id: userr[0].id,
+        industry_id: industryy[0].id,
+    });
 };

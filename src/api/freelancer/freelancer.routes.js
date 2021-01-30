@@ -16,7 +16,7 @@ module.exports = router;
 function create(req, res, next) {
     // add logged in userid
     req.body.user_id = parseInt(req.user.id);
-    FreelancerService.createIndustry(req.body)
+    FreelancerService.createFreelancer(req.body)
         .then((freelancer) => res.json(freelancer))
         .catch(next);
 }

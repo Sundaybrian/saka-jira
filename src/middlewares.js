@@ -11,7 +11,7 @@ function errorHandler(err, req, res, next) {
     const error = err.message || err;
     res.status(statusCode);
 
-    if (process.env.NODE_ENV == "development") {
+    if (process.env.NODE_ENV == "development" || "test") {
         console.log(error);
     }
 

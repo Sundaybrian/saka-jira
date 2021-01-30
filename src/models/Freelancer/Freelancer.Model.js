@@ -16,6 +16,8 @@ class Freelancer extends Model {
     static get relationMappings() {
         // Importing models here is a one way to avoid require loops.
         const User = require("../User/User.Model");
+        const Industry = require("../Industry/Industry.Model");
+
         return {
             user: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
@@ -24,6 +26,15 @@ class Freelancer extends Model {
                 join: {
                     from: `${tableNames.freelancer}.user_id`,
                     to: `${tableNames.user}.id`,
+                },
+            },
+            industry: {
+                // BelongsToOneRelation: Use this relation when the source model has the foreign key
+                relation: Model.BelongsToOneRelation,
+                modelClass: Industry,
+                join: {
+                    from: `${tableNames.freelancer}.industry_id`,
+                    to: `${tableNames.industry}.id`,
                 },
             },
         };

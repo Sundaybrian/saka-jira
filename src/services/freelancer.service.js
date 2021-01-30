@@ -22,7 +22,7 @@ class FreelancerService {
 
     static async updateFreelancer(id, updateParams) {
         // TODO MAKE IT A MIDDLEWARE
-        const isAllowed = await this.getFreelancer({ id });
+        const isAllowed = await this.getFreelancer(id);
 
         if (!isAllowed) return null;
 
@@ -38,7 +38,7 @@ class FreelancerService {
 
     static async getFreelancerById(id) {
         try {
-            const freelancer = await this.getFreelancer({ id });
+            const freelancer = await this.getFreelancer(id);
             if (!freelancer) {
                 return null;
             }
@@ -50,7 +50,7 @@ class FreelancerService {
     }
 
     static async _delete(id) {
-        const freelancer = await this.getFreelancer({ id });
+        const freelancer = await this.getFreelancer(d);
         if (!freelancer) {
             return null;
         }
@@ -59,23 +59,54 @@ class FreelancerService {
         return true;
     }
 
-    static async getFreelancer(params) {
+    static async getFreelancer(id) {
         const freelancer = await Freelancer.query()
-            .where({ ...params })
-            .leftJoin(
-                tableNames.industry,
-                `${tableNames.industry}_id`,
-                `${tableNames.industry}.id`
+            .alias("f")
+            .where("f.id", id)
+            .select(
+                "f.id",
+                "user_id",
+                "latitude",
+                "longitude",
+                "industry_id",
+                "industry_name",
+                "email",
+                "phone_number",
+                "first_name",
+                "last_name"
             )
+            .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
+            .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
 
+        console.log(freelancer);
         return freelancer;
     }
 
     static async basicDetails(Freelancer) {
-        const { id, active, latitude, longitude, industry } = Freelancer;
+        const {
+            id,
+            latitude,
+            longitude,
+            industry,
+            industry_name,
+            email,
+            phone_number,
+            first_name,
+            last_name,
+        } = Freelancer;
 
-        return { id, active, latitude, longitude, industry };
+        return {
+            id,
+            latitude,
+            longitude,
+            industry,
+            industry_name,
+            email,
+            phone_number,
+            first_name,
+            last_name,
+        };
     }
 }
 
