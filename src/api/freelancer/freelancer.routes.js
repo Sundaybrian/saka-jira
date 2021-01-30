@@ -7,13 +7,8 @@ const { Auth } = require("../../_middlewares/auth");
 router.post("/profile", Auth(), createSchema, create);
 router.get("/", getAllFreelancers);
 router.get("/profile/:id", getFreelancerById);
-router.patch(
-    "/profile/:id",
-    Auth([Role.user]),
-    isOwner(),
-    updateSchema,
-    updateFreelancer
-);
+router.patch("/profile/:id", Auth([Role.user]), updateSchema, updateFreelancer);
+
 router.delete("/:id", Auth([Role.admin]), deleteFreelancer);
 
 module.exports = router;
@@ -51,6 +46,7 @@ function getFreelancerById(req, res, next) {
 
 function updateFreelancer(req, res, next) {
     const id = parseInt(req.params.id);
+
     FreelancerService.updateFreelancer(id, req.body)
         .then((freelancer) =>
             freelancer ? res.json(freelancer) : res.sendStatus(404)
@@ -60,7 +56,7 @@ function updateFreelancer(req, res, next) {
 
 function deleteFreelancer(req, res, next) {
     // only admin can delete a subscription type
-
+    // TODO DELETE USER ACCOUNT ALSO
     const id = parseInt(req.params.id);
     FreelancerService._delete(id)
         .then((freelancer) => {

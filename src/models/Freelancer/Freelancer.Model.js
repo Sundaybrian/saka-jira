@@ -12,6 +12,22 @@ class Freelancer extends Model {
     static get jsonSchema() {
         return schema;
     }
+
+    static get relationMappings() {
+        // Importing models here is a one way to avoid require loops.
+        const User = require("../User/User.Model");
+        return {
+            user: {
+                // BelongsToOneRelation: Use this relation when the source model has the foreign key
+                relation: Model.BelongsToOneRelation,
+                modelClass: User,
+                join: {
+                    from: `${tableNames.freelancer}.user_id`,
+                    to: `${tableNames.user}.id`,
+                },
+            },
+        };
+    }
 }
 
 module.exports = Freelancer;
