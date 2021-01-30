@@ -4,7 +4,6 @@ const validateRequest = require("../../_middlewares/validateRequest");
 exports.createSchema = (req, res, next) => {
     const schema = Joi.object({
         industry_id: Joi.integer().required(),
-        user_id: Joi.integer().required(),
         latitude: Joi.number(),
         longitude: Joi.number(),
     });
