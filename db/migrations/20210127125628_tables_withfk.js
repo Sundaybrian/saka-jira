@@ -13,11 +13,11 @@ exports.up = async function (knex) {
     // starting with order of dependency
     await knex.schema.createTable(tableNames.freelancer, (table) => {
         table.increments().notNullable();
-        references(table, tableNames.user, null, true);
+        references(table, tableNames.user, null, true).index("userID");
         references(table, tableNames.industry, null, true);
         table.string("description", 1000);
         url(table, "website_url");
-        table.boolean("active").defaultTo(true);
+        table.boolean("active").notNullable().defaultTo(true).;
         table.double("latitude");
         table.double("longitude");
         addDefaultColumns(table);

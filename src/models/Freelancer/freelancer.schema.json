@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "freelancer",
+    "description": "The freelancer",
+    "required": ["user_id", "industry_id"],
+    "additionalProperties": true,
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "integer",
+            "title": "The database ID of the freelancer."
+        },
+        "user_id": {
+            "$id": "#/properties/user_id",
+            "type": "integer",
+            "title": "The user_id of the freelancer."
+        },
+        "industry_id": {
+            "$id": "#/properties/industry_id",
+            "type": "integer",
+            "title": "The industry_id of the freelancer."
+        },
+        "active": {
+            "$id": "#/properties/active",
+            "type": "boolean",
+            "title": "The active of the freelancer."
+        },
+        "latitude": {
+            "$id": "#/properties/latitude",
+            "type": "number",
+            "title": "The latitude of the freelancer."
+        },
+        "longitude": {
+            "$id": "#/properties/longitude",
+            "type": "number",
+            "title": "The longitude of the freelancer."
+        },
+        "created_at": {
+            "$id": "#/properties/created_at",
+            "type": "string",
+            "title": "The creation date when the ticket was created."
+        },
+        "updated_at": {
+            "$id": "#/properties/updated_at",
+            "type": "string",
+            "title": "The date when the ticket was updated."
+        },
+        "deleted_at": {
+            "$id": "#/properties/deleted_at",
+            "type": "string",
+            "title": "The date when the freelancer was deleted."
+        }
+    }
+}
