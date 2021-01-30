@@ -3,7 +3,7 @@ const validateRequest = require("../../_middlewares/validateRequest");
 
 exports.createSchema = (req, res, next) => {
     const schema = Joi.object({
-        industry_id: Joi.string().required(),
+        industry_id: Joi.integer().required(),
         user_id: Joi.integer().required(),
         latitude: Joi.number(),
         longitude: Joi.number(),
@@ -13,7 +13,7 @@ exports.createSchema = (req, res, next) => {
 
 exports.updateSchema = (req, res, next) => {
     const schema = Joi.object({
-        industry_id: Joi.string().empty(""),
+        industry_id: Joi.integer().empty(""),
         latitude: Joi.number().empty(""),
         longitude: Joi.number().empty(""),
     });
