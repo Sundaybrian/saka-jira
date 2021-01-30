@@ -20,11 +20,16 @@ class FreelancerService {
         return freelancers;
     }
 
-    static async updateFreelancer(id, params) {
+    static async updateFreelancer(id, updateParams) {
+        // TODO MAKE IT A MIDDLEWARE
+        const isAllowed = await this.getFreelancer({ id });
+
+        if (!isAllowed) return null;
+
         const updatedfreelancer = await Freelancer.query().patchAndFetchById(
             id,
             {
-                ...params,
+                ...updateParams,
             }
         );
 
