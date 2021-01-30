@@ -1,5 +1,6 @@
 const Freelancer = require("../models/Freelancer/Freelancer.Model");
 const tableNames = require("../constants/tableNames");
+const { threadId } = require("worker_threads");
 
 class FreelancerService {
     constructor() {}
@@ -22,18 +23,21 @@ class FreelancerService {
 
     static async updateFreelancer(id, updateParams) {
         // TODO MAKE IT A MIDDLEWARE
-        const isAllowed = await this.getFreelancer(id);
+        try {
+            const isAllowed = await this.getFreelancer(id);
 
-        if (!isAllowed) return null;
+            if (!isAllowed) return null;
 
-        const updatedfreelancer = await Freelancer.query().patchAndFetchById(
-            id,
-            {
-                ...updateParams,
-            }
-        );
-
-        return updatedfreelancer;
+            const updatedfreelancer = await Freelancer.query().patchAndFetchById(
+                id,
+                {
+                    ...updateParams,
+                }
+            );
+            return updatedfreelancer;
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async getFreelancerById(id) {
@@ -50,7 +54,7 @@ class FreelancerService {
     }
 
     static async _delete(id) {
-        const freelancer = await this.getFreelancer(d);
+        const freelancer = await this.getFreelancer(id);
         if (!freelancer) {
             return null;
         }
@@ -79,7 +83,6 @@ class FreelancerService {
             .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
 
-        console.log(freelancer);
         return freelancer;
     }
 
@@ -88,7 +91,7 @@ class FreelancerService {
             id,
             latitude,
             longitude,
-            industry,
+            industry_id,
             industry_name,
             email,
             phone_number,
@@ -100,7 +103,7 @@ class FreelancerService {
             id,
             latitude,
             longitude,
-            industry,
+            industry_id,
             industry_name,
             email,
             phone_number,

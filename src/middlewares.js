@@ -12,7 +12,7 @@ function errorHandler(err, req, res, next) {
     res.status(statusCode);
 
     if (process.env.NODE_ENV == "development" || "test") {
-        console.log(error);
+        console.log(err.stack);
     }
 
     switch (true) {
