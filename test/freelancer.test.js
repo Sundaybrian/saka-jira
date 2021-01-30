@@ -21,7 +21,7 @@ describe("POST /api/v1/freelancer/", () => {
 
     it("Should fail to create a freelancer with missing field", async () => {
         await request(app)
-            .post("/api/v1/freelancer")
+            .post("/api/v1/freelancer/")
             .set("Authorization", `Bearer ${token1}`)
             .expect(400);
     });
@@ -38,6 +38,7 @@ describe("POST /api/v1/freelancer/", () => {
             .expect(200);
 
         expect(res.body.industry_id).toBe(1);
+        expect(res.body.active).toBe(true);
     });
 });
 
@@ -56,7 +57,7 @@ describe("PATCH api/v1/freelancer/:id", () => {
         request(app)
             .post("/api/v1/accounts/login")
             .send({
-                email: "admin@admin.com",
+                email: "sunday@owner.com",
                 password: "12345678yh",
             })
             .end(function (err, res) {
@@ -88,11 +89,10 @@ describe("PATCH api/v1/freelancer/:id", () => {
             .patch("/api/v1/freelancer/1")
             .set("Authorization", `Bearer ${token1}`)
             .send({
-                freelancer_name: "super freelancer 1",
+                longitude: -2.66,
             })
             .expect(200);
-        expect(res.body.freelancer_name).toBe("super freelancer 1");
-
+        expect(res.body.longitude).toBe(-2.66);
         expect(res.body.id).toBe(1);
     });
 });

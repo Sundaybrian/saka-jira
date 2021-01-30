@@ -17,9 +17,9 @@ exports.up = async function (knex) {
         references(table, tableNames.industry, null, true);
         table.string("description", 1000);
         url(table, "website_url");
-        table.boolean("active").notNullable().defaultTo(true).;
-        table.double("latitude");
-        table.double("longitude");
+        table.boolean("active").notNullable().defaultTo(true);
+        table.double("latitude").defaultTo(0);
+        table.double("longitude").defaultTo(0);
         addDefaultColumns(table);
     });
 

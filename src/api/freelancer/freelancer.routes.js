@@ -4,10 +4,10 @@ const Role = require("../../constants/roles");
 const FreelancerService = require("../../services/freelancer.service");
 const { Auth } = require("../../_middlewares/auth");
 
-router.post("/profile", Auth(), createSchema, create);
+router.post("/", Auth(), createSchema, create);
 router.get("/", getAllFreelancers);
-router.get("/profile/:id", getFreelancerById);
-router.patch("/profile/:id", Auth([Role.user]), updateSchema, updateFreelancer);
+router.get("/:id", getFreelancerById);
+router.patch("/:id", Auth([Role.user]), updateSchema, updateFreelancer);
 
 router.delete("/:id", Auth([Role.admin]), deleteFreelancer);
 
