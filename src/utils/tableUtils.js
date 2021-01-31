@@ -1,6 +1,7 @@
 function addDefaultColumns(table) {
     table.timestamps(false, true);
     table.datetime("deleted_at");
+    table.boolean("deleted").notNullable().defaultTo(false);
 }
 
 function addDefaultGeoLocations(table) {

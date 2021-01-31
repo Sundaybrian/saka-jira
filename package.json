@@ -8,7 +8,7 @@
         "dev": "nodemon src/index.js",
         "inspect": "nodemon --inspect src/index.js",
         "test": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=O jest --reporters default jest-stare --coverage --detectOpenHandles --runInBand --forceExit --testTimeout=60000",
-        "heroku-postbuild": "npm run seed && npm run migrate",
+
         "lint": "npm run lint:js ",
         "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
         "lint:js": "npm run lint:eslint src/",
