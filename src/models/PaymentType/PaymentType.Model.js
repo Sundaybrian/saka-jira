@@ -1,12 +1,12 @@
 const { Model } = require("objection");
 
 const tableNames = require("../../constants/tableNames");
+// const db = require("../../db");
+const schema = require("./paymentType.schema.json");
 
-const schema = require("./subscriptionType.schema.json");
-
-class SubscriptionType extends Model {
+class PaymentType extends Model {
     static get tableName() {
-        return tableNames.subscription_type;
+        return tableNames.payment_type;
     }
 
     static get jsonSchema() {
@@ -14,4 +14,4 @@ class SubscriptionType extends Model {
     }
 }
 
-module.exports = SubscriptionType;
+module.exports = PaymentType;

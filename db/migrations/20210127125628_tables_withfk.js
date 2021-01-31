@@ -4,6 +4,7 @@ const {
     addDefaultColumns,
     references,
     url,
+    addDefaultGeoLocations,
 } = require("../../src/utils/tableUtils");
 
 /**
@@ -13,13 +14,11 @@ exports.up = async function (knex) {
     // starting with order of dependency
     await knex.schema.createTable(tableNames.freelancer, (table) => {
         table.increments().notNullable();
-        references(table, tableNames.user, null, true);
-        references(table, tableNames.industry, null, true);
+        references(table, tableNames.user, null, true).index("userID");
+        references(table, tableNames.industry, null, false);
         table.string("description", 1000);
         url(table, "website_url");
-        table.boolean("active").defaultTo(true);
-        table.double("latitude");
-        table.double("longitude");
+        addDefaultGeoLocations(table);
         addDefaultColumns(table);
     });
 
@@ -29,8 +28,7 @@ exports.up = async function (knex) {
         table.string("description", 1000);
         url(table, "website_url");
         table.boolean("active").defaultTo(true);
-        table.double("latitude");
-        table.double("longitude");
+        addDefaultGeoLocations(table);
         addDefaultColumns(table);
     });
 

@@ -16,5 +16,12 @@ router.use(
 router.use("/jobStatus", require("./jobStatus/jobStatus.routes"));
 router.use("/industry", require("./industry/industry.routes"));
 router.use("/skill", require("./skill/skill.routes"));
+router.use(
+    "/proposalStatus",
+    require("./proposalStatus/proposalStatus.routes")
+);
+router.use("/paymentType", require("./paymentType/paymentType.routes"));
+router.use("/freelancer", require("./freelancer/freelancer.routes"));
+router.use("/hiringManager", require("./hiringManager/hiringManager.routes"));
 
 module.exports = router;

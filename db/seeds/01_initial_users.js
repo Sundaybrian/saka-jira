@@ -14,6 +14,10 @@ exports.seed = async function (knex) {
 
     const password = await bcrypt.hash("12345678yh", 10);
 
+    const industry = {
+        industry_name: "Computer Programming",
+    };
+
     const userOwner = {
         email: "sunday@owner.com",
         first_name: "sunday",
@@ -69,4 +73,13 @@ exports.seed = async function (knex) {
     await knex(tableNames.user).insert(diffOwner);
     await knex(tableNames.user).insert(adminUser);
     await knex(tableNames.user).insert(staff);
+
+    const industryy = await knex(tableNames.industry)
+        .insert(industry)
+        .returning("*");
+    // insert freelancer
+    await knex(tableNames.freelancer).insert({
+        user_id: userr[0].id,
+        industry_id: industryy[0].id,
+    });
 };

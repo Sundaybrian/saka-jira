@@ -68,7 +68,7 @@
 
         /* Advanced Options */
         "skipLibCheck": true /* Skip type checking of declaration files. */,
-        "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+        "forceConsistentCasi, "test/paymentType.test.js"ngInFileNames": true /* Disallow inconsistently-cased references to the same file. */
     },
     "lib": ["es2015"],
     "include": ["./src/**/*"],
