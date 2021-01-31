@@ -9,8 +9,8 @@ const {
 const HiringManager = require("../../models/HiringManager/HiringManager.Model");
 
 router.post("/", Auth(), createSchema, createHiringManager);
-router.get("/", getAllHiringManagers);
-router.get("/:id", getHiringManagerById);
+router.get("/", Auth(), getAllHiringManagers);
+router.get("/:id", Auth(), getHiringManagerById);
 router.patch(
     "/:id",
     Auth([Role.user]),
