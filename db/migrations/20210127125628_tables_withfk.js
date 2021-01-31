@@ -3,6 +3,7 @@ const tableNames = require("../../src/constants/tableNames");
 const {
     addDefaultColumns,
     references,
+    referencesCustomPk,
     url,
     addDefaultGeoLocations,
 } = require("../../src/utils/tableUtils");
@@ -35,8 +36,8 @@ exports.up = async function (knex) {
     await knex.schema.createTable(
         tableNames.freelancer_subscriptions,
         (table) => {
-            table.increments().notNullable();
             references(table, tableNames.freelancer, null, true);
+            table.primary(["freelancer_id"]);
             table.datetime("expiry_date");
             addDefaultColumns(table);
         }
@@ -50,7 +51,13 @@ exports.up = async function (knex) {
 
     await knex.schema.createTable(tableNames.freelancer_payments, (table) => {
         table.increments().notNullable();
-        references(table, tableNames.freelancer_subscriptions, null, true);
+        referencesCustomPk(
+            table,
+            tableNames.freelancer_subscriptions,
+            null,
+            "freelancer_id",
+            true
+        );
         references(table, tableNames.subscription_type, null, true);
         table.integer("amount").notNullable();
         table.string("transaction_receipt_number", 100).notNullable();
