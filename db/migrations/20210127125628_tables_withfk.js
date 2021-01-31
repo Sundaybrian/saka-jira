@@ -4,6 +4,7 @@ const {
     addDefaultColumns,
     references,
     url,
+    addDefaultGeoLocations,
 } = require("../../src/utils/tableUtils");
 
 /**
@@ -17,8 +18,7 @@ exports.up = async function (knex) {
         references(table, tableNames.industry, null, false);
         table.string("description", 1000);
         url(table, "website_url");
-        table.double("latitude").defaultTo(0);
-        table.double("longitude").defaultTo(0);
+        addDefaultGeoLocations(table);
         addDefaultColumns(table);
     });
 
@@ -28,8 +28,7 @@ exports.up = async function (knex) {
         table.string("description", 1000);
         url(table, "website_url");
         table.boolean("active").defaultTo(true);
-        table.double("latitude");
-        table.double("longitude");
+        addDefaultGeoLocations(table);
         addDefaultColumns(table);
     });
 

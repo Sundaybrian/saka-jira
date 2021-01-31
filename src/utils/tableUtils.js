@@ -5,8 +5,8 @@ function addDefaultColumns(table) {
 }
 
 function addDefaultGeoLocations(table) {
-    table.double("latitude");
-    table.double("longitude");
+    table.double("latitude").defaultTo(0);
+    table.double("longitude").defaultTo(0);
 }
 
 function addDefaultColumnsUser(table) {
