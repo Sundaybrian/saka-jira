@@ -14,7 +14,7 @@ exports.up = async function (knex) {
     await knex.schema.createTable(tableNames.freelancer, (table) => {
         table.increments().notNullable();
         references(table, tableNames.user, null, true).index("userID");
-        references(table, tableNames.industry, null, true);
+        references(table, tableNames.industry, null, false);
         table.string("description", 1000);
         url(table, "website_url");
         table.double("latitude").defaultTo(0);
