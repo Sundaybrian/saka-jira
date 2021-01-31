@@ -26,6 +26,7 @@ class HiringManagerService {
     static async getHiringManagerById(id) {
         try {
             const hiringManager = await this.getHiringManager(id);
+
             if (!hiringManager) {
                 return null;
             }
@@ -53,6 +54,7 @@ class HiringManagerService {
     static async _delete(id) {
         try {
             const hiringManager = await this.getHiringManager(id);
+
             if (!hiringManager) {
                 return null;
             }
@@ -97,6 +99,7 @@ class HiringManagerService {
             phone_number,
             first_name,
             last_name,
+            user_id,
         } = HiringManager;
 
         return {
@@ -107,6 +110,7 @@ class HiringManagerService {
             phone_number,
             first_name,
             last_name,
+            user_id,
         };
     }
 }

@@ -2,6 +2,7 @@ const { Model } = require("objection");
 
 const tableNames = require("../../constants/tableNames");
 const schema = require("./hiringManager.schema.json");
+const db = require("../../db");
 
 class HiringManager extends Model {
     static get tableName() {
@@ -29,5 +30,7 @@ class HiringManager extends Model {
         };
     }
 }
+
+Model.knex(db);
 
 module.exports = HiringManager;

@@ -70,16 +70,33 @@ exports.seed = async function (knex) {
     //     owner_id: userr[0].id,
     // });
     await knex(tableNames.subscription_type).insert(subscriptionType);
-    await knex(tableNames.user).insert(diffOwner);
+    const diff = await knex(tableNames.user).insert(diffOwner).returning("*");
+
     await knex(tableNames.user).insert(adminUser);
     await knex(tableNames.user).insert(staff);
 
+    // insert industries
     const industryy = await knex(tableNames.industry)
         .insert(industry)
         .returning("*");
-    // insert freelancer
+
+    // insert freelancers
     await knex(tableNames.freelancer).insert({
         user_id: userr[0].id,
         industry_id: industryy[0].id,
+    });
+
+    await knex(tableNames.freelancer).insert({
+        user_id: diff[0].id,
+        industry_id: industryy[0].id,
+    });
+
+    // insert hiring manager
+    await knex(tableNames.hiring_manager).insert({
+        user_id: userr[0].id,
+    });
+
+    await knex(tableNames.hiring_manager).insert({
+        user_id: diff[0].id,
     });
 };
