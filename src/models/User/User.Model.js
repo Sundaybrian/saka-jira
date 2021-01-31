@@ -19,7 +19,7 @@ class User extends Model {
         try {
             const user = inputItems[0];
             if (user.role == "user") {
-                const freelancer = { user_id: user.id };
+                const freelancer = { user_id: user.id, industry_id: 1 };
                 const f = await Freelancer.query().insert(freelancer);
 
                 console.log(f);
