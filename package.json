@@ -8,7 +8,6 @@
         "dev": "nodemon src/index.js",
         "inspect": "nodemon --inspect src/index.js",
         "test": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=O jest --reporters default jest-stare --coverage --detectOpenHandles --runInBand --forceExit --testTimeout=60000",
-
         "lint": "npm run lint:js ",
         "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
         "lint:js": "npm run lint:eslint src/",
@@ -42,6 +41,8 @@
         "morgan": "^1.10.0",
         "nodemailer": "^6.4.14",
         "objection": "^2.2.3",
+        "objection-cursor": "^1.2.4",
+        "objection-soft-delete": "^1.0.7",
         "pg": "^8.3.0",
         "rootpath": "^0.1.2",
         "swagger-jsdoc": "^6.0.0-rc.3",
