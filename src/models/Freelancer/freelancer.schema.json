@@ -3,7 +3,7 @@
     "type": "object",
     "title": "freelancer",
     "description": "The freelancer",
-    "required": ["user_id", "industry_id"],
+    "required": ["user_id"],
     "additionalProperties": true,
     "properties": {
         "id": {
