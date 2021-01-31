@@ -1,40 +1,20 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "freelancer",
-    "description": "The freelancer",
-    "required": ["user_id"],
-    "additionalProperties": true,
+    "title": "freelancer_subscriptions",
+    "description": "The freelancer_subscriptions",
+    "required": ["freelancer_id"],
+    "additionalProperties": false,
     "properties": {
         "id": {
             "$id": "#/properties/id",
             "type": "integer",
-            "title": "The database ID of the freelancer."
+            "title": "The database ID of the freelancer_subscriptions."
         },
-        "user_id": {
-            "$id": "#/properties/user_id",
+        "freelancer_id": {
+            "$id": "#/properties/freelancer_id",
             "type": "integer",
-            "title": "The user_id of the freelancer."
-        },
-        "industry_id": {
-            "$id": "#/properties/industry_id",
-            "type": "integer",
-            "title": "The industry_id of the freelancer."
-        },
-        "active": {
-            "$id": "#/properties/active",
-            "type": "boolean",
-            "title": "The active of the freelancer."
-        },
-        "latitude": {
-            "$id": "#/properties/latitude",
-            "type": "number",
-            "title": "The latitude of the freelancer."
-        },
-        "longitude": {
-            "$id": "#/properties/longitude",
-            "type": "number",
-            "title": "The longitude of the freelancer."
+            "title": "The freelancer_id of the freelancer_subscriptions."
         },
         "created_at": {
             "$id": "#/properties/created_at",
@@ -49,7 +29,7 @@
         "deleted_at": {
             "$id": "#/properties/deleted_at",
             "type": "string",
-            "title": "The date when the freelancer was deleted."
+            "title": "The date when the freelancer_subscriptions was deleted."
         }
     }
 }
