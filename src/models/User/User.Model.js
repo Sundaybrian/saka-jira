@@ -21,8 +21,6 @@ class User extends Model {
             if (user.role == "user") {
                 const freelancer = { user_id: user.id, industry_id: 1 };
                 const f = await Freelancer.query().insert(freelancer);
-
-                console.log(f);
             } else {
                 console.log("Nothing to see here");
             }
