@@ -6,15 +6,10 @@
     "required": ["freelancer_id"],
     "additionalProperties": false,
     "properties": {
-        "id": {
-            "$id": "#/properties/id",
-            "type": "integer",
-            "title": "The database ID of the freelancer_subscriptions."
-        },
         "freelancer_id": {
             "$id": "#/properties/freelancer_id",
             "type": "integer",
-            "title": "The freelancer_id of the freelancer_subscriptions."
+            "title": "The fk freelancer_id of the freelancer_subscriptions."
         },
         "created_at": {
             "$id": "#/properties/created_at",
