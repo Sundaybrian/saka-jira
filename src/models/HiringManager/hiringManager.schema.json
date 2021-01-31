@@ -1,40 +1,40 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "freelancer",
-    "description": "The freelancer",
+    "title": "hiring manager",
+    "description": "The hiring manager",
     "required": ["user_id"],
     "additionalProperties": true,
     "properties": {
         "id": {
             "$id": "#/properties/id",
             "type": "integer",
-            "title": "The database ID of the freelancer."
+            "title": "The database ID of the hiring manager."
         },
         "user_id": {
             "$id": "#/properties/user_id",
             "type": "integer",
-            "title": "The user_id of the freelancer."
+            "title": "The user_id of the hiring manager."
         },
-        "industry_id": {
-            "$id": "#/properties/industry_id",
+        "website_url": {
+            "$id": "#/properties/website_url",
             "type": "integer",
-            "title": "The industry_id of the freelancer."
+            "title": "The website_url of the hiring manager."
         },
         "active": {
             "$id": "#/properties/active",
             "type": "boolean",
-            "title": "The active of the freelancer."
+            "title": "The active of the hiring manager."
         },
         "latitude": {
             "$id": "#/properties/latitude",
             "type": "number",
-            "title": "The latitude of the freelancer."
+            "title": "The latitude of the hiring manager."
         },
         "longitude": {
             "$id": "#/properties/longitude",
             "type": "number",
-            "title": "The longitude of the freelancer."
+            "title": "The longitude of the hiring manager."
         },
         "created_at": {
             "$id": "#/properties/created_at",
@@ -49,7 +49,7 @@
         "deleted_at": {
             "$id": "#/properties/deleted_at",
             "type": "string",
-            "title": "The date when the freelancer was deleted."
+            "title": "The date when the hiring manager was deleted."
         }
     }
 }
