@@ -3,21 +3,38 @@ const router = require("express").Router();
 const Role = require("../../constants/roles");
 const HiringManagerService = require("../../services/hiringManager.service");
 const { Auth } = require("../../_middlewares/auth");
+const {
+    canUpdateHiringManager,
+} = require("../../utils/_permissions/hiringManager");
+const HiringManager = require("../../models/HiringManager/HiringManager.Model");
 
-router.post("/", Auth(), createSchema, create);
-router.get("/", getAllFreelancers);
-router.get("/:id", getFreelancerById);
-router.patch("/:id", Auth([Role.user]), updateSchema, updateFreelancer);
+router.post("/", Auth(), createSchema, createHiringManager);
+router.get("/", getAllHiringManagers);
+router.get("/:id", getHiringManagerById);
+router.patch(
+    "/:id",
+    Auth([Role.user]),
+    setHiringManager,
+    authUpdateHiringManager,
+    updateSchema,
+    updateHiringManager
+);
 
-router.delete("/:id", Auth([Role.admin]), deleteFreelancer);
+router.delete(
+    "/:id",
+    Auth([Role.admin, Role.user]),
+    setHiringManager,
+    authUpdateHiringManager,
+    deleteHiringManager
+);
 
 module.exports = router;
 
-function create(req, res, next) {
+function createHiringManager(req, res, next) {
     // add logged in userid
     req.body.user_id = parseInt(req.user.id);
-    HiringManagerService.createFreelancer(req.body)
-        .then((freelancer) => res.json(freelancer))
+    HiringManagerService.createHiringManager(req.body)
+        .then((hiringManager) => res.json(hiringManager))
         .catch(next);
 }
 
@@ -25,44 +42,66 @@ function create(req, res, next) {
 // GET /tasks?completed=true
 // GET /tasks?limit=3&skip=3
 // GET /tasks?sortBy=createdAt:desc
-function getAllFreelancers(req, res, next) {
+function getAllHiringManagers(req, res, next) {
     // const limit = parseInt(req.query.limit) || 10;
     // const page = parseInt(req.query.page) || 1;
 
-    HiringManagerService.getAllFreelancers()
-        .then((freelancers) => {
-            return freelancers ? res.json(freelancers) : res.sendStatus(404);
+    HiringManagerService.getAllHiringManagers()
+        .then((hiringManagers) => {
+            return hiringManagers
+                ? res.json(hiringManagers)
+                : res.sendStatus(404);
         })
         .catch(next);
 }
 
-function getFreelancerById(req, res, next) {
+function getHiringManagerById(req, res, next) {
     const id = parseInt(req.params.id);
 
-    HiringManagerService.getFreelancerById(id)
-        .then((freelancer) =>
-            freelancer ? res.json(freelancer) : res.sendStatus(404)
+    HiringManagerService.getHiringManagerById(id)
+        .then((hiringManager) =>
+            hiringManager ? res.json(hiringManager) : res.sendStatus(404)
         )
         .catch(next);
 }
 
-function updateFreelancer(req, res, next) {
+function updateHiringManager(req, res, next) {
     const id = parseInt(req.params.id);
 
-    HiringManagerService.updateFreelancer(id, req.body)
-        .then((freelancer) =>
-            freelancer ? res.json(freelancer) : res.sendStatus(404)
+    HiringManagerService.updateHiringManager(id, req.body)
+        .then((hiringManager) =>
+            hiringManager ? res.json(hiringManager) : res.sendStatus(404)
         )
         .catch(next);
 }
 
-function deleteFreelancer(req, res, next) {
+function deleteHiringManager(req, res, next) {
     // only admin can delete a subscription type
     // TODO DELETE USER ACCOUNT ALSO
     const id = parseInt(req.params.id);
     HiringManagerService._delete(id)
-        .then((freelancer) => {
-            return !freelancer ? res.sendStatus(404) : res.json({ id });
+        .then((hiringManager) => {
+            return !hiringManager ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
+}
+
+//
+function setHiringManager(req, res, next) {
+    HiringManager.query()
+        .findById(parseInt(req.params.id))
+        .then((manager) => {
+            req.manager = manager;
+            next();
+        })
+        .catch((error) => next(error));
+}
+
+function authUpdateHiringManager(req, res, next) {
+    if (!canUpdateHiringManager(req.user, req.manager)) {
+        res.status(401);
+        return res.send("Action is Not Allowed");
+    }
+
+    next();
 }

@@ -23,25 +23,6 @@ class HiringManagerService {
         }
     }
 
-    static async updateHiringManager(id, updateParams) {
-        // TODO MAKE IT A MIDDLEWARE
-        try {
-            const isAllowed = await this.getHiringManager(id);
-
-            if (!isAllowed) return null;
-
-            const updatedhiringManager = await HiringManager.query().patchAndFetchById(
-                id,
-                {
-                    ...updateParams,
-                }
-            );
-            return updatedhiringManager;
-        } catch (error) {
-            throw error;
-        }
-    }
-
     static async getHiringManagerById(id) {
         try {
             const hiringManager = await this.getHiringManager(id);
@@ -50,6 +31,20 @@ class HiringManagerService {
             }
 
             return this.basicDetails(hiringManager);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateHiringManager(id, updateParams) {
+        try {
+            const updatedhiringManager = await HiringManager.query().patchAndFetchById(
+                id,
+                {
+                    ...updateParams,
+                }
+            );
+            return updatedhiringManager;
         } catch (error) {
             throw error;
         }
