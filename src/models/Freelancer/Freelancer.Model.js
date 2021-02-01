@@ -16,16 +16,17 @@ class Freelancer extends Model {
 
     static async afterInsert({ items, inputItems, relation, context }) {
         try {
+            // inputs items will be the carry over from userModel freelancer insertions
+            // [ { user_id: 5, industry_id: 1, id: 3 } ]
+
             // fetching inserted freelancer and creating  a subscription
-            const { freelancer_id } = inputItems[0];
+            const { id: freelancer_id } = inputItems[0];
             const expiry_date = new Date().toISOString();
 
             const f = await FreelancerSubscriptionService.createFreelancerSubscription(
                 freelancer_id,
                 expiry_date
             );
-
-            console.log("freelancer_sub", f, "===========-====---");
         } catch (error) {
             throw error;
         }

@@ -8,13 +8,16 @@ class FreelancerSubscriptionService {
         // edge case will be when a manual creation is required!
 
         try {
-            const subscription = await FreelancerSubscription.query().insert({
-                freelancer_id,
-                expiry_date,
-            });
+            const subscription = await FreelancerSubscription.query()
+                .insert({
+                    freelancer_id,
+                    expiry_date,
+                })
+                .returning("*");
 
             return subscription;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
