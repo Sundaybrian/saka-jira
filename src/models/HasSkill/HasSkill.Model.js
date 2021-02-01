@@ -2,10 +2,10 @@ const { Model } = require("objection");
 
 const tableNames = require("../../constants/tableNames");
 const db = require("../../db");
-const schema = require("./jobStatus.schema.json");
+const schema = require("./hasSkill.schema.json");
 
 class HasSkill extends Model {
-    
+
     static get tableName() {
         return tableNames.has_skill;
     }
@@ -30,7 +30,7 @@ class HasSkill extends Model {
             skill: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
-                modelClass: Freelancer,
+                modelClass: Skill,
                 join: {
                     from: `${tableNames.has_skill}.skill_id`,
                     to:`${tableNames.skill}.id`,
