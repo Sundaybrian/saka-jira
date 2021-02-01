@@ -1,7 +1,5 @@
 const Freelancer = require("../models/Freelancer/Freelancer.Model");
 const tableNames = require("../constants/tableNames");
-const { threadId } = require("worker_threads");
-const { log } = require("console");
 
 class FreelancerService {
     constructor() {}
