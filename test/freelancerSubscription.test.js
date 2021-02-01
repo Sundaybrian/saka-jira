@@ -90,95 +90,85 @@ describe("POST /api/v1/freelancerSubscription/", () => {
     });
 });
 
-// describe("GET /api/v1/freelancerSubscription/:id", () => {
-//     it("Should find a freelancerSubscription", async () => {
-//         const res = await request(app)
-//             .get("/api/v1/freelancerSubscription/1")
-//             .expect(200);
+describe("GET /api/v1/freelancerSubscription/", () => {
+    it("Should return an array of  freelancerSubscriptions", async () => {
+        const res = await request(app)
+            .get("/api/v1/freelancerSubscription/")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
 
-//         expect(res.body.industry_id).toBe(1);
-//         expect(res.body.latitude).toBe(0);
-//     });
+        expect(res.body.length).toBeGreaterThan(0);
+    });
 
-//     it("should fail to find a freelancerSubscription", async () => {
-//         await request(app)
-//             .get("/api/v1/freelancerSubscription/100")
-//             .expect(404);
-//     });
-// });
+    it("should fail to return array of freelancerSubscriptions if user is not admin", async () => {
+        await request(app)
+            .get("/api/v1/freelancerSubscription/")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(401);
+    });
+});
 
-// describe("PATCH api/v1/freelancerSubscription/:id", () => {
-//     beforeEach(function (done) {
-//         request(app)
-//             .post("/api/v1/accounts/login")
-//             .send({
-//                 email: "sunday@owner.com",
-//                 password: "12345678yh",
-//             })
-//             .end(function (err, res) {
-//                 if (err) throw err;
-//                 token1 = res.body.token;
-//                 done();
-//             });
-//     });
+describe("GET /api/v1/freelancerSubscription/:id", () => {
+    it("Should find a freelancerSubscription", async () => {
+        const res = await request(app)
+            .get("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
+    });
 
-//     it("should fail to update another users freelancerSubscription profile", async () => {
-//         await request(app)
-//             .patch("/api/v1/freelancerSubscription/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(404);
-//     });
+    it("should fail to find a freelancerSubscription", async () => {
+        await request(app)
+            .get("/api/v1/freelancerSubscription/100")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(404);
+    });
+});
 
-//     it("should not add unknown fields to freelancerSubscription", async () => {
-//         await request(app)
-//             .patch("/api/v1/freelancerSubscription/1")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .send({
-//                 freelancerSubscription_desc: "super freelancerSubscription 1",
-//             })
-//             .expect(400);
-//     });
+// patch tests
+describe("PATCH api/v1/freelancerSubscription/:id", () => {
+    it("should fail to update another users freelancerSubscription profile", async () => {
+        await request(app)
+            .patch("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(401);
+    });
 
-//     it("should update freelancerSubscription", async () => {
-//         const res = await request(app)
-//             .patch("/api/v1/freelancerSubscription/1")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .send({
-//                 longitude: -2.66,
-//             })
-//             .expect(200);
-//         expect(res.body.longitude).toBe(-2.66);
-//         expect(res.body.id).toBe(1);
-//     });
-// });
+    it("should not add unknown fields to freelancerSubscription", async () => {
+        await request(app)
+            .patch("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token1}`)
+            .send({
+                freelancerSubscription_desc: "super freelancerSubscription 1",
+            })
+            .expect(400);
+    });
 
-// describe("DELETE api/v1/freelancerSubscription/:id", () => {
-//     beforeEach(function (done) {
-//         request(app)
-//             .post("/api/v1/accounts/login")
-//             .send({
-//                 email: "admin@admin.com",
-//                 password: "12345678yh",
-//             })
-//             .end(function (err, res) {
-//                 if (err) throw err;
-//                 token1 = res.body.token;
-//                 done();
-//             });
-//     });
+    it("should update freelancerSubscription", async () => {
+        const res = await request(app)
+            .patch("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token1}`)
+            .send({
+                expiry_date,
+                freelancer_id: 2,
+            })
+            .expect(200);
+        expect(res.body.freelancer_id).toBe(2);
+    });
+});
 
-//     it("should fail to delete freelancerSubscription", async () => {
-//         await request(app)
-//             .delete("/api/v1/freelancerSubscription/100")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(404);
-//     });
+describe("DELETE api/v1/freelancerSubscription/:id", () => {
+    it("should fail to delete freelancerSubscription", async () => {
+        await request(app)
+            .delete("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(401);
+    });
 
-//     it("should delete freelancerSubscription", async () => {
-//         const res = await request(app)
-//             .delete("/api/v1/freelancerSubscription/1")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
-//         expect(res.body.id).toBe(1);
-//     });
-// });
+    it("should delete freelancerSubscription", async () => {
+        const res = await request(app)
+            .delete("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
+        expect(res.body.id).toBe(2);
+    });
+});

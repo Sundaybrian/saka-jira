@@ -70,7 +70,7 @@ class FreelancerSubscriptionService {
             return null;
         }
 
-        await FreelancerSubscription.query().delete.where({ freelancer_id });
+        await FreelancerSubscription.query().delete().where({ freelancer_id });
 
         return true;
     }
