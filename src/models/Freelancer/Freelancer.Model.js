@@ -3,6 +3,7 @@ const { Model } = require("objection");
 const tableNames = require("../../constants/tableNames");
 const db = require("../../db");
 const schema = require("./freelancer.schema.json");
+const FreelancerSubscriptionService = require("../../services/freelancerSubscription.service");
 
 class Freelancer extends Model {
     static get tableName() {
@@ -11,6 +12,23 @@ class Freelancer extends Model {
 
     static get jsonSchema() {
         return schema;
+    }
+
+    static async afterInsert({ items, inputItems, relation, context }) {
+        try {
+            // fetching inserted freelancer and creating  a subscription
+            const { freelancer_id } = inputItems[0];
+            const expiry_date = new Date().toISOString();
+
+            const f = await FreelancerSubscriptionService.createFreelancerSubscription(
+                freelancer_id,
+                expiry_date
+            );
+
+            console.log("freelancer_sub", f, "===========-====---");
+        } catch (error) {
+            throw error;
+        }
     }
 
     static get relationMappings() {
