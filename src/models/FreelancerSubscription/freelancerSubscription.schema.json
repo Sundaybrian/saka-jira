@@ -3,13 +3,18 @@
     "type": "object",
     "title": "freelancer_subscriptions",
     "description": "The freelancer_subscriptions",
-    "required": ["freelancer_id"],
+    "required": ["freelancer_id", "expiry_date"],
     "additionalProperties": false,
     "properties": {
         "freelancer_id": {
             "$id": "#/properties/freelancer_id",
             "type": "integer",
             "title": "The fk freelancer_id of the freelancer_subscriptions."
+        },
+        "expiry_date": {
+            "$id": "#/properties/expiry_date",
+            "type": "string",
+            "title": "The expiry_date date of the subscription."
         },
         "created_at": {
             "$id": "#/properties/created_at",
