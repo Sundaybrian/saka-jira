@@ -27,6 +27,8 @@ class Freelancer extends Model {
                 freelancer_id,
                 expiry_date
             );
+
+            console.log(f);
         } catch (error) {
             throw error;
         }

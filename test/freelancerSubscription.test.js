@@ -49,6 +49,19 @@ describe("POST /api/v1/freelancerSubscription/", () => {
             .expect(401);
     });
 
+    it("Should fail create a freelancerSubscription if date is not iso string || new Date", async () => {
+        const res = await request(app)
+            .post("/api/v1/freelancerSubscription/")
+            .set("Authorization", `Bearer ${token1}`)
+            .send({
+                freelancer_id: 2,
+                expiry_date: Date.now,
+            })
+            .expect(400);
+
+        // expect(res.body.message).toContain("ValidationError");
+    });
+
     it("Should create a freelancerSubscription", async () => {
         const res = await request(app)
             .post("/api/v1/freelancerSubscription/")
@@ -63,17 +76,17 @@ describe("POST /api/v1/freelancerSubscription/", () => {
         expect(res.body.expiry_date).toBe(expiry_date);
     });
 
-    it("Should fail create a freelancerSubscription if date is not isostring", async () => {
+    it("Should fail create a freelancerSubscription if one exists", async () => {
         const res = await request(app)
             .post("/api/v1/freelancerSubscription/")
             .set("Authorization", `Bearer ${token1}`)
             .send({
                 freelancer_id: 2,
-                expiry_date: new Date(),
+                expiry_date,
             })
-            .expect(400);
+            .expect(500);
 
-        expect(res.body.message).toBe("Validation Error");
+        expect(res.body.message).toContain("violates unique constraint");
     });
 });
 
