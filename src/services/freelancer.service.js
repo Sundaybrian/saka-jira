@@ -91,6 +91,7 @@ class FreelancerService {
             phone_number,
             first_name,
             last_name,
+            user_id,
         } = Freelancer;
 
         return {
@@ -103,6 +104,7 @@ class FreelancerService {
             phone_number,
             first_name,
             last_name,
+            user_id,
         };
     }
 }

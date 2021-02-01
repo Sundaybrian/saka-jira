@@ -3,15 +3,17 @@ const router = require("express").Router();
 const Role = require("../../constants/roles");
 const FreelancerService = require("../../services/freelancer.service");
 const { Auth } = require("../../_middlewares/auth");
-const { canUpdateFreelancer } = require("../../utils/_permissions/freelancer");
-const Freelancer = require("../../models/Freelancer/Freelancer.Model");
+const {
+    setFreelancer,
+    authUpdateFreelancer,
+} = require("../../utils/_permissions/freelancer");
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", getAllFreelancers);
 router.get("/:id", getFreelancerById);
 router.patch(
     "/:id",
-    Auth([Role.user, Role.admin]),
+    Auth(),
     setFreelancer,
     authUpdateFreelancer,
     updateSchema,
@@ -74,24 +76,4 @@ function deleteFreelancer(req, res, next) {
             return !freelancer ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
-}
-
-//
-function setFreelancer(req, res, next) {
-    Freelancer.query()
-        .findById(parseInt(req.params.id))
-        .then((freelancer) => {
-            req.freelancer = freelancer;
-            next();
-        })
-        .catch(next);
-}
-
-function authUpdateFreelancer(req, res, next) {
-    if (!canUpdateFreelancer(req.user, req.freelancer)) {
-        res.status(401);
-        return res.send("Action is Not Allowed");
-    }
-
-    next();
 }

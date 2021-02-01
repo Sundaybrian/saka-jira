@@ -109,6 +109,12 @@ describe("GET /api/v1/freelancerSubscription/", () => {
 });
 
 describe("GET /api/v1/freelancerSubscription/:id", () => {
+    it("should fail to return another users freelancerSubscription", async () => {
+        await request(app)
+            .get("/api/v1/freelancerSubscription/2")
+            .set("Authorization", `Bearer ${token3}`)
+            .expect(401);
+    });
     it("Should find a freelancerSubscription", async () => {
         const res = await request(app)
             .get("/api/v1/freelancerSubscription/2")

@@ -19,13 +19,6 @@ describe("POST /api/v1/freelancer/", () => {
             });
     });
 
-    it("Should fail to create a freelancer with missing field", async () => {
-        await request(app)
-            .post("/api/v1/freelancer/")
-            .set("Authorization", `Bearer ${token1}`)
-            .expect(400);
-    });
-
     it("Should create a freelancer profile", async () => {
         const res = await request(app)
             .post("/api/v1/freelancer/")
@@ -55,6 +48,7 @@ describe("GET /api/v1/freelancer/:id", () => {
     });
 });
 
+// patch
 describe("PATCH api/v1/freelancer/:id", () => {
     beforeEach(function (done) {
         request(app)
@@ -74,7 +68,7 @@ describe("PATCH api/v1/freelancer/:id", () => {
         await request(app)
             .patch("/api/v1/freelancer/2")
             .set("Authorization", `Bearer ${token1}`)
-            .expect(404);
+            .expect(401);
     });
 
     it("should not add unknown fields to freelancer", async () => {

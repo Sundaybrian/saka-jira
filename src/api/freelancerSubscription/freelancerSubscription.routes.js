@@ -6,6 +6,10 @@ const router = require("express").Router();
 const Role = require("../../constants/roles");
 const FreelancerSubscriptionService = require("../../services/freelancerSubscription.service");
 const { Auth } = require("../../_middlewares/auth");
+const {
+    setFreelancer,
+    authFetchFreelancerSubscription,
+} = require("../../utils/_permissions/freelancer");
 
 router.post(
     "/",
@@ -14,7 +18,13 @@ router.post(
     createFreelancerSubscription
 );
 router.get("/", Auth([Role.admin]), getAllFreelancerSubscriptions);
-router.get("/:id", Auth(), getFreelancerSubscriptionById);
+router.get(
+    "/:id",
+    Auth(),
+    setFreelancer,
+    authFetchFreelancerSubscription,
+    getFreelancerSubscriptionById
+);
 router.patch(
     "/:id",
     Auth([Role.admin]),
