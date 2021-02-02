@@ -1,20 +1,25 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "job_status",
-    "description": "The job_status",
-    "required": ["job_status_name"],
+    "title": "has_Skill",
+    "description": "The has_Skill",
+    "required": ["freelancer_id", "skill_id"],
     "additionalProperties": false,
     "properties": {
         "id": {
             "$id": "#/properties/id",
             "type": "integer",
-            "title": "The database ID of the job_status."
+            "title": "The database ID of the has_Skill."
         },
-        "job_status_name": {
-            "$id": "#/properties/job_status_name",
-            "type": "string",
-            "title": "The job_status_name of the job_status."
+        "freelancer_id": {
+            "$freelancer_id": "#/properties/freelancer_id",
+            "type": "integer",
+            "title": "The database ID of the freelancer."
+        },
+        "skill_id": {
+            "$skill_id": "#/properties/skill_id",
+            "type": "integer",
+            "title": "The database ID of the skill."
         },
         "created_at": {
             "$id": "#/properties/created_at",
@@ -29,7 +34,7 @@
         "deleted_at": {
             "$id": "#/properties/deleted_at",
             "type": "string",
-            "title": "The date when the job_status was deleted."
+            "title": "The date when the has_Skill was deleted."
         }
     }
 }
