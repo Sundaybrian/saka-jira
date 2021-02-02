@@ -9,8 +9,8 @@ const {
 const HiringManager = require("../../models/HiringManager/HiringManager.Model");
 
 router.post("/", Auth(), createSchema, createHiringManager);
-router.get("/", getAllHiringManagers);
-router.get("/:id", getHiringManagerById);
+router.get("/", Auth(), getAllHiringManagers);
+router.get("/:id", Auth(), getHiringManagerById);
 router.patch(
     "/:id",
     Auth([Role.user]),
@@ -89,12 +89,14 @@ function deleteHiringManager(req, res, next) {
 //
 function setHiringManager(req, res, next) {
     HiringManager.query()
-        .findById(parseInt(req.params.id))
+        .where("id", parseInt(req.params.id))
+        .first()
         .then((manager) => {
+            if (!manager) return res.sendStatus(404);
             req.manager = manager;
             next();
         })
-        .catch((error) => next(error));
+        .catch(next);
 }
 
 function authUpdateHiringManager(req, res, next) {

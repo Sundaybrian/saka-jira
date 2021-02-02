@@ -1,8 +1,9 @@
 const { Model } = require("objection");
 
 const tableNames = require("../../constants/tableNames");
-// const db = require("../../db");
+const db = require("../../db");
 const schema = require("./freelancer.schema.json");
+const FreelancerSubscriptionService = require("../../services/freelancerSubscription.service");
 
 class Freelancer extends Model {
     static get tableName() {
@@ -11,6 +12,24 @@ class Freelancer extends Model {
 
     static get jsonSchema() {
         return schema;
+    }
+
+    static async afterInsert({ items, inputItems, relation, context }) {
+        try {
+            // inputs items will be the carry over from userModel freelancer insertions
+            // [ { user_id: 5, industry_id: 1, id: 3 } ]
+
+            // fetching inserted freelancer and creating  a subscription
+            const { id: freelancer_id } = inputItems[0];
+            const expiry_date = new Date().toISOString();
+
+            const f = await FreelancerSubscriptionService.createFreelancerSubscription(
+                freelancer_id,
+                expiry_date
+            );
+        } catch (error) {
+            throw error;
+        }
     }
 
     static get relationMappings() {
@@ -40,5 +59,7 @@ class Freelancer extends Model {
         };
     }
 }
+
+Model.knex(db);
 
 module.exports = Freelancer;

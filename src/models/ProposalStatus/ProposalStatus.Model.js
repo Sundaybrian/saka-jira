@@ -1,7 +1,7 @@
 const { Model } = require("objection");
 
 const tableNames = require("../../constants/tableNames");
-// const db = require("../../db");
+const db = require("../../db");
 const schema = require("./proposalStatus.schema.json");
 
 class ProposalStatus extends Model {
@@ -13,5 +13,7 @@ class ProposalStatus extends Model {
         return schema;
     }
 }
+
+Model.knex(db);
 
 module.exports = ProposalStatus;

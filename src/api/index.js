@@ -23,5 +23,9 @@ router.use(
 router.use("/paymentType", require("./paymentType/paymentType.routes"));
 router.use("/freelancer", require("./freelancer/freelancer.routes"));
 router.use("/hiringManager", require("./hiringManager/hiringManager.routes"));
+router.use(
+    "/freelancerSubscription",
+    require("./freelancerSubscription/freelancerSubscription.routes")
+);
 
 module.exports = router;

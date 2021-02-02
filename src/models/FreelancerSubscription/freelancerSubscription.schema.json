@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "freelancer_subscriptions",
+    "description": "The freelancer_subscriptions",
+    "required": ["freelancer_id", "expiry_date"],
+    "additionalProperties": false,
+    "properties": {
+        "freelancer_id": {
+            "$id": "#/properties/freelancer_id",
+            "type": "integer",
+            "title": "The fk freelancer_id of the freelancer_subscriptions."
+        },
+        "expiry_date": {
+            "$id": "#/properties/expiry_date",
+            "type": "string",
+            "format": "date-time",
+            "title": "The expiry_date date of the subscription."
+        },
+        "created_at": {
+            "$id": "#/properties/created_at",
+            "type": "string",
+            "title": "The creation date when the ticket was created."
+        },
+        "updated_at": {
+            "$id": "#/properties/updated_at",
+            "type": "string",
+            "title": "The date when the ticket was updated."
+        },
+        "deleted_at": {
+            "$id": "#/properties/deleted_at",
+            "type": "string",
+            "title": "The date when the freelancer_subscriptions was deleted."
+        }
+    }
+}

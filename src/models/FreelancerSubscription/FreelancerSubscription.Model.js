@@ -1,12 +1,12 @@
 const { Model } = require("objection");
 
 const tableNames = require("../../constants/tableNames");
-const schema = require("./hiringManager.schema.json");
 const db = require("../../db");
+const schema = require("./freelancerSubscription.schema.json");
 
-class HiringManager extends Model {
+class FreelancerSubscription extends Model {
     static get tableName() {
-        return tableNames.hiring_manager;
+        return tableNames.freelancer_subscriptions;
     }
 
     static get jsonSchema() {
@@ -15,16 +15,16 @@ class HiringManager extends Model {
 
     static get relationMappings() {
         // Importing models here is a one way to avoid require loops.
-        const User = require("../User/User.Model");
+        const Freelancer = require("../Freelancer/Freelancer.Model");
 
         return {
-            user: {
+            freelancer: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
-                modelClass: User,
+                modelClass: Freelancer,
                 join: {
-                    from: `${tableNames.hiring_manager}.user_id`,
-                    to: `${tableNames.user}.id`,
+                    from: `${tableNames.freelancer_subscriptions}.freelancer_id`,
+                    to: `${tableNames.freelancer}.id`,
                 },
             },
         };
@@ -33,4 +33,4 @@ class HiringManager extends Model {
 
 Model.knex(db);
 
-module.exports = HiringManager;
+module.exports = FreelancerSubscription;

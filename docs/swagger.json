@@ -2226,7 +2226,7 @@
                 "tags": ["freelancer"],
                 "summary": "Add a freelancer profile",
                 "operationId": "createfreelancerprofile",
-                "description": "users can create a freelancer profile",
+                "description": "users can create a freelancer profile. Technically you will not require to use this endpoint , since a relation will be created on user signup",
                 "security": [
                     {
                         "bearerAuth": []
@@ -2418,6 +2418,479 @@
                     }
                 }
             }
+        },
+        "/hiringManager": {
+            "get": {
+                "tags": ["hiringManager"],
+                "summary": "Get a list of all hiringManager",
+                "description": "Open to all users, update will have pagination and query params",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "getallhiringManager",
+                "responses": {
+                    "200": {
+                        "description": "An array of all hiringManager",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "first_name": {
+                                                "type": "string",
+                                                "example": "Sunday"
+                                            },
+                                            "last_name": {
+                                                "type": "string",
+                                                "example": "Owner"
+                                            },
+                                            "latitude": {
+                                                "type": "number",
+                                                "example": 38.676
+                                            },
+                                            "longitude": {
+                                                "type": "number",
+                                                "example": -1.566
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "sunday@owner.com"
+                                            },
+                                            "phone_number": {
+                                                "type": "string",
+                                                "example": "0714382366"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "example": "2020-05-05T09:12:57.848Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "example": "2020-05-08T03:11:21.553Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["hiringManager"],
+                "summary": "Add a hiringManager profile",
+                "operationId": "createhiringManagerprofile",
+                "description": "users can create a hiringManager profile. Technically you will not require to use this endpoint, just as freelancer will not use theirs , since a relation will be created on user signup",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "latitude": {
+                                        "type": "number",
+                                        "example": 36.78678678
+                                    },
+                                    "longitude": {
+                                        "type": "number",
+                                        "example": -1.546567
+                                    }
+                                },
+                                "required": ["user_id"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "hiringManager profile was correctly inserted if lat and long were not provided, they default to greenwich coordinates of (0,0)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "latitude": {
+                                            "type": "number",
+                                            "example": 36.78678678
+                                        },
+                                        "longitude": {
+                                            "type": "number",
+                                            "example": -1.5465677
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/hiringManager/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "hiringManager id",
+                    "required": true,
+                    "example": 1,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }
+            ],
+            "get": {
+                "tags": ["hiringManager"],
+                "summary": "Get a hiringManager  by id",
+                "description": "Open to all users",
+                "operationId": "gethiringManagerByID",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/FreelancerResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["hiringManager"],
+                "summary": "Update a hiringManager profile",
+                "description": "hiringManager can update their own profiles, and admin can update any profile",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "latitude": {
+                                        "type": "number",
+                                        "example": 36.78678678
+                                    },
+                                    "longitude": {
+                                        "type": "number",
+                                        "example": -1.5465677
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "hiringManager updated successfully. The details of the hiringManager are returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "latitude": {
+                                            "type": "number",
+                                            "example": 36.78678678
+                                        },
+                                        "longitude": {
+                                            "type": "number",
+                                            "example": "-1.546567'"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["hiringManager"],
+                "summary": "Delete a hiringManager",
+                "description": "Admin users can delete any hiringManager, regular users are restricted. Future implementation is making sure we cascade user tables and any other data",
+                "operationId": "deletehiringManager",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "hiringManager deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/freelancerSubscription": {
+            "get": {
+                "tags": ["freelancerSubscription"],
+                "summary": "Get a list of all freelancerSubscription",
+                "description": "Restricted to admin users, update will have pagination and query params",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "getallfreelancerSubscriptions",
+                "responses": {
+                    "200": {
+                        "description": "An array of all freelancerSubscription, update will have join with user table",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "freelancer_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "expiry_date": {
+                                                "type": "string",
+                                                "example": "2020-05-05T09:12:57.848Z"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "example": "2020-05-05T09:12:57.848Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "example": "2020-05-08T03:11:21.553Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["freelancerSubscription"],
+                "summary": "Create a freelancer freelancerSubscription, restricted to admins",
+                "operationId": "createfreelancerfreelancerSubscription",
+                "description": "Technically you will not be required to use this endpoint, only edge cases like the db failing to create an initial subscription; then will you actually need it",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "freelancer_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "expiry_date": {
+                                        "type": "string",
+                                        "example": "2020-05-08T03:11:21.553Z"
+                                    }
+                                },
+                                "required": ["freelancer_id", "expiry_date"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "freelancer freelancerSubscription was correctly inserted and expiry_date set",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "freelancer_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "expiry_date": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/freelancerSubscription/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "freelancer id, since a freelancer has only one subscription",
+                    "required": true,
+                    "example": 1,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }
+            ],
+            "get": {
+                "tags": ["freelancerSubscription"],
+                "summary": "Get a freelancerSubscription by id",
+                "description": "Restricted to admins and subscription owner i,e the freelancer",
+                "operationId": "getfreelancerSubscriptionByID",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/FreelancerSubscriptionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["freelancerSubscription"],
+                "summary": "Update a freelancerSubscription",
+                "description": "Another edge case where manual updating of subscription can be done, if something goes wrong in the backend side",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "freelancer_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "expiry_date": {
+                                        "type": "string",
+                                        "example": "2020-05-08T03:11:21.553Z"
+                                    }
+                                },
+                                "required": ["freelancer_id", "expiry_date"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/FreelancerSubscriptionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["freelancerSubscription"],
+                "summary": "Delete a freelancer subscription",
+                "description": "Admin users can delete any freelancers subscription.Beats me why we need it now",
+                "operationId": "deletefreelancerSubscription",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "freelancerSubscription deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2465,6 +2938,26 @@
                     }
                 }
             },
+            "FreelancerSubscriptionResponse": {
+                "description": "freelancer freelancerSubscription was correctly inserted and expiry_date set",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "freelancer_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "expiry_date": {
+                                    "type": "string",
+                                    "example": "2020-05-08T03:11:21.553Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "FreelancerResponse": {
                 "description": "Freelancer Details",
                 "content": {
@@ -2491,6 +2984,54 @@
                                 "industry_name": {
                                     "type": "string",
                                     "example": "omputer Programming"
+                                },
+                                "latitude": {
+                                    "type": "number",
+                                    "example": 38.676
+                                },
+                                "longitude": {
+                                    "type": "number",
+                                    "example": -1.566
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "sunday@owner.com"
+                                },
+                                "phone_number": {
+                                    "type": "string",
+                                    "example": "0714382366"
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "example": "2020-05-05T09:12:57.848Z"
+                                },
+                                "updated_at": {
+                                    "type": "string",
+                                    "example": "2020-05-08T03:11:21.553Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "HiringManagerResponse": {
+                "description": "HiringManager Details",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "first_name": {
+                                    "type": "string",
+                                    "example": "Sunday"
+                                },
+                                "last_name": {
+                                    "type": "string",
+                                    "example": "Owner"
                                 },
                                 "latitude": {
                                     "type": "number",

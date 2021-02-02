@@ -42,6 +42,27 @@ function references(table, tableName, columnName = null, notNullable = true) {
     return definition;
 }
 
+function referencesCustomPk(
+    table,
+    tableName,
+    columnName = null,
+    customPk,
+    notNullable = true
+) {
+    const definition = table
+        .integer(`${columnName || tableName}_id`)
+        .unsigned()
+        .references(customPk)
+        .inTable(tableName)
+        .onDelete("cascade");
+
+    if (notNullable) {
+        definition.notNullable();
+    }
+
+    return definition;
+}
+
 function url(table, columnName) {
     table.string(columnName, 2000);
 }
@@ -55,6 +76,7 @@ module.exports = {
     addDefaultColumnsUser,
     addDefaultGeoLocations,
     references,
+    referencesCustomPk,
     url,
     email,
 };
