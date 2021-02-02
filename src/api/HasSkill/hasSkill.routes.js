@@ -3,8 +3,6 @@ const {
 } = require("./hasSkill.validators");
 const Role = require("../../constants/roles");
 const HasSkillService = require("../../services/hasSkill.service");
-
-
 const { Auth } = require("../../_middlewares/auth");
 const {
     setFreelancer,
