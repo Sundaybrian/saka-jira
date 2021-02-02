@@ -87,23 +87,30 @@ describe("POST /api/v1/freelancer/:id/skills/", () => {
     });
 });
 
-// describe("GET /api/v1/freelancer/:id/skills/", () => {
-//     it("Should return an array of  freelancers:id/skills/", async () => {
-//         const res = await request(app)
-//             .get("/api/v1/freelancer/:id/skills/")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
+// get my skills
 
-//         expect(res.body.length).toBeGreaterThan(0);
-//     });
+describe("GET /api/v1/freelancer/:id/skills/", () => {
+    it("Should return an array of  freelancers skills", async () => {
+        const res = await request(app)
+            .get("/api/v1/freelancer/1/skills/")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(200);
+console.log(res.body);
+        expect(res.body.skills.length).toBeGreaterThan(0);
+        expect(res.body.freelancer_id).toBe(1);
+        expect(res.body.skills[0].skill_name).toBeTruthy()
 
-//     it("should fail to return array of freelancers:id/skills/ if user is not admin", async () => {
-//         await request(app)
-//             .get("/api/v1/freelancer/:id/skills/")
-//             .set("Authorization", `Bearer ${token2}`)
-//             .expect(401);
-//     });
-// });
+    });
+
+    it("should fail to return array of freelancers:id/skills/ if user is not admin", async () => {
+        await request(app)
+            .get("/api/v1/freelancer/1/skills/")
+            .set("Authorization", `Bearer ${token3}`)
+            .expect(401);
+    });
+});
+
+
 
 // describe("GET /api/v1/freelancer/:id/skills/:id", () => {
 //     it("should fail to return another users freelancer":id/skills/, async () => {

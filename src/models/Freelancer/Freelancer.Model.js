@@ -36,6 +36,7 @@ class Freelancer extends Model {
         // Importing models here is a one way to avoid require loops.
         const User = require("../User/User.Model");
         const Industry = require("../Industry/Industry.Model");
+        const Skill = require("../Skill/Skill.Model");
 
         return {
             user: {
@@ -54,6 +55,25 @@ class Freelancer extends Model {
                 join: {
                     from: `${tableNames.freelancer}.industry_id`,
                     to: `${tableNames.industry}.id`,
+                },
+            },
+
+            skills: {
+                // ManyToManyRelation: Use this relation when the model is related to a list of other models through a join table
+                relation: Model.ManyToManyRelation,
+                modelClass: Skill,
+                join: {
+                    from: `${tableNames.freelancer}.id`,
+                    // ManyToMany relation needs the `through` object
+                    // to describe the join table.
+                    through: {
+                        // If you have a model class for the join table
+                        // you need to specify it like this:
+                        // modelClass: PersonMovie,
+                        from: `${tableNames.has_skill}.freelancer_id`,
+                        to: `${tableNames.has_skill}.skill_id`,
+                    },
+                    to: `${tableNames.skill}.id`,
                 },
             },
         };

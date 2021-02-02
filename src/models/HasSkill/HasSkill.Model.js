@@ -13,9 +13,6 @@ class HasSkill extends Model {
     static get modifiers() {
         return{
             
-            selectNameAndId(builder){
-                builder.select("id","skill_name")
-            },
             defaultSelects(builder) {
                 builder.select('id', 'freelancer_id', 'skill_id');
               },

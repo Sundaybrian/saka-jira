@@ -58,9 +58,14 @@ class HasSkillService {
             .where({ ...params }).modify(
                 'defaultSelects'
             )
-            .withGraphFetched(`skills(selectNameAndId)`)
+            .withGraphFetched('skills(selectNameAndId)')
+            .modifiers({
+                selectNameAndId(builder) {
+                  builder.select('skill_name', 'id');
+                },})
             .first();
 
+            console.log(typeof(hasSkill.skills));
         return hasSkill;
     }
 
