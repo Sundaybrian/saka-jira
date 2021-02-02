@@ -3,9 +3,10 @@ const HasSkill = require("../models/HasSkill/HasSkill.Model");
 class HasSkillService {
     constructor() {}
 
-    static async createHasSkill(params) {
+    static async addSkills(skills_array) {
+
         try {
-            const hasSkill = await HasSkill.query().insert(params);
+            const hasSkill = await HasSkill.query().insert(skills_array);
 
             return this.basicDetails(hasSkill);
         } catch (error) {
@@ -13,44 +14,43 @@ class HasSkillService {
         }
     }
 
-    static async getAllHasSkilles() {
-        const hasSkill = await HasSkill.query();
-        return hasSkill;
-    }
-    static async updateHasSkill(id, params) {
-        const updatedHasSkill = await HasSkill.query().patchAndFetchById(id, {
-            ...params,
-        });
-
-        return updatedHasSkill;
-    }
-
-    static async getHasSkillById(id) {
+    static async getMySkills(freelancer_id){
         try {
-            const hasSkill = await this.getHasSkill({ id });
-            if (!hasSkill) {
-                return null;
-            }
+            const mySkills = await this.getHasSkill({freelancer_id});
 
-            return this.basicDetails(hasSkill);
+            return mySkills;
         } catch (error) {
             throw error;
         }
     }
 
-    static async _delete(id) {
-        const hasSkill = await this.getHasSkill({ id });
-        if (!hasSkill) {
-            return null;
+    // TODO ADD SEARCH BY SKILLS CRITERIA
+    // static async getfREEs() {
+    //     const hasSkill = await HasSkill.query();
+    //     return hasSkill;
+    // }
+
+
+    static async _removeSkill(id) {
+        try {
+            // returns num of deleted row if any
+           const removedSkill =  await HasSkill.query().deleteById(id);
+            return removedSkill;
+        } catch (error) {
+            throw error
         }
 
-        await HasSkill.query().deleteById(id);
-        return true;
     }
 
+    // helper methods
     static async getHasSkill(params) {
+        // fetches only freelancer_id for the modify
+        // for eager loading only skill_name and its id
         const hasSkill = await HasSkill.query()
-            .where({ ...params })
+            .where({ ...params }).modify(
+                'defaultSelects'
+            )
+            .withGraphFetched(`skills(selectNameAndId)`)
             .first();
 
         return hasSkill;
