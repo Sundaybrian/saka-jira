@@ -1,4 +1,5 @@
 const HasSkill = require("../models/HasSkill/HasSkill.Model");
+const FreelancerService = require("./freelancer.service");
 
 class HasSkillService {
     constructor() {}
@@ -29,9 +30,11 @@ class HasSkillService {
 
     static async getMySkills(freelancer_id){
         try {
-            const mySkills = await this.getHasSkill({freelancer_id});
+            const mySkills = await FreelancerService.getAllFreelancerSkills(freelancer_id);
 
-            return mySkills;
+            const {skills} = mySkills[0];
+            return {skills};
+
         } catch (error) {
             throw error;
         }
@@ -51,23 +54,7 @@ class HasSkillService {
     }
 
     // helper methods
-    static async getHasSkill(params) {
-        // fetches only freelancer_id for the modify
-        // for eager loading only skill_name and its id
-        const hasSkill = await HasSkill.query()
-            .where({ ...params }).modify(
-                'defaultSelects'
-            )
-            .withGraphFetched('skills(selectNameAndId)')
-            .modifiers({
-                selectNameAndId(builder) {
-                  builder.select('skill_name', 'id');
-                },})
-            .first();
-
-            console.log(typeof(hasSkill.skills));
-        return hasSkill;
-    }
+   
 
     static async basicDetails(HasSkill) {
         const { id,  freelancer_id,

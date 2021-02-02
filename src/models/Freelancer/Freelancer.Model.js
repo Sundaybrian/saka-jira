@@ -37,6 +37,7 @@ class Freelancer extends Model {
         const User = require("../User/User.Model");
         const Industry = require("../Industry/Industry.Model");
         const Skill = require("../Skill/Skill.Model");
+        const HasSkill = require("../HasSkill/HasSkill.Model");
 
         return {
             user: {
@@ -60,20 +61,12 @@ class Freelancer extends Model {
 
             skills: {
                 // ManyToManyRelation: Use this relation when the model is related to a list of other models through a join table
-                relation: Model.ManyToManyRelation,
-                modelClass: Skill,
+                relation: Model.HasManyRelation,
+                modelClass: HasSkill,
                 join: {
                     from: `${tableNames.freelancer}.id`,
-                    // ManyToMany relation needs the `through` object
-                    // to describe the join table.
-                    through: {
-                        // If you have a model class for the join table
-                        // you need to specify it like this:
-                        // modelClass: PersonMovie,
-                        from: `${tableNames.has_skill}.freelancer_id`,
-                        to: `${tableNames.has_skill}.skill_id`,
-                    },
-                    to: `${tableNames.skill}.id`,
+                   
+                    to: `${tableNames.has_skill}.freelancer_id`,
                 },
             },
         };

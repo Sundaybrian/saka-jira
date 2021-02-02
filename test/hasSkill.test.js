@@ -95,9 +95,9 @@ describe("GET /api/v1/freelancer/:id/skills/", () => {
             .get("/api/v1/freelancer/1/skills/")
             .set("Authorization", `Bearer ${token2}`)
             .expect(200);
-console.log(res.body);
+
         expect(res.body.skills.length).toBeGreaterThan(0);
-        expect(res.body.freelancer_id).toBe(1);
+        expect(res.body.skills[0].freelancer_id).toBe(1);
         expect(res.body.skills[0].skill_name).toBeTruthy()
 
     });

@@ -57,6 +57,28 @@ class FreelancerService {
         return true;
     }
 
+    static async getAllFreelancerSkills(freelancer_id){
+        try {
+            const mySkills = await Freelancer.query().alias("f")
+            .where("f.id", freelancer_id).withGraphFetched('skills(selectNameAndId)')
+            .modifiers({
+                selectNameAndId(builder) {
+                    builder
+                        .select(
+                            "has_skill.freelancer_id",
+                            "skill.skill_name",
+                            "skill.id",
+                            
+                        )
+                        .innerJoin("skill", "has_skill.skill_id", "skill.id");
+                }});
+
+            return mySkills
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async getFreelancer(id) {
         const freelancer = await Freelancer.query()
             .alias("f")
