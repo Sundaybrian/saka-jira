@@ -15,6 +15,7 @@ class HasSkillService {
     }
 
     // insert many
+    // TODO implement this
     static async addSkills(skills_array) {
 
         try {
@@ -37,11 +38,6 @@ class HasSkillService {
     }
 
     // TODO ADD SEARCH BY SKILLS CRITERIA
-    // static async getfREEs() {
-    //     const hasSkill = await HasSkill.query();
-    //     return hasSkill;
-    // }
-
 
     static async _removeSkill(id) {
         try {

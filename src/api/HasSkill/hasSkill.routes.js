@@ -26,22 +26,10 @@ router.post(
 );
 
 
-router.get("/", Auth([Role.admin]), getAllFreelancerSubscriptions);
-router.get(
-    "/:id",
-    Auth(),
-    setFreelancer,
-    authFetchFreelancerSubscription,
-    getFreelancerSubscriptionById
-);
-router.patch(
-    "/:id",
-    Auth([Role.admin]),
-    updateSchema,
-    updateFreelancerSubscription
-);
+router.get("/", Auth(), setFreelancer,  authUpdateFreelancer,getMySkills);
 
-router.delete("/:id", Auth([Role.admin]), deleteFreelancerSubscription);
+
+router.delete("/:skill_id", Auth(), setFreelancer,  authUpdateFreelancer, removeSkill);
 
 module.exports = router;
 
@@ -49,7 +37,7 @@ function addSkill(req, res, next) {
     const { skill_id} = req.body;
     const payload = {
         skill_id,
-        freelacer_id: parseInt(req.freelacer.id)
+        freelacer_id: parseInt(req.freelancer.id)
     }
 
     HasSkillService.addSkill(
@@ -59,55 +47,27 @@ function addSkill(req, res, next) {
         .catch(next);
 }
 
-/// TODO paginations
-function getAllFreelancerSubscriptions(req, res, next) {
-    // const limit = parseInt(req.query.limit) || 10;
-    // const page = parseInt(req.query.page) || 1;
 
-    HasSkillService.getAllFreelancersSubscriptions()
-        .then((hiringManagers) => {
-            return hiringManagers
-                ? res.json(hiringManagers)
+function getMySkills(req, res, next) {
+
+    const freelancer_id = parseInt(req.freelancer.id);
+
+    HasSkillService.getMySkills(freelancer_id)
+        .then((freelancer_and_skills) => {
+            return freelancer_and_skills
+                ? res.json(freelancer_and_skills)
                 : res.sendStatus(404);
         })
         .catch(next);
 }
 
-function getFreelancerSubscriptionById(req, res, next) {
-    const id = parseInt(req.params.id);
 
-    HasSkillService.getFreelancerSubscriptionById(id)
-        .then((freelancer_subscription) =>
-            freelancer_subscription
-                ? res.json(freelancer_subscription)
-                : res.sendStatus(404)
-        )
-        .catch(next);
-}
-
-// TODO WILL be accessed via backend with endpoint or with admin
-function updateFreelancerSubscription(req, res, next) {
-    const { freelancer_id, expiry_date } = req.body;
-
-    HasSkillService.updateFreelancerSubscription(
-        freelancer_id,
-        expiry_date
-    )
-        .then((freelancer_subscription) =>
-            freelancer_subscription
-                ? res.json(freelancer_subscription)
-                : res.sendStatus(404)
-        )
-        .catch(next);
-}
-
-function deleteFreelancerSubscription(req, res, next) {
-    // only admin can delete a subscription type
-    // TODO DELETE USER subscripion ACCOUNT ALSO
-    const id = parseInt(req.params.id);
+function removeSkill(req, res, next) {
+    // only admin can delete /freelancer can unrelate a skill from user 
+    const id = parseInt(req.params.skill_id);
     HasSkillService._delete(id)
-        .then((freelancer_subscription) => {
-            return !freelancer_subscription
+        .then((freelancer_skill) => {
+            return !freelancer_skill
                 ? res.sendStatus(404)
                 : res.json({ id });
         })
