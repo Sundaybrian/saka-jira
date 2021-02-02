@@ -1,7 +1,4 @@
 const { createSchema, updateSchema } = require("./freelancer.validators");
-const router = require("express").Router();
-
-
 const Role = require("../../constants/roles");
 const FreelancerService = require("../../services/freelancer.service");
 
@@ -15,7 +12,7 @@ const {
 const Skills = require("../HasSkill/hasSkill.routes");
 
 
-const router = express.Router({
+const router = require("express").Router({
     mergeParams: true,
 });
 

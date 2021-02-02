@@ -3,6 +3,18 @@ const HasSkill = require("../models/HasSkill/HasSkill.Model");
 class HasSkillService {
     constructor() {}
 
+    static async addSkill(skill) {
+
+        try {
+            const hasSkill = await HasSkill.query().insert(skill);
+
+            return this.basicDetails(hasSkill);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // insert many
     static async addSkills(skills_array) {
 
         try {
