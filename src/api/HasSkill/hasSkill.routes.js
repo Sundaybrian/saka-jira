@@ -33,7 +33,7 @@ function addSkill(req, res, next) {
     const { skill_id} = req.body;
     const payload = {
         skill_id,
-        freelacer_id: parseInt(req.freelancer.id)
+        freelancer_id: parseInt(req.freelancer.id)
     }
 
     HasSkillService.addSkill(

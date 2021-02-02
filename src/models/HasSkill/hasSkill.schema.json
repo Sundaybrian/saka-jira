@@ -3,7 +3,7 @@
     "type": "object",
     "title": "has_Skill",
     "description": "The has_Skill",
-    "required": ["freelancer_id", "skill_id"],
+    "required": ["skill_id"],
     "additionalProperties": false,
     "properties": {
         "id": {
