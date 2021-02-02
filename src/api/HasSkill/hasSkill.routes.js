@@ -24,11 +24,7 @@ router.post(
     createSchema,
     addSkill
 );
-
-
 router.get("/", Auth(), setFreelancer,  authUpdateFreelancer,getMySkills);
-
-
 router.delete("/:skill_id", Auth(), setFreelancer,  authUpdateFreelancer, removeSkill);
 
 module.exports = router;
