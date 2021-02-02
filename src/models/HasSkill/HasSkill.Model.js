@@ -27,7 +27,7 @@ class HasSkill extends Model {
                     to:`${tableNames.freelancer}.id`,
                 },
             },
-            skill: {
+            skills: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
                 modelClass: Skill,
