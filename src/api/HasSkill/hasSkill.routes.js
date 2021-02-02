@@ -61,7 +61,7 @@ function getMySkills(req, res, next) {
 function removeSkill(req, res, next) {
     // only admin can delete /freelancer can unrelate a skill from user 
     const id = parseInt(req.params.skill_id);
-    HasSkillService._delete(id)
+    HasSkillService._removeSkill(id)
         .then((freelancer_skill) => {
             return !freelancer_skill
                 ? res.sendStatus(404)

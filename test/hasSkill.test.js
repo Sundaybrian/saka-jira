@@ -111,74 +111,19 @@ describe("GET /api/v1/freelancer/:id/skills/", () => {
 });
 
 
+describe("DELETE api/v1/freelancer/:id/skills/:id", () => {
+    it("should fail to delete freelancer skill",async () => {
+        await request(app)
+            .delete("/api/v1/freelancer/1/skills/1")
+            .set("Authorization", `Bearer ${token3}`)
+            .expect(401);
+    });
 
-// describe("GET /api/v1/freelancer/:id/skills/:id", () => {
-//     it("should fail to return another users freelancer":id/skills/, async () => {
-//         await request(app)
-//             .get("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token3}`)
-//             .expect(401);
-//     });
-//     it("Should find a freelancer":id/skills/, async () => {
-//         const res = await request(app)
-//             .get("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
-//     });
-
-//     it("should fail to find a freelancer":id/skills/, async () => {
-//         await request(app)
-//             .get("/api/v1/freelancer/:id/skills/100")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(404);
-//     });
-// });
-
-// // patch tests
-// describe("PATCH api/v1/freelancer/:id/skills/:id", () => {
-//     it("should fail to update another users freelancer :id/skills/profile", async () => {
-//         await request(app)
-//             .patch("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token2}`)
-//             .expect(401);
-//     });
-
-//     it("should not add unknown fields to freelancer", async () => {
-//         await request(app)
-//             .patch("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .send({
-//                 freelancer_:id/skills/desc: "super freelancer :id/skills/1",
-//             })
-//             .expect(400);
-//     });
-
-//     it("should update freelancer":id/skills/, async () => {
-//         const res = await request(app)
-//             .patch("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .send({
-//                 ,
-//                 freelancer_id: 2,
-//             })
-//             .expect(200);
-//         expect(res.body.freelancer_id).toBe(2);
-//     });
-// });
-
-// describe("DELETE api/v1/freelancer/:id/skills/:id", () => {
-//     it("should fail to delete freelancer",async () => {
-//         await request(app)
-//             .delete("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token2}`)
-//             .expect(401);
-//     });
-
-//     it("should delete freelancer":id/skills/, async () => {
-//         const res = await request(app)
-//             .delete("/api/v1/freelancer/:id/skills/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
-//         expect(res.body.id).toBe(2);
-//     });
-// });
+    it("should delete freelancer", async () => {
+        const res = await request(app)
+            .delete("/api/v1/freelancer/1/skills/1")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(200);
+        expect(res.body.id).toBe(1);
+    });
+});
