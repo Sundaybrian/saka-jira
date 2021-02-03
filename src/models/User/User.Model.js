@@ -15,6 +15,15 @@ class User extends Cursor(Model) {
         return schema;
     }
 
+
+    static modifiers = {
+        defaultSelects(query) {
+          const { ref } = User;
+          query.select(ref('id'), ref('first_name'), ref('last_name'),ref('email'),ref('phone_number'),ref('active'),ref('image_url'));
+        },
+    
+    }
+
     static async afterInsert({ items, inputItems, relation, context }) {
         try {
             const user = inputItems[0];
@@ -37,4 +46,6 @@ class User extends Cursor(Model) {
 }
 
 Model.knex(db);
+
+
 module.exports = User;
