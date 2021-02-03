@@ -32,7 +32,7 @@ class Job extends Model {
         const PaymentType = require("../PaymentType/PaymentType.Model");
 
         return{
-            owner: {
+            hiringManager: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
                 modelClass: HiringManager,
