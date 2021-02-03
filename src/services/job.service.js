@@ -1,5 +1,5 @@
 const Job = require("../models/Job/Job.Model");
-const tableNames = require("../constants/tableNames");
+
 
 class JobService {
 
