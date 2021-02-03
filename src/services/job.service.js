@@ -19,10 +19,10 @@ class JobService {
         //TODO paginate and query params
         try {
             const jobs = await Job.query();
-            return jobs;
+            return jobs.map((job)=> this.basicDetails(job));
             
         } catch (error) {
-            throw jobs;
+            throw error;
         }
     }
 
@@ -70,46 +70,54 @@ class JobService {
         }
     }
 
-    static async _getAllJobs(job_id){
-        try {
-            const mySkills = await Job.query().alias("f")
-            .where("f.id", job_id).withGraphFetched('skills(selectNameAndId)')
-            .modifiers({
-                selectNameAndId(builder) {
-                    builder
-                        .select(
-                            "has_skill.job_id",
-                            "skill.skill_name",
-                            "skill.id",
+    // static async _getAllJobs(job_id){
+    //     try {
+    //         const mySkills = await Job.query().alias("f")
+    //         .where("f.id", job_id).withGraphFetched('skills(selectNameAndId)')
+    //         .modifiers({
+    //             selectNameAndId(builder) {
+    //                 builder
+    //                     .select(
+    //                         "has_skill.job_id",
+    //                         "skill.skill_name",
+    //                         "skill.id",
                             
-                        )
-                        .innerJoin("skill", "has_skill.skill_id", "skill.id");
-                }});
+    //                     )
+    //                     .innerJoin("skill", "has_skill.skill_id", "skill.id");
+    //             }});
 
-            return mySkills
-        } catch (error) {
-            throw error
-        }
-    }
+    //         return mySkills
+    //     } catch (error) {
+    //         throw error
+    //     }
+    // }
 
     static async getJob(id) {
         const job = await Job.query()
             .alias("f")
             .where("f.id", id)
-            .select(
-                "f.id",
-                "user_id",
-                "latitude",
-                "longitude",
-                "industry_id",
-                "industry_name",
-                "email",
-                "phone_number",
-                "first_name",
-                "last_name"
-            )
-            .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
-            .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
+            .withGraphFetched({hiringManager, jobStatus, industry})
+            // .select(
+            //     "f.id",
+            //     "title",
+            //     "description",
+            //     "f.hiring_manager_id",
+            //     "f.industry_id",
+            //     "f.job_status_id",
+            //     "f.start_date",
+            //     "f.end_date",
+            //     "latitude",
+            //     "longitude",
+            //     "budget_range_min",
+            //     "budget_range_max",
+            //     "industry_name",
+            //     "email",
+            //     "phone_number",
+            //     "first_name",
+            //     "last_name"
+            // )
+            // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
+            // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
 
         return job;
@@ -118,28 +126,32 @@ class JobService {
     static async basicDetails(Job) {
         const {
             id,
+            title,
+            description,
+            budget_range_min,
+            budget_range_max,
+            start_date,
+            end_date,
+            jobStatus,
+            hiringManager,
+            industry,
             latitude,
-            longitude,
-            industry_id,
-            industry_name,
-            email,
-            phone_number,
-            first_name,
-            last_name,
-            user_id,
+            longitude
         } = Job;
 
         return {
             id,
+            title,
+            description,
+            budget_range_min,
+            budget_range_max,
+            start_date,
+            end_date,
+            jobStatus,
+            hiringManager,
+            industry,
             latitude,
-            longitude,
-            industry_id,
-            industry_name,
-            email,
-            phone_number,
-            first_name,
-            last_name,
-            user_id,
+            longitude
         };
     }
 }
