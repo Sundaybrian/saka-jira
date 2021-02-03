@@ -8,6 +8,7 @@ const schema = require("./job.schema.json");
 class Job extends Cursor(Model) {
 
     static get tableName() {
+        
         return tableNames.job;
     }
 

@@ -69,7 +69,7 @@ function getAllJobs(req, res, next) {
     }
 
 
-    JobService.getAllJobs(nextPage, limit, match)
+    JobService.getAllJobs(nextPage,match,limit)
         .then((jobs) => {
             return jobs ? res.json(jobs) : res.sendStatus(404);
         })

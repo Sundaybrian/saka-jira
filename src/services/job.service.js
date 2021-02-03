@@ -15,15 +15,16 @@ class JobService {
         }
     }
 
-    static async getAllJobs(next=null, industry=null) {
-        //TODO paginate and query params
+    static async getAllJobs(next=null, match, limit) {
+
         try {
-            const jobs = await Job.query().orderBy('created_at').cursorPage();
+            let jobs = await Job.query().where(match).orderBy('created_at').limit(limit);
             
             if(next){
-                return await Job.query().orderBy('created_at').cursorPage(next);
+                return jobs.cursorPage(next);
             }
-            return jobs;
+
+            return jobs.cursorPage();
             
         } catch (error) {
             throw error;
@@ -74,27 +75,6 @@ class JobService {
         }
     }
 
-    // static async _getAllJobs(job_id){
-    //     try {
-    //         const mySkills = await Job.query().alias("f")
-    //         .where("f.id", job_id).withGraphFetched('skills(selectNameAndId)')
-    //         .modifiers({
-    //             selectNameAndId(builder) {
-    //                 builder
-    //                     .select(
-    //                         "has_skill.job_id",
-    //                         "skill.skill_name",
-    //                         "skill.id",
-                            
-    //                     )
-    //                     .innerJoin("skill", "has_skill.skill_id", "skill.id");
-    //             }});
-
-    //         return mySkills
-    //     } catch (error) {
-    //         throw error
-    //     }
-    // }
 
     static async getJob(id) {
         const job = await Job.query()
