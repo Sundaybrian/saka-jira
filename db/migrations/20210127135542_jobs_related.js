@@ -16,6 +16,7 @@ exports.up = async function (knex) {
         table.increments().notNullable();
         table.string("description", 1300).notNullable();
         table.string("main_skill", 100);
+        references(table, tableNames.hiring_manager, null, true);
         references(table, tableNames.job_status, null, true);
         references(table, tableNames.industry, null, true);
         url(table, "website_url");
