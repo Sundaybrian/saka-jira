@@ -1,30 +1,93 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "has_Skill",
-    "description": "The has_Skill",
-    "required": ["skill_id"],
-    "additionalProperties": false,
+    "title": "Job",
+    "description": "The Job",
+    "required": [
+        "description",
+        "hiring_manager_id",
+        "job_status_id",
+        "industry_id",
+        "start_date",
+        "end_date",
+        // "budget_range_min",
+        // "budget_range_max",
+        "latitude",
+        "longitude"
+    ],
+    "additionalProperties": true,
     "properties": {
         "id": {
             "$id": "#/properties/id",
             "type": "integer",
-            "title": "The database ID of the has_Skill."
+            "title": "The database ID of the Job."
         },
-        "freelancer_id": {
-            "$freelancer_id": "#/properties/freelancer_id",
+        "hiring_manager_id": {
+            "$hiring_manager_id": "#/properties/hiring_manager_id",
             "type": "integer",
-            "title": "The database ID of the freelancer."
+            "title": "The database ID of the hiring manager."
         },
-        "skill_id": {
-            "$skill_id": "#/properties/skill_id",
+        "job_status_id": {
+            "$job_status_id": "#/properties/job_status_id",
             "type": "integer",
-            "title": "The database ID of the skill."
+            "title": "The database ID of the job status."
+        },
+        "industry_id": {
+            "$industry_id": "#/properties/industry_id",
+            "type": "integer",
+            "title": "The database ID of the industry."
+        },
+        "description": {
+            "$description": "#/properties/description",
+            "type": "string",
+            "title": "The description of the job."
+        },
+        "main_skill": {
+            "$main_skill": "#/properties/main_skill",
+            "type": "string",
+            "title": "The main skill for the job."
+        },
+        "start_date": {
+            "$id": "#/properties/start_date",
+            "type": "string",
+            "format": "date-time",
+            "title": "The date when the  job has to start ."
+        },
+        "end_date": {
+            "$id": "#/properties/end_date",
+            "type": "string",
+            "format": "date-time",
+            "title": "The date when the job has to be completed ."
+        },
+        "budget_range_min": {
+            "$id": "#/properties/budget_range_min",
+            "type": "number",
+            "title": "The budget min of the job."
+        },
+        "budget_range_max": {
+            "$id": "#/properties/budget_range_max",
+            "type": "number",
+            "title": "The budget max value of the job."
         },
         "created_at": {
             "$id": "#/properties/created_at",
             "type": "string",
             "title": "The creation date when the ticket was created."
+        },
+        "latitude": {
+            "$id": "#/properties/latitude",
+            "type": "number",
+            "title": "The latitude of the job."
+        },
+        "longitude": {
+            "$id": "#/properties/longitude",
+            "type": "number",
+            "title": "The longitude of the job."
+        },
+        "payment_type_id": {
+            "$payment_type_id": "#/properties/payment_type_id",
+            "type": "integer",
+            "title": "The integer id of payment_type_id."
         },
         "updated_at": {
             "$id": "#/properties/updated_at",
@@ -34,7 +97,7 @@
         "deleted_at": {
             "$id": "#/properties/deleted_at",
             "type": "string",
-            "title": "The date when the has_Skill was deleted."
+            "title": "The date when the Job was deleted."
         }
     }
 }
