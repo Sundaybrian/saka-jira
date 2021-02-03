@@ -11,15 +11,18 @@ class Job extends Cursor(Model) {
         return tableNames.job;
     }
 
-    static get modifiers() {
-        return{
-            
-            defaultSelects(builder) {
-                builder.select('id', 'freelancer_id', 'skill_id');
-              },
-        
-        }
+    static modifiers = {
+        defaultSelects(query) {
+          const { ref } = User;
+          query.select(ref('id'), ref('first_name'), ref('last_name'),ref('email'),ref('phone_number'),ref('active'),ref('image_url'));
+        },
+    
+        // defaultSelects(builder) {
+        //     builder.select('id', 'freelancer_id', 'skill_id');
+        //   },
     }
+
+    
 
     static get jsonSchema() {
         return schema;
