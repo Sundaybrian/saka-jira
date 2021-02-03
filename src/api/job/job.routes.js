@@ -1,6 +1,6 @@
 
-const router = require("express");
-const { createSchema, updateSchema } = require("./freelancer.validators");
+const router = require("express").Router();
+const { createSchema, updateSchema } = require("./job.validators.validators");
 const Role = require("../../constants/roles");
 const JobService = require("../../services/job.service");
 
@@ -8,6 +8,8 @@ const { Auth } = require("../../_middlewares/auth");
 
 const {
     setHiringManager,
+    authUpdateHiringManagerJob,
+    setHiringManagerJob
 } = require("../../utils/_permissions/hiringManager");
 
 
@@ -19,6 +21,7 @@ router.patch(
     "/:id",
     Auth(),
     setHiringManager,
+    setHiringManagerJob,
     authUpdateHiringManagerJob,
     updateSchema,
     updateJob
@@ -38,48 +41,47 @@ function create(req, res, next) {
         .catch(next);
 }
 
-// fetch all your tasks
-// GET /tasks?completed=true
-// GET /tasks?limit=3&skip=3
-// GET /tasks?sortBy=createdAt:desc
+// TODO PAGINATE
+// GET /jobs?completed=true
+// GET /jobs?limit=3&skip=3
+// GET /jobs?sortBy=createdAt:desc
 function getAllJobs(req, res, next) {
     // const limit = parseInt(req.query.limit) || 10;
     // const page = parseInt(req.query.page) || 1;
 
     JobService.getAllJobs()
-        .then((freelancers) => {
-            return freelancers ? res.json(freelancers) : res.sendStatus(404);
+        .then((jobs) => {
+            return jobs ? res.json(jobs) : res.sendStatus(404);
         })
         .catch(next);
 }
 
-function getFreelancerById(req, res, next) {
+function getJobById(req, res, next) {
     const id = parseInt(req.params.id);
 
-    JobService.getFreelancerById(id)
-        .then((freelancer) =>
-            freelancer ? res.json(freelancer) : res.sendStatus(404)
+    JobService.getJobById(id)
+        .then((job) =>
+            job ? res.json(job) : res.sendStatus(404)
         )
         .catch(next);
 }
 
-function updateFreelancer(req, res, next) {
+function updateJob(req, res, next) {
     const id = parseInt(req.params.id);
 
-    JobService.updateFreelancer(id, req.body)
-        .then((freelancer) =>
-            freelancer ? res.json(freelancer) : res.sendStatus(404)
+    JobService.updateJob(id, req.body)
+        .then((job) =>
+            job ? res.json(job) : res.sendStatus(404)
         )
         .catch(next);
 }
 
-function deleteFreelancer(req, res, next) {
-    // only admin can delete a subscription type
-    // TODO DELETE USER ACCOUNT ALSO
+function deleteJob(req, res, next) {
+    // only admin can delete a job
     const id = parseInt(req.params.id);
     JobService._delete(id)
-        .then((freelancer) => {
-            return !freelancer ? res.sendStatus(404) : res.json({ id });
+        .then((job) => {
+            return !job ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
 }

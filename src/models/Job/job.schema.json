@@ -10,8 +10,6 @@
         "industry_id",
         "start_date",
         "end_date",
-        // "budget_range_min",
-        // "budget_range_max",
         "latitude",
         "longitude"
     ],
