@@ -1,6 +1,6 @@
 
 const router = require("express").Router();
-const { createSchema, updateSchema } = require("./job.validators.validators");
+const { createSchema, updateSchema } = require("./job.validators");
 const Role = require("../../constants/roles");
 const JobService = require("../../services/job.service");
 
@@ -42,7 +42,7 @@ function create(req, res, next) {
 }
 
 // TODO PAGINATE
-// GET /jobs?completed=true
+// GET /jobs?industry=programming
 // GET /jobs?limit=3&skip=3
 // GET /jobs?sortBy=createdAt:desc
 function getAllJobs(req, res, next) {
