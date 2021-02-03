@@ -14,17 +14,14 @@ module.exports = router;
 
 router.post("/login", signinSchema, login);
 router.post("/register", signupSchema, register);
-router.post("/register/insertMany", insertMany);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
-router.get("/", Auth([Role.admin]), getAll);
+// router.get("/", Auth([Role.admin]), getAll);
+router.get("/", getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
 router.patch("/:id", Auth(), updateSchema, update);
 router.delete("/:id", Auth(), _delete);
 
-function insertMany(req,res,next){
-    User.query().insert(req.body).then(res=> res.json(res)).catch(next)
-}
 
 function login(req, res, next) {
     const { email, password } = req.body;
@@ -71,7 +68,13 @@ function verifyEmail(req, res, next) {
 }
 
 function getAll(req, res, next) {
-    AuthService.getAll()
+   let nextPage = null;
+
+   if(req.body.nextPage){
+    nextPage = req.body.nextPage;
+   }
+
+    AuthService.getAll(nextPage)
         .then((accounts) => res.json(accounts))
         .catch(next);
 }
