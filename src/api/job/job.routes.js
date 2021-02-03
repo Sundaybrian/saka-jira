@@ -42,15 +42,34 @@ function create(req, res, next) {
 }
 
 // TODO PAGINATE
-// GET /jobs?industry=programming&limit=20
-// GET /jobs?industry=programming
-// GET /jobs?limit=3
-// GET /jobs?sortBy=created_at:desc
+// GET /jobs?industry=1&limit=20
+// GET /jobs?industry=2
+// GET /jobs?industry=1&limit=3&nextPage=flsdjfjdfjslfjlksdjfl&jobStatus=2
+// GET /jobs?sortBy=created_at:desc //soon
 function getAllJobs(req, res, next) {
-    const limit = parseInt(req.query.limit) || 10;
-   
 
-    JobService.getAllJobs(nextPage, limit, industry, sortBy)
+    const nextPage = null; // will be used for cursor pagination
+
+    const match = {
+        job_status_id:1 // will rep the initial state of job i.e accepting quotes
+    };
+
+    const limit = parseInt(req.query.limit) || 10;
+
+    if(req.query.industry){
+        match.industry_id = parseInt(req.query.industry);
+    }
+
+    if(req.query.jobStatus){
+        match.job_status_id = parseInt(req.query.jobStatus);
+    }
+
+    if(req.query.nextPage){
+        nextPage = req.query.nextPage
+    }
+
+
+    JobService.getAllJobs(nextPage, limit, match)
         .then((jobs) => {
             return jobs ? res.json(jobs) : res.sendStatus(404);
         })

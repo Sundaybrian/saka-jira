@@ -15,11 +15,15 @@ class JobService {
         }
     }
 
-    static async getAllJobs() {
+    static async getAllJobs(next=null, industry=null) {
         //TODO paginate and query params
         try {
-            const jobs = await Job.query();
-            return jobs.map((job)=> this.basicDetails(job));
+            const jobs = await Job.query().orderBy('created_at').cursorPage();
+            
+            if(next){
+                return await Job.query().orderBy('created_at').cursorPage(next);
+            }
+            return jobs;
             
         } catch (error) {
             throw error;
