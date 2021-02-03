@@ -66,6 +66,17 @@ class HiringManagerService {
         }
     }
 
+
+    static async fetchHiringManager(params){
+        try {
+            const hiring_manager = await HiringManager.query().where(params).first();
+            return hiring_manager;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
     static async getHiringManager(id) {
         try {
             const hiringManager = await HiringManager.query()
