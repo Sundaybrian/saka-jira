@@ -29,6 +29,7 @@ function auth(roles = []) {
 
             const user = await User.query()
                 .where({ id: decodedToken.id })
+                .withGraphFetched("hiringManager")
                 .first();
 
             if (!user || (roles.length && !roles.includes(decodedToken.role))) {

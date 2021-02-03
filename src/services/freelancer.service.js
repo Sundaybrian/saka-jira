@@ -102,6 +102,15 @@ class FreelancerService {
         return freelancer;
     }
 
+    static async fetchFreelancer(params){
+        try {
+            const freelancer = await Freelancer.query.where(params).first();
+            return freelancer;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async basicDetails(Freelancer) {
         const {
             id,
