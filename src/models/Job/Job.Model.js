@@ -1,10 +1,11 @@
 const { Model } = require("objection");
+const Cursor = require("../cursorPagination");
 
 const tableNames = require("../../constants/tableNames");
 const db = require("../../db");
 const schema = require("./job.schema.json");
 
-class Job extends Model {
+class Job extends Cursor(Model) {
 
     static get tableName() {
         return tableNames.job;

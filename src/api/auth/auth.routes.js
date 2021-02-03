@@ -8,15 +8,14 @@ const Role = require("../../constants/roles");
 const router = require("express").Router();
 const AuthService = require("../../services/auth.service");
 const { Auth } = require("../../_middlewares/auth");
-const User = require("../../models/User/User.Model");
+
 
 module.exports = router;
 
 router.post("/login", signinSchema, login);
 router.post("/register", signupSchema, register);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
-// router.get("/", Auth([Role.admin]), getAll);
-router.get("/", getAll);
+router.get("/", Auth([Role.admin]), getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
 router.patch("/:id", Auth(), updateSchema, update);
@@ -46,7 +45,7 @@ function register(req, res, next) {
         })
         .catch(next);
 }
-
+// TODO DEPRECATE
 function registerStaff(req, res, next) {
     req.body.role = req.body.role || Role.admin;
     AuthService.register(req.body, req.hostname)
@@ -68,6 +67,7 @@ function verifyEmail(req, res, next) {
 }
 
 function getAll(req, res, next) {
+   // CHECK FOR NEXTPAGE 
    let nextPage = null;
 
    if(req.body.nextPage){

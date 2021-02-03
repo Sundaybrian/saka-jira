@@ -42,14 +42,15 @@ function create(req, res, next) {
 }
 
 // TODO PAGINATE
+// GET /jobs?industry=programming&limit=20
 // GET /jobs?industry=programming
-// GET /jobs?limit=3&skip=3
-// GET /jobs?sortBy=createdAt:desc
+// GET /jobs?limit=3
+// GET /jobs?sortBy=created_at:desc
 function getAllJobs(req, res, next) {
-    // const limit = parseInt(req.query.limit) || 10;
-    // const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+   
 
-    JobService.getAllJobs()
+    JobService.getAllJobs(nextPage, limit, industry, sortBy)
         .then((jobs) => {
             return jobs ? res.json(jobs) : res.sendStatus(404);
         })
