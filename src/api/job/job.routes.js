@@ -8,8 +8,7 @@ const { Auth } = require("../../_middlewares/auth");
 
 const {
     setHiringManager,
-    authUpdateHiringManagerJob,
-} = require("../../utils/_permissions/freelancer");
+} = require("../../utils/_permissions/hiringManager");
 
 
 
@@ -30,10 +29,12 @@ router.delete("/:id", Auth([Role.admin]), deleteJob);
 module.exports = router;
 
 function create(req, res, next) {
-    // add logged in userid
-    req.body.hiring_manager = parseInt(req.hiring_manager.d);
+    // adding required values to req.body
+    req.body.hiring_manager_id = parseInt(req.hiringManager.id);
+    req.body.job_status_id = 1;
+
     JobService.createJob(req.body)
-        .then((freelancer) => res.json(freelancer))
+        .then((job) => res.json(job))
         .catch(next);
 }
 
@@ -41,11 +42,11 @@ function create(req, res, next) {
 // GET /tasks?completed=true
 // GET /tasks?limit=3&skip=3
 // GET /tasks?sortBy=createdAt:desc
-function getAllFreelancers(req, res, next) {
+function getAllJobs(req, res, next) {
     // const limit = parseInt(req.query.limit) || 10;
     // const page = parseInt(req.query.page) || 1;
 
-    JobService.getAllFreelancers()
+    JobService.getAllJobs()
         .then((freelancers) => {
             return freelancers ? res.json(freelancers) : res.sendStatus(404);
         })
