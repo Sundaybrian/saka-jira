@@ -65,10 +65,8 @@ exports.seed = async function (knex) {
     };
 
     const userr = await knex(tableNames.user).insert(userOwner).returning("*");
-    // await knex(tableNames.company).insert({
-    //     ...companyUser,
-    //     owner_id: userr[0].id,
-    // });
+    
+    // subscription
     await knex(tableNames.subscription_type).insert(subscriptionType);
     const diff = await knex(tableNames.user).insert(diffOwner).returning("*");
 
