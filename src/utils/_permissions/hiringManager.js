@@ -1,3 +1,4 @@
+const { log } = require("console");
 const Role = require("../../constants/roles");
 const HiringManagerService = require("../../services/hiringManager.service");
 const JobService = require("../../services/job.service");
@@ -5,8 +6,9 @@ const JobService = require("../../services/job.service");
 // permissions
 
 // permissions
-function canUpdateJob(user ,job, hiringManager) {
-    return user.role == Role.admin || job.hiring_manager_id == hiringManager.id;
+function canUpdateJob(user ,job) {
+  
+    return job.hiringManager.user_id == user.id;
 }
 // function canUpdateHiringManager(user, hiring_manager) {
 //     return user.role == Role.admin || user.id == hiring_manager.user_id;
@@ -40,10 +42,11 @@ function setHiringManagerJob(req, res, next) {
 
 
 function authUpdateHiringManagerJob(req,res,next) {
-    if (!canUpdateJob(req.user, req.job , req.hiringManager)) {
-        res.status(401);
-        return res.send("Action is Not Allowed");
+    if (!canUpdateJob(req.user, req.job )) {
+        return res.status(401).json("Action is Not Allowed");
+        
     } 
+    next();
 }
 
 
@@ -53,4 +56,4 @@ module.exports = {
     setHiringManager,
     authUpdateHiringManagerJob,
     setHiringManagerJob
-}
+};

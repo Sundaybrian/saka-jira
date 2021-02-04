@@ -19,12 +19,11 @@ router.get("/", Auth(),getAllJobs);
 router.get("/:id", Auth(),getJobById);
 router.patch(
     "/:id",
-    Auth(),
-    setHiringManager,
+    Auth([Role.user]),
+    updateSchema,
     setHiringManagerJob,
     authUpdateHiringManagerJob,
-    updateSchema,
-    updateJob
+    updateJob,
 );
 
 router.delete("/:id", Auth([Role.admin]), deleteJob);
@@ -88,6 +87,7 @@ function getJobById(req, res, next) {
 
 function updateJob(req, res, next) {
     const id = parseInt(req.params.id);
+console.log(id);
 
     JobService.updateJob(id, req.body)
         .then((job) =>

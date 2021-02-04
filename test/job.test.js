@@ -87,7 +87,7 @@ describe("POST /api/v1/job/", () => {
 
 });
 
-// get 
+// get all
 describe("GET /api/v1/job/", () => {
     it("Should return an array of  jobs", async () => {
         const res = await request(app)
@@ -101,6 +101,7 @@ describe("GET /api/v1/job/", () => {
 
 });
 
+// get by id
 describe("GET /api/v1/job/:id", () => {
    
     it("Should find a job", async () => {
@@ -121,37 +122,30 @@ describe("GET /api/v1/job/:id", () => {
     });
 });
 
-// patch tests
-// describe("PATCH api/v1/job/:id", () => {
-//     it("should fail to update another users job profile", async () => {
-//         await request(app)
-//             .patch("/api/v1/job/2")
-//             .set("Authorization", `Bearer ${token2}`)
-//             .expect(401);
-//     });
+//patch tests
+describe("PATCH api/v1/job/:id", () => {
 
-//     it("should not add unknown fields to job", async () => {
-//         await request(app)
-//             .patch("/api/v1/job/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .send({
-//                 job_desc: "super job 1",
-//             })
-//             .expect(400);
-//     });
+    it("should fail to update another users job profile", async () => {
+        await request(app)
+            .patch("/api/v1/job/1")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(401);
+    });
 
-//     it("should update job", async () => {
-//         const res = await request(app)
-//             .patch("/api/v1/job/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .send({
-//                 expiry_date,
-//                 freelancer_id: 2,
-//             })
-//             .expect(200);
-//         expect(res.body.freelancer_id).toBe(2);
-//     });
-// });
+    
+
+    it("should update job", async () => {
+        const res = await request(app)
+            .patch("/api/v1/job/2")
+            .set("Authorization", `Bearer ${token3}`)
+            .send({
+            
+                title:"updated job"
+            })
+            .expect(200);
+        expect(res.body.title).toBe("updated job");
+    });
+});
 
 // describe("DELETE api/v1/job/:id", () => {
 //     it("should fail to delete job", async () => {
