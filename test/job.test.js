@@ -127,7 +127,7 @@ describe("PATCH api/v1/job/:id", () => {
 
     it("should fail to update another users job profile", async () => {
         await request(app)
-            .patch("/api/v1/job/1")
+            .patch("/api/v1/job/3")
             .set("Authorization", `Bearer ${token2}`)
             .expect(401);
     });
@@ -147,19 +147,19 @@ describe("PATCH api/v1/job/:id", () => {
     });
 });
 
-// describe("DELETE api/v1/job/:id", () => {
-//     it("should fail to delete job", async () => {
-//         await request(app)
-//             .delete("/api/v1/job/2")
-//             .set("Authorization", `Bearer ${token2}`)
-//             .expect(401);
-//     });
+describe("DELETE api/v1/job/:id", () => {
+    it("should fail to delete job", async () => {
+        await request(app)
+            .delete("/api/v1/job/2")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(401);
+    });
 
-//     it("should delete job", async () => {
-//         const res = await request(app)
-//             .delete("/api/v1/job/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
-//         expect(res.body.id).toBe(2);
-//     });
-// });
+    it("should delete job", async () => {
+        const res = await request(app)
+            .delete("/api/v1/job/2")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
+        expect(res.body.id).toBe(2);
+    });
+});
