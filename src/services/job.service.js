@@ -1,3 +1,4 @@
+const { log } = require("console");
 const Job = require("../models/Job/Job.Model");
 
 
@@ -18,13 +19,12 @@ class JobService {
     static async getAllJobs(next=null, match, limit) {
 
         try {
-            let jobs = await Job.query().where(match).orderBy('created_at').limit(limit);
+            let jobs = await Job.query().where(match).orderBy('created_at').limit(limit).cursorPage();
             
             if(next){
-                return jobs.cursorPage(next);
+                return await Job.query().where(match).orderBy('created_at').limit(limit).cursorPage(next);
             }
-
-            return jobs.cursorPage();
+            return jobs;
             
         } catch (error) {
             throw error;
@@ -78,9 +78,8 @@ class JobService {
 
     static async getJob(id) {
         const job = await Job.query()
-            .alias("f")
-            .where("f.id", id)
-            .withGraphFetched({hiringManager, jobStatus, industry})
+            .where("id", id).modify('defaultSelects')
+            .withGraphFetched(`[hiringManager,industry,jobStatus]`)
             // .select(
             //     "f.id",
             //     "title",
@@ -103,6 +102,8 @@ class JobService {
             // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
             // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
+
+            console.log(job);
 
         return job;
     }

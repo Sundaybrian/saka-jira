@@ -6,7 +6,7 @@ const cursor = cursorMixin({
     nodes: false, // Page results where each result also has an associated cursor
     pageInfo: {
       // When true, these values will be added to `pageInfo` in query response
-      total: false, // Total amount of rows
+      total: true, // Total amount of rows
       remaining: true, // Remaining amount of rows in *this* direction
       remainingBefore: false, // Remaining amount of rows before current results
       remainingAfter: false, // Remaining amount of rows after current results

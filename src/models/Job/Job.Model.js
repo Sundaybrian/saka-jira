@@ -15,12 +15,10 @@ class Job extends Cursor(Model) {
     static modifiers = {
         defaultSelects(query) {
           const { ref } = User;
-          query.select(ref('id'), ref('first_name'), ref('last_name'),ref('email'),ref('phone_number'),ref('active'),ref('image_url'));
+          query.select(ref('id'), ref('title'), ref('description'),ref('start_date'),ref('end_date'),ref('latitude'),ref('longitude'), ref('budget_range_min'), ref('budget_range_max'), ref('main_skill'));
         },
     
-        // defaultSelects(builder) {
-        //     builder.select('id', 'freelancer_id', 'skill_id');
-        //   },
+
     }
 
     

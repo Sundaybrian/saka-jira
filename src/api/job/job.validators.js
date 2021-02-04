@@ -3,7 +3,7 @@ const validateRequest = require("../../_middlewares/validateRequest");
 
 exports.createSchema = (req, res, next) => {
     const schema = Joi.object({
-        title: Joi.string().max(30).required(),
+        title: Joi.string().max(100).required(),
         description: Joi.string().max(1000).required(),
         main_skill: Joi.string().max(100),
         // job_status_id: Joi.number().integer().required()
