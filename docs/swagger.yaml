@@ -303,8 +303,22 @@ paths:
     get:
       tags:
         - "accounts"
+      parameters:
+        - in: query
+          name: queryparams
+          schema:
+            type: object
+            properties:
+              limit:
+                type: integer
+                example: 20
+              nextPage:
+                type: string
+                example: "KGRhdGUpMjAyMS0wMi0wM1QyMDozMjo0MC43NTda"
+          style: form
+          explode: true  
       summary: Get a list of all accounts
-      description: Restricted to admin users
+      description: Restricted to admin . Has pagination and can accept query params for rich data querying. By default the endpoint will get all users with with a limit of 10 , nextPage query param will be generated after the first query. A pageInfo will dictate the items left and how to fetch next data
       operationId: getallaccounts
       security: 
         - bearerAuth: []
@@ -314,34 +328,61 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    first_name:
-                      type: string
-                      example: 'sunday'
-                    last_name:
-                      type: string
-                      example: "oliseh"
-                    email:
-                      type: string
-                      example: "sunday@oliseh.com"
-                    role:
-                      type: string
-                      example: "user"
-                    phone_number:
-                      type: string
-                      example: "0714382366"
-                    created_at:
-                      type: string
-                      example: "2020-05-05T09:12:57.848Z"
-                    updated_at:
-                      type: string
-                      example: "2020-05-08T03:11:21.553Z"
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        first_name:
+                          type: string
+                          example: 'sunday'
+                        last_name:
+                          type: string
+                          example: "oliseh"
+                        email:
+                          type: string
+                          example: "sunday@oliseh.com"
+                        role:
+                          type: string
+                          example: "user"
+                        phone_number:
+                          type: string
+                          example: "0714382366"
+                        created_at:
+                          type: string
+                          example: "2020-05-05T09:12:57.848Z"
+                        updated_at:
+                          type: string
+                          example: "2020-05-08T03:11:21.553Z"
+                  pageInfo:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 30
+                      remaining:
+                        type: integer
+                        example: 20
+                      hasMore:
+                        type: boolean
+                        example: true
+                      hasPrevious:
+                        type: boolean
+                        example: true
+                      hasNext:
+                        type: boolean
+                        example: true
+                      next: 
+                        type: string
+                        example: "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                      previous:
+                        type: string
+                        example: "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"        
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 

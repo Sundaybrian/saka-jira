@@ -1,9 +1,6 @@
-
 const Job = require("../models/Job/Job.Model");
 
-
 class JobService {
-
     constructor() {}
 
     static async createJob(params) {
@@ -16,16 +13,22 @@ class JobService {
         }
     }
 
-    static async getAllJobs(next=null, match, limit) {
-
+    static async getAllJobs(next = null, match, limit) {
         try {
-            let jobs = await Job.query().where(match).orderBy('created_at').limit(limit).cursorPage();
-            
-            if(next){
-                return await Job.query().where(match).orderBy('created_at').limit(limit).cursorPage(next);
+            let jobs = await Job.query()
+                .where(match)
+                .orderBy("created_at")
+                .limit(limit)
+                .cursorPage();
+
+            if (next) {
+                return await Job.query()
+                    .where(match)
+                    .orderBy("created_at")
+                    .limit(limit)
+                    .cursorPage(next);
             }
             return jobs;
-            
         } catch (error) {
             throw error;
         }
@@ -44,17 +47,12 @@ class JobService {
         }
     }
 
-
-    static async updateJob(id,updateParams) {
-
+    static async updateJob(id, updateParams) {
         console.log(updateParams);
         try {
-            const updatedjob = await Job.query().patchAndFetchById(
-                id,
-                {
-                    ...updateParams,
-                }
-            );
+            const updatedjob = await Job.query().patchAndFetchById(id, {
+                ...updateParams,
+            });
             return updatedjob;
         } catch (error) {
             throw error;
@@ -62,14 +60,12 @@ class JobService {
     }
 
     static async _delete(id) {
-
         try {
-            
             const job = await this.getJob(id);
             if (!job) {
                 return null;
             }
-    
+
             await Job.query().deleteById(id);
             return true;
         } catch (error) {
@@ -77,13 +73,14 @@ class JobService {
         }
     }
 
-
     static async getJob(id) {
         try {
-            
             const job = await Job.query()
-                .where("id", id).modify('defaultSelects')
-                .withGraphFetched(`[hiringManager(defaultSelects),industry(defaultSelects),jobStatus(defaultSelects)]`)
+                .where("id", id)
+                .modify("defaultSelects")
+                .withGraphFetched(
+                    `[hiringManager(defaultSelects),industry(defaultSelects),jobStatus(defaultSelects)]`
+                )
                 // .select(
                 //     "f.id",
                 //     "title",
@@ -106,10 +103,10 @@ class JobService {
                 // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
                 // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
                 .first();
-    
+
             return job;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
@@ -127,7 +124,7 @@ class JobService {
             hiringManager,
             industry,
             latitude,
-            longitude
+            longitude,
         } = Job;
 
         return {
@@ -143,7 +140,7 @@ class JobService {
             hiringManager,
             industry,
             latitude,
-            longitude
+            longitude,
         };
     }
 }

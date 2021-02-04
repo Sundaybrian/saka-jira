@@ -121,11 +121,17 @@ class AuthService {
     }
 
     // TODO MAKE SO IT CAN QUERY FOR DIFFERENT TYPES OF USERS
-    static async getAll(next = null, limit = null, orderBy = "created_at") {
-        let accounts = await User.query().orderBy("created_at").cursorPage();
+    static async getAll(next = null, match = null, limit) {
+        let accounts = await User.query()
+            .orderBy("created_at")
+            .limit(limit)
+            .cursorPage();
 
         if (next) {
-            return User.query().orderBy("created_at").cursorPage(next);
+            return User.query()
+                .orderBy("created_at")
+                .limit(limit)
+                .cursorPage(next);
         }
 
         return accounts;
