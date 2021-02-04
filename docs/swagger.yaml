@@ -72,6 +72,24 @@ paths:
                       phone_number:
                         type: string
                         example: '0714382366'
+                      freelancer:
+                        type: object
+                        properties:
+                          id: 
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1
+                      hiringManager:
+                        type: object
+                        properties:
+                          id: 
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1  
                   token:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3ROYW1lIjoiYWRtaW4iLCJsYXN0TmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiYWRtaW4iLCJpc1ZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNjA2MTU4MDkwLCJleHAiOjE2MDYxNjg4OTB9.o7npZt_wsUvvGiLW7Bu08zhzxKmM9I3enQ2X48m1b9U"
@@ -171,6 +189,24 @@ paths:
                       role:
                         type: string
                         example: "user"
+                      freelancer:
+                        type: object
+                        properties:
+                          id: 
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1
+                      hiringManager:
+                        type: object
+                        properties:
+                          id: 
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1      
                   token:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"

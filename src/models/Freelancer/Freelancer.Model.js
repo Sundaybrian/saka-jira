@@ -43,7 +43,6 @@ class Freelancer extends Model {
         // Importing models here is a one way to avoid require loops.
         const User = require("../User/User.Model");
         const Industry = require("../Industry/Industry.Model");
-        const Skill = require("../Skill/Skill.Model");
         const HasSkill = require("../HasSkill/HasSkill.Model");
 
         return {
