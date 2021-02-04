@@ -14,6 +14,13 @@ class Freelancer extends Model {
         return schema;
     }
 
+    static modifiers = {
+        defaultSelects(query) {
+            const { ref } = Freelancer;
+            query.select(ref("id"), ref("user_id"));
+        },
+    };
+
     static async afterInsert({ items, inputItems, relation, context }) {
         try {
             // inputs items will be the carry over from userModel freelancer insertions
@@ -65,7 +72,7 @@ class Freelancer extends Model {
                 modelClass: HasSkill,
                 join: {
                     from: `${tableNames.freelancer}.id`,
-                   
+
                     to: `${tableNames.has_skill}.freelancer_id`,
                 },
             },
