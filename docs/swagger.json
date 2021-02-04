@@ -3218,6 +3218,14 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "js developer"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "a super js developer"
+                                    },
                                     "industry_id": {
                                         "type": "integer",
                                         "example": 1
@@ -3271,6 +3279,14 @@
                                         "id": {
                                             "type": "integer",
                                             "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "js developer"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "a super js developer"
                                         },
                                         "industry_id": {
                                             "type": "integer",
