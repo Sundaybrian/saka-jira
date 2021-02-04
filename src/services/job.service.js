@@ -117,6 +117,7 @@ class JobService {
         const {
             id,
             title,
+            main_skill,
             description,
             budget_range_min,
             budget_range_max,
@@ -132,6 +133,7 @@ class JobService {
         return {
             id,
             title,
+            main_skill,
             description,
             budget_range_min,
             budget_range_max,

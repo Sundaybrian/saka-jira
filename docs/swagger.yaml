@@ -2163,7 +2163,338 @@ paths:
           $ref: "#/components/responses/NotFoundError"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
-   
+  
+  
+  /job:
+    get:
+      tags:
+        - "job"
+      parameters:
+        - in: query
+          name: queryparams
+          schema:
+            type: object
+            properties:
+              industry:
+                type: integer
+                example: 1
+              limit:
+                type: integer
+                example: 20
+              nextPage:
+                type: string
+                example: "KGRhdGUpMjAyMS0wMi0wM1QyMDozMjo0MC43NTda"
+          style: form
+          explode: true
+            
+      summary: Get a list of all jobs with multiple combinations
+      description: Open to all users. Has pagination and can accept query params for rich data querying. By default the endpoint will get all jobs with with a limit of 10 , to fetch a single industry use it as a query param
+      security:
+      - bearerAuth: []
+      operationId: getalljobs
+      responses:
+        "200":
+          description: An object containing the results and the pagInfo obj for cursor pagination
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                       type: object
+                       properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: "python developer wanted"
+                        description:
+                          type: string
+                          example: "looking for a seasoned python developer"
+                        industry_id:
+                          type: integer
+                          example: 1
+                        hiring_manager_id:
+                          type: number
+                          example: 1
+                        main_skill:
+                          type: string
+                          example: "python"
+                        latitude:
+                          type: number
+                          example: 38.676
+                        longitude:
+                          type: number
+                          example: -1.566
+                        job_status_id:
+                          type: integer
+                          example: 1
+                        budget_range_min:
+                          type: integer
+                          example: 25000
+                        budget_range_max:
+                          type: integer
+                          example: 50000
+                        created_at:
+                          type: string
+                          example: "2020-05-05T09:12:57.848Z"
+                        start_date:
+                          type: string
+                          example: "2020-05-08T03:11:21.553Z"
+                        end_date:
+                          type: string
+                          example: "2020-05-08T03:11:21.553Z" 
+                  pageInfo:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 30
+                      remaining:
+                        type: integer
+                        example: 20
+                      hasMore:
+                        type: boolean
+                        example: true
+                      hasPrevious:
+                        type: boolean
+                        example: true
+                      hasNext:
+                        type: boolean
+                        example: true
+                      next: 
+                        type: string
+                        example: "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                      previous:
+                        type: string
+                        example: "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError" 
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+          
+    post:
+      tags:
+        - "job"
+      summary: Post a job
+      operationId: postajob
+      description:  Restricted to users.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                industry_id:
+                  type: integer
+                  example: 1
+                latitude:
+                  type: number
+                  example: 36.78678678
+                longitude:
+                  type: number
+                  example: -1.546567
+                start_date:
+                  type: string
+                  example: "2020-05-08T03:11:21.553Z"
+                end_date:
+                  type: string
+                  example: "2020-05-08T03:11:21.553Z"  
+                budget_range_min:
+                  type: integer
+                  example: 25000
+                budget_range_max:
+                  type: integer
+                  example: 50000
+              required:
+                - industry_id
+                - title
+                - description
+                - start_date
+                - end_date
+                - latitude
+                - longitude
+                
+               
+      responses:
+        '200':
+          description: job  was correctly inserted 
+          content:
+             application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  industry_id:
+                    type: integer
+                    example: 1
+                  main_skill:
+                    type: integer
+                    example: "javascript"
+                  latitude:
+                    type: number
+                    example: 36.78678678
+                  longitude:
+                    type: number
+                    example: -1.546567
+                  start_date:
+                    type: string
+                    example: "2020-05-08T03:11:21.553Z"
+                  end_date:
+                    type: string
+                    example: "2020-05-08T03:11:21.553Z"  
+                  budget_range_min:
+                    type: integer
+                    example: 25000
+                  budget_range_max:
+                    type: integer
+                    example: 500007     
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+    
+  /job/{id}:
+    parameters:
+      - in: path
+        name: id
+        description: job id
+        required: true
+        example: 1
+        schema:
+          type: integer
+    get:
+      tags:
+        - "job"
+      summary: Get a job  by id
+      description: Open to all users
+      operationId: getjobByID
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/JobResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+       
+        
+    patch:
+      tags:
+        - "job"
+      summary: Update a job 
+      description: Freelancers can update their own job
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "java and javascript developers"
+                industry_id:
+                  type: integer
+                  example: 1
+                job_status_id:
+                  type: integer
+                  example: 2
+                latitude:
+                  type: number
+                  example: 36.78678678
+                longitude:
+                  type: number
+                  example: -1.546567
+                start_date:
+                  type: string
+                  example: "2020-05-08T03:11:21.553Z"
+                end_date:
+                  type: string
+                  example: "2020-05-08T03:11:21.553Z"  
+                budget_range_min:
+                  type: integer
+                  example: 25000
+                budget_range_max:
+                  type: integer
+                  example: 50000
+
+      responses:
+        "200":
+          description: job updated successfully. The details of the job are returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: "java and javascript developers"
+                  industry_id:
+                    type: integer
+                    example: 1
+                  job_status_id:
+                    type: integer
+                    example: 2
+                  latitude:
+                    type: number
+                    example: 36.78678678
+                  longitude:
+                    type: number
+                    example: -1.546567
+                  start_date:
+                    type: string
+                    example: "2020-05-08T03:11:21.553Z"
+                  end_date:
+                    type: string
+                    example: "2020-05-08T03:11:21.553Z"  
+                  budget_range_min:
+                    type: integer
+                    example: 25000
+                  budget_range_max:
+                    type: integer
+                    example: 50000'
+                
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+          
+    delete:
+      tags:
+        - "job"
+      summary: Delete a job
+      description: Admin users can delete any job, regular users are restricted.
+      operationId: deletejob
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: job deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError" 
 
 
 components:
@@ -2173,8 +2504,8 @@ components:
       scheme: bearer
       bearerFormat: JWT
   responses:
-    CompanyResponse:
-      description: Company Details
+    JobResponse:
+      description: Job Details
       content:
         application/json:
           schema:
@@ -2183,21 +2514,54 @@ components:
               id:
                 type: integer
                 example: 1
-              name:
-                type: string
-                example: 'massive dynamic'
-              description:
-                type: string
-                example: 'we create everything'
-              logo_url:
-                type: string
-                example: "https://storagebucket.gogle.com/massivedy"
-              owner:
+              industry:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  industry_name:
+                    type: string
+                    example: "Programming"
+              hiringManager:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: string
+                    example: 2
+              jobStatus:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  job_status_name:
+                    example: "accepting bids"
+                    type: string
+              main_skill:
                 type: integer
-                example: 1
-              email:
+                example: "javascript"
+              latitude:
+                type: number
+                example: 36.78678678
+              longitude:
+                type: number
+                example: -1.546567
+              start_date:
                 type: string
-                example: 'massive.dynamics@info.com'
+                example: "2020-05-08T03:11:21.553Z"
+              end_date:
+                type: string
+                example: "2020-05-08T03:11:21.553Z"  
+              budget_range_min:
+                type: integer
+                example: 25000
+              budget_range_max:
+                type: integer
+                example: 50000
                 
     FreelancerSubscriptionResponse:
       description: freelancer freelancerSubscription was correctly inserted and expiry_date set
