@@ -14,7 +14,7 @@ class Job extends Cursor(Model) {
 
     static modifiers = {
         defaultSelects(query) {
-          const { ref } = User;
+          const { ref } = Job;
           query.select(ref('id'), ref('title'), ref('description'),ref('start_date'),ref('end_date'),ref('latitude'),ref('longitude'), ref('budget_range_min'), ref('budget_range_max'), ref('main_skill'));
         },
     

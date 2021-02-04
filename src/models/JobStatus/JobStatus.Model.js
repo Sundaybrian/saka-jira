@@ -12,6 +12,15 @@ class JobStatus extends Model {
     static get jsonSchema() {
         return schema;
     }
+
+    static modifiers = {
+        defaultSelects(query) {
+          const { ref } = JobStatus;
+          query.select(ref('id'), ref('job_status_name'));
+        },
+    
+
+    }
 }
 
 Model.knex(db);

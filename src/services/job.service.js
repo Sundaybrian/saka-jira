@@ -79,7 +79,7 @@ class JobService {
     static async getJob(id) {
         const job = await Job.query()
             .where("id", id).modify('defaultSelects')
-            .withGraphFetched(`[hiringManager,industry,jobStatus]`)
+            .withGraphFetched(`[hiringManager(defaultSelects),industry(defaultSelects),jobStatus(defaultSelects)]`)
             // .select(
             //     "f.id",
             //     "title",

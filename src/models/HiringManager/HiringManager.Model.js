@@ -4,6 +4,7 @@ const tableNames = require("../../constants/tableNames");
 const schema = require("./hiringManager.schema.json");
 const db = require("../../db");
 
+
 class HiringManager extends Model {
     static get tableName() {
         return tableNames.hiring_manager;
@@ -12,6 +13,14 @@ class HiringManager extends Model {
     static get jsonSchema() {
         return schema;
     }
+
+    static modifiers = {
+        defaultSelects(query) {
+          const { ref } = HiringManager;
+          query.select(ref('id'), ref('user_id'));
+        },
+    }
+    
 
     static get relationMappings() {
         // Importing models here is a one way to avoid require loops.
