@@ -1,18 +1,27 @@
 const { Model } = require("objection");
+const Cursor = require("../cursorPagination");
 
 const tableNames = require("../../constants/tableNames");
 const schema = require("./user.schema.json");
 const db = require("../../db");
-const Freelancer = require("../Freelancer/Freelancer.Model");
-const HiringManager = require("../HiringManager/HiringManager.Model");
 
-class User extends Model {
+
+class User extends Cursor(Model) {
     static get tableName() {
         return tableNames.user;
     }
 
     static get jsonSchema() {
         return schema;
+    }
+
+
+    static modifiers = {
+        defaultSelects(query) {
+          const { ref } = User;
+          query.select(ref('id'), ref('first_name'), ref('last_name'),ref('email'),ref('phone_number'),ref('active'),ref('image_url'));
+        },
+    
     }
 
     static async afterInsert({ items, inputItems, relation, context }) {
@@ -27,9 +36,8 @@ class User extends Model {
                     })
                     .returning("*");
 
-                console.log(f, h, "===========-====---");
             } else {
-                console.log("Nothing to see here");
+                console.log("Nothing to see here, freelancer and hiringManager Created");
             }
         } catch (error) {
             throw error;
@@ -38,4 +46,6 @@ class User extends Model {
 }
 
 Model.knex(db);
+
+
 module.exports = User;

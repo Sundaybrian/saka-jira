@@ -1,12 +1,24 @@
 const { createSchema, updateSchema } = require("./freelancer.validators");
-const router = require("express").Router();
 const Role = require("../../constants/roles");
 const FreelancerService = require("../../services/freelancer.service");
+
+
 const { Auth } = require("../../_middlewares/auth");
 const {
     setFreelancer,
     authUpdateFreelancer,
 } = require("../../utils/_permissions/freelancer");
+
+const Skills = require("../HasSkill/hasSkill.routes");
+
+
+const router = require("express").Router({
+    mergeParams: true,
+});
+
+//api/v1/freelancer/:freelancer_id/skills
+router.use("/:id/skills", Skills);
+
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", getAllFreelancers);

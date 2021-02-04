@@ -16,7 +16,8 @@
         "rollback": "knex migrate:rollback",
         "rollback:test": "knex migrate:rollback --env test",
         "seed": "knex seed:run",
-        "test:watch": "jest --verbose --watchAll"
+        "test:watch": "jest --verbose --watchAll",
+        "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app urady"
     },
     "keywords": [],
     "author": "Sundaybrian",
@@ -44,6 +45,8 @@
         "nodemailer": "^6.4.14",
         "objection": "^2.2.3",
         "objection-cursor": "^1.2.4",
+        "objection-filter": "^4.1.1",
+        "objection-keyset-pagination": "^0.1.0",
         "objection-soft-delete": "^1.0.7",
         "pg": "^8.3.0",
         "rootpath": "^0.1.2",

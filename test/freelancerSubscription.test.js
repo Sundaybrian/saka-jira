@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("../src/app");
-const async = require("async");
 
 // let variables
 let token1, token2, token3;

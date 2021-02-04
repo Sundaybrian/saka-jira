@@ -20,7 +20,16 @@ async function sendEmail({
         from,
     };
 
-    await sgMail.send(msg);
+
+    if(process.env.NODE_ENV == 'test'){
+        console.log("email sent..." + " " + msg.to);
+    }else{
+
+        await sgMail.send(msg);
+
+    } 
+
+
     // const transporter = nodemailer.createTransport({
     //     server: "smtp.sendgrid.net",
     //     port: 587,
