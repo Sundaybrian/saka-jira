@@ -62,7 +62,7 @@ describe("POST fetch accounts", () => {
             .expect("Content-Type", /json/)
             .expect(200);
 
-        expect(res.body.length).toBeGreaterThan(0);
+        expect(res.body.results.length).toBeGreaterThan(0);
     });
 });
 

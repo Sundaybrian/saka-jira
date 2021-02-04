@@ -41,6 +41,7 @@ exports.up = async function (knex) {
             true
         );
         table.unique(["job_id", "freelancer_id"]);
+        0;
         table.string("client_comment", 1500);
         table.enum("client_rating", [1, 2, 3, 4, 5]);
         table.string("freelancer_comment", 1500);
