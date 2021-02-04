@@ -27,8 +27,6 @@ class AuthService {
             )
             .first();
 
-        console.log(loggedIn);
-
         const token = await jwt.sign(loggedIn.toJSON());
 
         return {
@@ -50,27 +48,18 @@ class AuthService {
             }
 
             const newUser = await this.insertUser(userInput, origin);
-            const signedUser = await newUser
-                .$query()
-                .alias("u")
-                .select(
-                    "u.id",
-                    "first_name",
-                    "last_name",
-                    "email",
-                    "phone_number",
-                    "active",
-                    "image_url",
-                    "freelancer_id",
-                    "hiring_manager_id"
+            const signedUser = await User.query()
+                .where({ id: newUser.id })
+                .modify("defaultSelectsWithoutPass")
+                .withGraphFetched(
+                    `[freelancer(defaultSelects), hiringManager(defaultSelects)]`
                 )
-                .join(`${tableNames.freelancer} as f`, "u.id", "f.user_id")
-                .join(`${tableNames.hiring_manager} as h`, "f.id", "h.user_id");
+                .first();
 
-            const token = await jwt.sign(signedUser);
+            const token = await jwt.sign(signedUser.toJSON());
 
             return {
-                user: newUser,
+                user: signedUser,
                 token,
             };
         } catch (error) {

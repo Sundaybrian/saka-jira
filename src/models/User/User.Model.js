@@ -44,6 +44,8 @@ class User extends Cursor(Model) {
     };
 
     static async afterInsert({ items, inputItems, relation, context }) {
+        const Freelancer = require("../Freelancer/Freelancer.Model");
+        const HiringManager = require("../HiringManager/HiringManager.Model");
         try {
             const user = inputItems[0];
             if (user.role == "user") {
