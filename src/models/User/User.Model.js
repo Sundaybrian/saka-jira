@@ -20,6 +20,7 @@ class User extends Cursor(Model) {
             query.select(
                 ref("id"),
                 ref("first_name"),
+                ref("role"),
                 ref("last_name"),
                 ref("email"),
                 ref("phone_number"),
@@ -34,6 +35,7 @@ class User extends Cursor(Model) {
             query.select(
                 ref("id"),
                 ref("first_name"),
+                ref("role"),
                 ref("last_name"),
                 ref("email"),
                 ref("phone_number"),

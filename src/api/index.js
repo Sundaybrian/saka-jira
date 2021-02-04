@@ -28,9 +28,6 @@ router.use(
     require("./freelancerSubscription/freelancerSubscription.routes")
 );
 
-router.use(
-    "/job",
-    require("./job/job.routes")
-);
+router.use("/job", require("./job/job.routes"));
 
 module.exports = router;

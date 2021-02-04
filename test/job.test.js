@@ -55,7 +55,7 @@ describe("POST /api/v1/job/", () => {
             .post("/api/v1/job/")
             .set("Authorization", `Bearer ${token2}`)
             .send({
-               title: "Python developer"
+                title: "Python developer",
             })
             .expect(400);
 
@@ -67,9 +67,9 @@ describe("POST /api/v1/job/", () => {
             .post("/api/v1/job/")
             .set("Authorization", `Bearer ${token3}`)
             .send({
-                title:"python developer wanted",
-                description:"looking for a super developer " ,
-                main_skill:"python",
+                title: "python developer wanted",
+                description: "looking for a super developer ",
+                main_skill: "python",
                 industry_id: 1,
                 budget_range_min: 25000,
                 start_date,
@@ -80,11 +80,12 @@ describe("POST /api/v1/job/", () => {
             })
             .expect(200);
 
+        console.log(res.body);
+
         expect(res.body.title).toBe("python developer wanted");
         expect(res.body.hiring_manager_id).toBe(2);
         expect(res.body.end_date).toBe(end_date);
     });
-
 });
 
 // get all
@@ -97,21 +98,17 @@ describe("GET /api/v1/job/", () => {
 
         expect(res.body.results.length).toBeGreaterThan(0);
     });
-
-
 });
 
 // get by id
 describe("GET /api/v1/job/:id", () => {
-   
     it("Should find a job", async () => {
         const res = await request(app)
             .get("/api/v1/job/2")
             .set("Authorization", `Bearer ${token1}`)
             .expect(200);
-        
-            console.log(res.body);
-            expect(res.body.description).toBe("looking for a super developer 2")
+
+        expect(res.body.description).toBe("looking for a super developer 2");
     });
 
     it("should fail to find a job", async () => {
@@ -124,7 +121,6 @@ describe("GET /api/v1/job/:id", () => {
 
 //patch tests
 describe("PATCH api/v1/job/:id", () => {
-
     it("should fail to update another users job profile", async () => {
         await request(app)
             .patch("/api/v1/job/3")
@@ -132,15 +128,12 @@ describe("PATCH api/v1/job/:id", () => {
             .expect(401);
     });
 
-    
-
     it("should update job", async () => {
         const res = await request(app)
             .patch("/api/v1/job/2")
             .set("Authorization", `Bearer ${token3}`)
             .send({
-            
-                title:"updated job"
+                title: "updated job",
             })
             .expect(200);
         expect(res.body.title).toBe("updated job");
