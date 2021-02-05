@@ -29,7 +29,7 @@
         "updated_at": {
             "$id": "#/properties/updated_at",
             "type": "string",
-            "title": "The date when the ticket was updated."
+            "title": "The date when the ticket was updated"
         },
         "deleted_at": {
             "$id": "#/properties/deleted_at",

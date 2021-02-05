@@ -33,10 +33,51 @@ class Proposal extends Cursor(Model) {
         return schema;
     }
 
+    static async afterInsert({ items, inputItems, relation, context }) {
+        const ProposalHistory = require("../ProposalHistory/ProposalHistory.Model");
+        try {
+            const { current_proposal_status_id, id } = inputItems[0];
+
+            const proposal_history = {
+                proposal_status_id: current_proposal_status_id,
+                proposal_id: id,
+            };
+            // creating a history trail on bid submission
+            const history = await ProposalHistory.query().insert(
+                proposal_history
+            );
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async beforeUpdate({ items, inputItems, relation }) {
+        const ProposalHistory = require("../ProposalHistory/ProposalHistory.Model");
+        try {
+            // items:      [{ id: 1, firstName: 'Jennifer' }]
+            // inputItems: [{ lastName: 'Aniston' }]
+            // relation:   none
+
+            const { id } = items[0];
+            const { current_proposal_status_id } = inputItems[0];
+
+            const proposal_history = {
+                proposal_status_id: current_proposal_status_id,
+                proposal_id: id,
+            };
+            // creating a history trail on bid update
+            const history = await ProposalHistory.query().insert(
+                proposal_history
+            );
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static get relationMappings() {
         const Job = require("../Job/Job.Model");
         const Freelancer = require("../Freelancer/Freelancer.Model");
-        const ProposalStatus = require("../ProposalStatus/ProposalStatus.Model");
+        const ProposalHistory = require("../ProposalHistory/ProposalHistory.Model");
 
         return {
             job: {
@@ -57,13 +98,13 @@ class Proposal extends Cursor(Model) {
                     to: `${tableNames.freelancer}.id`,
                 },
             },
-            proposalStatus: {
-                // BelongsToOneRelation: Use this relation when the source model has the foreign key
-                relation: Model.BelongsToOneRelation,
-                modelClass: ProposalStatus,
+
+            history: {
+                relation: Model.HasManyRelation,
+                modelClass: ProposalHistory,
                 join: {
-                    from: `${tableNames.proposal}.current_proposal_status`,
-                    to: `${tableNames.proposal_status}.id`,
+                    from: `${tableNames.proposal}.id`,
+                    to: `${tableNames.proposal_history}.proposal_id`,
                 },
             },
         };
