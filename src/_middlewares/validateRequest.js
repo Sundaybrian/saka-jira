@@ -1,3 +1,5 @@
+const { log } = require("console");
+
 module.exports = validateRequest;
 
 function validateRequest(req, next, schema) {
@@ -12,6 +14,8 @@ function validateRequest(req, next, schema) {
         const message = `Validation error: ${error.details
             .map((x) => x.message)
             .join(", ")}`;
+
+        console.log(message);
         next(message);
     } else {
         req.body = value;
