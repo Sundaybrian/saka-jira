@@ -7,10 +7,20 @@ const router = require("express").Router();
 const Role = require("../../constants/roles");
 const ProposalService = require("../../services/proposal.service");
 const { Auth } = require("../../_middlewares/auth");
+const {
+    setHiringManagerJob,
+    authUpdateHiringManagerJob,
+} = require("../../utils/_permissions/hiringManager");
 
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
 router.get("/freelancer", Auth([Role.user]), getProposalsFreelancer);
-router.get("/:job_id", Auth([Role.user]), getProposalsByJob);
+router.get(
+    "/:job_id",
+    Auth([Role.user]),
+    setHiringManagerJob,
+    authUpdateHiringManagerJob,
+    getProposalsByJob
+);
 router.get("/:id", getJobStatusById);
 router.patch("/:id", Auth([Role.admin]), updateSchema, update);
 router.delete("/:id", Auth([Role.admin]), deleteJobStatus);
@@ -62,7 +72,7 @@ function getProposalsByJob(req, res, next) {
 
     const limit = parseInt(req.query.limit) || 10;
 
-    // initialize with freelancer id
+    // initialize with job id
     const match = {
         job_id: parseInt(req.params.job_id),
         current_proposal_status_id: parseInt(req.query.proposalStatus) || 1,
