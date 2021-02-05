@@ -9,7 +9,8 @@ const ProposalService = require("../../services/proposal.service");
 const { Auth } = require("../../_middlewares/auth");
 
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
-router.get("/", getAllJobStatuses);
+router.get("/freelancer", Auth([Role.user]), getProposalsFreelancer);
+router.get("/:job_id", Auth([Role.user]), getProposalsByJob);
 router.get("/:id", getJobStatusById);
 router.patch("/:id", Auth([Role.admin]), updateSchema, update);
 router.delete("/:id", Auth([Role.admin]), deleteJobStatus);
@@ -28,10 +29,52 @@ function sendProposal(req, res, next) {
         .catch(next);
 }
 
-function getAllJobStatuses(req, res, next) {
-    ProposalService.getAllJobStatuses()
-        .then((jobStatuss) => {
-            return jobStatuss ? res.json(jobStatuss) : res.sendStatus(404);
+function getProposalsFreelancer(req, res, next) {
+    let nextPage = null;
+
+    const limit = parseInt(req.query.limit) || 10;
+
+    // initialize with freelancer id
+    const match = {
+        freelancer_id: parseInt(req.user.freelancer.id),
+    };
+
+    // proposal status is passed aka bid status eg. sent
+    if (req.query.proposalStatus) {
+        match.current_proposal_status_id = parseInt(req.query.proposalStatus);
+    }
+
+    if (req.query.nextPage) {
+        nextPage = req.query.nextPage;
+    }
+
+    ProposalService.getProposals(nextPage, match, limit)
+        .then((bids) => {
+            return bids ? res.json(bids) : res.sendStatus(404);
+        })
+        .catch(next);
+}
+
+// fetch bids by job id
+// perm job.hiringManager to match req.user.hiringManager.id
+function getProposalsByJob(req, res, next) {
+    let nextPage = null;
+
+    const limit = parseInt(req.query.limit) || 10;
+
+    // initialize with freelancer id
+    const match = {
+        job_id: parseInt(req.params.job_id),
+        current_proposal_status_id: parseInt(req.query.proposalStatus) || 1,
+    };
+
+    if (req.query.nextPage) {
+        nextPage = req.query.nextPage;
+    }
+
+    ProposalService.getProposals(nextPage, match, limit)
+        .then((bids) => {
+            return bids ? res.json(bids) : res.sendStatus(404);
         })
         .catch(next);
 }
