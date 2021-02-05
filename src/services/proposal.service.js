@@ -3,19 +3,24 @@ const Proposal = require("../models/Proposal/Proposal.Model");
 class ProposalService {
     constructor() {}
 
-    static async createProposal(params) {
+    static async sendProposal(params) {
         try {
-            const job = await Proposal.query().insert(params);
+            const proposal = await Proposal.query().insert(params);
 
-            return job;
+            return proposal;
         } catch (error) {
             throw error;
         }
     }
 
-    static async getAllProposals(next = null, match, limit) {
+    static async getProposals(next = null, match, limit) {
+        // can be used by both freelancer to fetch all their proposals
+        //can be used by hiring manager to fetch all proposals for a given job
+        // power is in the match obj
         try {
-            let jobs = await Proposal.query()
+            // proposals are bids just so you know
+            // a bid is unique bu freelancer_id and job_id
+            let proposals = await Proposal.query()
                 .where(match)
                 .orderBy("created_at")
                 .limit(limit)
@@ -28,41 +33,46 @@ class ProposalService {
                     .limit(limit)
                     .cursorPage(next);
             }
-            return jobs;
+            return proposals;
         } catch (error) {
             throw error;
         }
     }
 
-    static async getProposalById(id) {
+    static async getProposalHistoryById(id) {
         try {
-            const job = await this.getProposal(id);
-            if (!job) {
+            const proposal = await this.getProposal(id);
+            if (!proposal) {
                 return null;
             }
 
-            return this.basicDetails(job);
+            return this.basicDetails(proposal);
         } catch (error) {
             throw error;
         }
     }
 
     static async updateProposal(id, updateParams) {
-        console.log(updateParams);
+        // job owner will update the bids
         try {
-            const updatedjob = await Proposal.query().patchAndFetchById(id, {
-                ...updateParams,
-            });
-            return updatedjob;
+            const updatedproposal = await Proposal.query().patchAndFetchById(
+                id,
+                {
+                    ...updateParams,
+                }
+            );
+            return updatedproposal;
         } catch (error) {
             throw error;
         }
     }
 
-    static async _delete(id) {
+    static async _deleteWithdrawProposal(id) {
+        // freelancer will withdraw proposal
         try {
-            const job = await this.getProposal(id);
-            if (!job) {
+            const proposal = await Proposal.query().findOne({ id });
+
+            if (!proposal) {
                 return null;
             }
 
@@ -73,38 +83,18 @@ class ProposalService {
         }
     }
 
+    // helpers
     static async getProposal(id) {
         try {
-            const job = await Proposal.query()
+            const proposal = await Proposal.query()
                 .where("id", id)
                 .modify("defaultSelects")
                 .withGraphFetched(
-                    `[hiringManager(defaultSelects),industry(defaultSelects),jobStatus(defaultSelects)]`
+                    `[history(defaultSelects),proposalStatus(defaultSelects)]`
                 )
-                // .select(
-                //     "f.id",
-                //     "title",
-                //     "description",
-                //     "f.hiring_manager_id",
-                //     "f.industry_id",
-                //     "f.job_status_id",
-                //     "f.start_date",
-                //     "f.end_date",
-                //     "latitude",
-                //     "longitude",
-                //     "budget_range_min",
-                //     "budget_range_max",
-                //     "industry_name",
-                //     "email",
-                //     "phone_number",
-                //     "first_name",
-                //     "last_name"
-                // )
-                // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
-                // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
                 .first();
 
-            return job;
+            return proposal;
         } catch (error) {
             throw error;
         }
@@ -113,34 +103,30 @@ class ProposalService {
     static async basicDetails(Proposal) {
         const {
             id,
-            title,
-            main_skill,
-            description,
-            budget_range_min,
-            budget_range_max,
-            start_date,
-            end_date,
-            jobStatus,
-            hiringManager,
-            industry,
-            latitude,
-            longitude,
+            job_id,
+            freelancer_id,
+            current_proposal_status,
+            client_comment,
+            client_rating,
+            freelancer_comment,
+            freelancer_rating,
+            updated_at,
+            created_at,
+            history,
         } = Proposal;
 
         return {
             id,
-            title,
-            main_skill,
-            description,
-            budget_range_min,
-            budget_range_max,
-            start_date,
-            end_date,
-            jobStatus,
-            hiringManager,
-            industry,
-            latitude,
-            longitude,
+            job_id,
+            freelancer_id,
+            current_proposal_status,
+            client_comment,
+            client_rating,
+            freelancer_comment,
+            freelancer_rating,
+            updated_at,
+            created_at,
+            history,
         };
     }
 }
