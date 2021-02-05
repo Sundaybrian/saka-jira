@@ -1,0 +1,72 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "Proposal aka Bid",
+    "description": "The Proposal aka Bid",
+    "required": ["current_proposal_status_id", "freelancer_id", "job_id"],
+    "additionalProperties": true,
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "integer",
+            "title": "The database ID of the Job."
+        },
+        "freelancer_id": {
+            "$freelancer_id": "#/properties/freelancer_id",
+            "type": "integer",
+            "title": "The database ID of the hiring manager."
+        },
+        "job_id": {
+            "$job_id": "#/properties/job_id",
+            "type": "integer",
+            "title": "The database ID of the job status."
+        },
+        "client_comment": {
+            "$client_comment": "#/properties/client_comment",
+            "type": "string",
+            "title": "The client_comment of the client."
+        },
+        "current_proposal_status": {
+            "$current_proposal_status": "#/properties/current_proposal_status",
+            "type": "integer",
+            "title": "The current_proposal_status of the job."
+        },
+        "client_rating": {
+            "$client_rating": "#/properties/client_rating",
+            "type": "integer",
+            "title": "The client_rating for the job."
+        },
+        "freelancer_comment": {
+            "$freelancer_comment": "#/properties/freelancer_comment",
+            "type": "string",
+            "title": "The freelancer_comment of the client."
+        },
+        "freelancer_rating": {
+            "$freelancer_rating": "#/properties/freelancer_rating",
+            "type": "integer",
+            "title": "The freelancer_rating for the job."
+        },
+        "payment_amount": {
+            "$id": "#/properties/payment_amount",
+            "type": "string",
+            "title": "The payment_amount of the job has to start ."
+        },
+
+        "created_at": {
+            "$id": "#/properties/created_at",
+            "type": "string",
+            "title": "The creation date when the ticket was created."
+        },
+
+        "updated_at": {
+            "$id": "#/properties/updated_at",
+            "type": "string",
+            "title": "The date when the ticket was updated."
+        },
+        "deleted_at": {
+            "$id": "#/properties/deleted_at",
+            "type": "string",
+            "title": "The date when the Job was deleted."
+        }
+    }
+}
