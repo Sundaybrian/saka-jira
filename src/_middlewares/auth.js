@@ -10,6 +10,7 @@ function auth(roles = []) {
         roles = [roles];
     }
 
+    console.log(req.headers.authorization, "hauana token");
     return async (req, res, next) => {
         let token;
         if (
