@@ -24,8 +24,7 @@
         "current_proposal_status": {
             "$current_proposal_status": "#/properties/current_proposal_status",
             "type": "integer",
-            "title": "The database ID of proposal status
-            ."
+            "title": "The database ID of proposal status."
         },
         "client_comment": {
             "$client_comment": "#/properties/client_comment",
@@ -44,7 +43,7 @@
         },
         "freelancer_rating": {
             "$id": "#/properties/freelancer_rating",
-            "type": "integer",           
+            "type": "integer",
             "title": "The freelancer_rating when the job is done."
         },
         "payment_amount": {
