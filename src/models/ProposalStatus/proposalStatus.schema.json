@@ -1,20 +1,56 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "title": "skill",
-    "description": "The skill",
-    "required": ["proposal_status_name"],
-    "additionalProperties": false,
+    "title": "Proposal aka Bid",
+    "description": "The Proposal aka Bid",
+    "required": ["job_id", "freelancer_id", "current_proposal_status"],
+    "additionalProperties": true,
     "properties": {
         "id": {
             "$id": "#/properties/id",
             "type": "integer",
-            "title": "The database ID of the skill."
+            "title": "The database ID of the Proposal aka Bid."
         },
-        "proposal_status_name": {
-            "$id": "#/properties/proposal_status_name",
+        "freelancer_id": {
+            "$freelancer_id": "#/properties/freelancer_id",
+            "type": "integer",
+            "title": "The database ID of the freelancer."
+        },
+        "job_id": {
+            "$job_id": "#/properties/job_id",
+            "type": "integer",
+            "title": "The database ID of the job."
+        },
+        "current_proposal_status": {
+            "$current_proposal_status": "#/properties/current_proposal_status",
+            "type": "integer",
+            "title": "The database ID of proposal status
+            ."
+        },
+        "client_comment": {
+            "$client_comment": "#/properties/client_comment",
             "type": "string",
-            "title": "The proposal_status_name of the skill."
+            "title": "The client_comment of the job."
+        },
+        "client_rating": {
+            "$client_rating": "#/properties/client_rating",
+            "type": "integer",
+            "title": "The client_rating for the job."
+        },
+        "freelancer_comment": {
+            "$id": "#/properties/freelancer_comment",
+            "type": "string",
+            "title": "The freelancer_comment about the job."
+        },
+        "freelancer_rating": {
+            "$id": "#/properties/freelancer_rating",
+            "type": "integer",           
+            "title": "The freelancer_rating when the job is done."
+        },
+        "payment_amount": {
+            "$id": "#/properties/payment_amount",
+            "type": "integer",
+            "title": "The payment_amount for the job."
         },
         "created_at": {
             "$id": "#/properties/created_at",
@@ -29,7 +65,7 @@
         "deleted_at": {
             "$id": "#/properties/deleted_at",
             "type": "string",
-            "title": "The date when the skill was deleted."
+            "title": "The date when the Proposal aka Bid was deleted."
         }
     }
 }
