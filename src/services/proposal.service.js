@@ -46,7 +46,7 @@ class ProposalService {
                 return null;
             }
 
-            return this.basicDetails(proposal);
+            return proposal;
         } catch (error) {
             throw error;
         }
@@ -89,9 +89,7 @@ class ProposalService {
             const proposal = await Proposal.query()
                 .where("id", id)
                 .modify("defaultSelects")
-                .withGraphFetched(
-                    `[history(defaultSelects),proposalStatus(defaultSelects)]`
-                )
+                .withGraphFetched(`history(defaultSelects)`)
                 .first();
 
             return proposal;
