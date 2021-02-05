@@ -43,7 +43,7 @@ function create(req, res, next) {
 // GET /jobs?industry=1&limit=3&nextPage=flsdjfjdfjslfjlksdjfl&jobStatus=2
 // GET /jobs?sortBy=created_at:desc //soon
 function getAllJobs(req, res, next) {
-    const nextPage = null; // will be used for cursor pagination
+    let nextPage = null; // will be used for cursor pagination
 
     const match = {
         job_status_id: 1, // will rep the initial state of job i.e accepting quotes

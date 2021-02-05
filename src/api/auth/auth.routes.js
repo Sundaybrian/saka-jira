@@ -65,9 +65,9 @@ function verifyEmail(req, res, next) {
 }
 
 function getAll(req, res, next) {
-    const nextPage = null; // will be used for cursor pagination
+    let nextPage = null; // will be used for cursor pagination
 
-    const match = null;
+    let match = null;
 
     const limit = parseInt(req.query.limit) || 10;
 
