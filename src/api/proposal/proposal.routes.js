@@ -1,5 +1,6 @@
 const {
     createSchema,
+    getJobProposalsSchema,
     updateSchemaClient,
     updateSchemaFreelancer,
 } = require("./jobStatus.validators");
@@ -20,8 +21,9 @@ const {
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
 router.get("/freelancer", Auth([Role.user]), getProposalsFreelancer);
 router.get(
-    "/:job_id",
+    "/jobProposals",
     Auth([Role.user]),
+    getJobProposalsSchema,
     setHiringManagerJob,
     authUpdateHiringManagerJob,
     getProposalsByJob
@@ -88,7 +90,7 @@ function getProposalsByJob(req, res, next) {
 
     // initialize with job id
     const match = {
-        job_id: parseInt(req.params.job_id),
+        job_id: parseInt(req.body.job_id),
         current_proposal_status_id: parseInt(req.query.proposalStatus) || 1,
     };
 
@@ -125,26 +127,50 @@ function freelancerJobFeedback(req, res, next) {
         .catch(next);
 }
 
-// update proposal cleint comment and rating and possible status
+// update proposal client comment and rating and possible status
 // TODO think
 function clientJobFeedback(req, res, next) {
     const id = parseInt(req.params.id); // proposal id
 
-    ProposalService.updateProposal(id, req.body)
-        .then((jobStatus) =>
-            jobStatus ? res.json(jobStatus) : res.sendStatus(404)
+    const {
+        current_proposal_status_id,
+        client_comment,
+        client_rating,
+    } = req.body;
+
+    const payload = {
+        current_proposal_status_id,
+        client_comment,
+        client_rating,
+    };
+
+    ProposalService.updateProposal(id, payload)
+        .then((updatedProposal) =>
+            updatedProposal ? res.json(updatedProposal) : res.sendStatus(404)
         )
         .catch(next);
 }
 
-//
-function deleteJobStatus(req, res, next) {
-    // only admin can delete a subscription type
+// for freelancer
+function withdrawProposal(req, res, next) {
+    // only freelancers can withdraw a proposal
 
     const id = parseInt(req.params.id);
     ProposalService._delete(id)
-        .then((jobStatus) => {
-            return !jobStatus ? res.sendStatus(404) : res.json({ id });
+        .then((proposal) => {
+            return !proposal ? res.sendStatus(404) : res.json({ id });
+        })
+        .catch(next);
+}
+
+//
+function deleteProposal(req, res, next) {
+    // only hiring managers can delete a proposal type
+
+    const id = parseInt(req.params.id);
+    ProposalService._delete(id)
+        .then((proposal) => {
+            return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
 }

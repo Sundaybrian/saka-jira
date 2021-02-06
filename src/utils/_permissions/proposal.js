@@ -5,6 +5,14 @@ function canUpdateProposalFreelancer(user, proposal) {
     return proposal.freelancer_id == user.freelancer.id;
 }
 
+// permissions
+function canUpdateClientFeedbackProposal(user, proposal, job) {
+    return (
+        job.hiring_manager_id == user.hiringManager.id &&
+        proposal.job_id == job.id
+    );
+}
+
 function setFreelancerProposal(req, res, next) {
     const id = parseInt(req.params.id);
 
@@ -23,9 +31,17 @@ function authUpdateFreelancerFeedBackProposal(req, res, next) {
     next();
 }
 
+function authUpdateClientFeedBackProposal(req, res, next) {
+    if (!canUpdateClientFeedbackProposal(req.user, req.proposal, req.job)) {
+        return res.status(401).json("Action is Not Allowed");
+    }
+    next();
+}
+
 // module export
 module.exports = {
     setHiringManager,
     authUpdateFreelancerFeedBackProposal,
+    authUpdateClientFeedBackProposal,
     setFreelancerProposal,
 };
