@@ -29,5 +29,6 @@ router.use(
 );
 
 router.use("/job", require("./job/job.routes"));
+router.use("/proposal", require("./proposal/proposal.routes"));
 
 module.exports = router;

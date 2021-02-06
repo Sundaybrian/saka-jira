@@ -33,7 +33,7 @@ router.get(
 router.get("/:id/proposalHistory", Auth(), getProposalHistory);
 router.patch(
     "/:id/freelancerFeedback",
-    updateSchema,
+    updateSchemaFreelancer,
     Auth([Role.user]),
     setFreelancerProposal,
     authUpdateFreelancerFeedBackProposal,
