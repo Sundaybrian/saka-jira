@@ -17,14 +17,14 @@ class JobService {
         try {
             let jobs = await Job.query()
                 .where(match)
-                .orderBy("created_at")
+                .orderBy("created_at", "desc")
                 .limit(limit)
                 .cursorPage();
 
             if (next) {
                 return await Job.query()
                     .where(match)
-                    .orderBy("created_at")
+                    .orderBy("created_at", "desc")
                     .limit(limit)
                     .cursorPage(next);
             }
