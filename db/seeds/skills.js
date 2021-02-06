@@ -77,7 +77,7 @@ exports.seed = async function (knex) {
 
     // proposal status catalog
 
-    const job_statuses = await knex(tableNames.proposal_status).insert([
+    const proposal_status = await knex(tableNames.proposal_status).insert([
         { proposal_status_name: "sent" },
         { proposal_status_name: "accepted" },
         { proposal_status_name: "rejected" },

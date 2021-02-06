@@ -7,7 +7,7 @@ const schema = require("./proposal.schema.json");
 
 class Proposal extends Cursor(Model) {
     static get tableName() {
-        return tableNames.job;
+        return tableNames.proposal;
     }
 
     static modifiers = {

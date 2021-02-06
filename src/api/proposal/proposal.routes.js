@@ -71,7 +71,7 @@ function sendProposal(req, res, next) {
     const payload = {
         job_id: parseInt(req.body.job_id),
         freelancer_id: parseInt(req.user.freelancer.id),
-        current_proposal_status_id: 1, // will sent status
+        current_proposal_status_id: 1, // will set status
     };
 
     ProposalService.sendProposal(payload)
