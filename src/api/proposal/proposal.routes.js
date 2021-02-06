@@ -3,7 +3,8 @@ const {
     getJobProposalsSchema,
     updateSchemaClient,
     updateSchemaFreelancer,
-} = require("./jobStatus.validators");
+    rejectProposalSchemaClient,
+} = require("./proposal.validators");
 const router = require("express").Router();
 const Role = require("../../constants/roles");
 const ProposalService = require("../../services/proposal.service");
@@ -17,7 +18,6 @@ const {
     setFreelancerProposal,
     authUpdateFreelancerFeedBackProposal,
     authUpdateClientFeedBackProposal,
-    rejectProposalSchemaClient,
 } = require("../../utils/_permissions/proposal");
 
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
@@ -58,8 +58,8 @@ router.delete(
 
 router.delete(
     "/:id/rejectProposal",
-    Auth([Role.user]),
     rejectProposalSchemaClient,
+    Auth([Role.user]),
     setHiringManagerJob,
     rejectProposal
 );
