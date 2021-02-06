@@ -49,6 +49,7 @@ function getAllJobs(req, res, next) {
         job_status_id: 1, // will rep the initial state of job i.e accepting quotes
     };
 
+    // TODO make modular
     const limit = parseInt(req.query.limit) || 100;
 
     if (req.query.industry) {
