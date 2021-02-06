@@ -16,6 +16,8 @@ const {
 const {
     setFreelancerProposal,
     authUpdateFreelancerFeedBackProposal,
+    authUpdateClientFeedBackProposal,
+    rejectProposalSchemaClient,
 } = require("../../utils/_permissions/proposal");
 
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
@@ -37,7 +39,30 @@ router.patch(
     authUpdateFreelancerFeedBackProposal,
     freelancerJobFeedback
 );
-router.delete("/:id", Auth([Role.admin]), deleteJobStatus);
+router.patch(
+    "/:id/clientFeedback",
+    updateSchemaClient,
+    Auth([Role.user]),
+    setHiringManagerJob,
+    authUpdateClientFeedBackProposal,
+    clientJobFeedback
+);
+
+router.delete(
+    "/:id/withdrawProposal",
+    Auth([Role.user]),
+    setFreelancerProposal,
+    authUpdateFreelancerFeedBackProposal,
+    withdrawProposal
+);
+
+router.delete(
+    "/:id/rejectProposal",
+    Auth([Role.user]),
+    rejectProposalSchemaClient,
+    setHiringManagerJob,
+    rejectProposal
+);
 
 module.exports = router;
 
@@ -128,7 +153,6 @@ function freelancerJobFeedback(req, res, next) {
 }
 
 // update proposal client comment and rating and possible status
-// TODO think
 function clientJobFeedback(req, res, next) {
     const id = parseInt(req.params.id); // proposal id
 
@@ -156,7 +180,7 @@ function withdrawProposal(req, res, next) {
     // only freelancers can withdraw a proposal
 
     const id = parseInt(req.params.id);
-    ProposalService._delete(id)
+    ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
@@ -164,7 +188,7 @@ function withdrawProposal(req, res, next) {
 }
 
 //
-function deleteProposal(req, res, next) {
+function rejectProposal(req, res, next) {
     // only hiring managers can delete a proposal type
 
     const id = parseInt(req.params.id);
