@@ -12,6 +12,11 @@ const {
     authUpdateHiringManagerJob,
 } = require("../../utils/_permissions/hiringManager");
 
+const {
+    setFreelancerProposal,
+    authUpdateFreelancerFeedBackProposal,
+} = require("../../utils/_permissions/proposal");
+
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
 router.get("/freelancer", Auth([Role.user]), getProposalsFreelancer);
 router.get(
@@ -21,12 +26,20 @@ router.get(
     authUpdateHiringManagerJob,
     getProposalsByJob
 );
-router.get("/:id", getJobStatusById);
-router.patch("/:id", Auth([Role.admin]), updateSchema, update);
+router.get("/:id/proposalHistory", Auth(), getProposalHistory);
+router.patch(
+    "/:id/freelancerFeedback",
+    updateSchema,
+    Auth([Role.user]),
+    setFreelancerProposal,
+    authUpdateFreelancerFeedBackProposal,
+    freelancerJobFeedback
+);
 router.delete("/:id", Auth([Role.admin]), deleteJobStatus);
 
 module.exports = router;
 
+// send bid
 function sendProposal(req, res, next) {
     const payload = {
         job_id: parseInt(req.body.job_id),
@@ -39,6 +52,7 @@ function sendProposal(req, res, next) {
         .catch(next);
 }
 
+// fetch all your bid proposals freelancer
 function getProposalsFreelancer(req, res, next) {
     let nextPage = null;
 
@@ -89,25 +103,41 @@ function getProposalsByJob(req, res, next) {
         .catch(next);
 }
 
-function getJobStatusById(req, res, next) {
+// fetch proposal history
+function getProposalHistory(req, res, next) {
     const id = parseInt(req.params.id);
 
-    ProposalService.getJobStatusById(id)
+    ProposalService.getProposalHistoryById(id)
+        .then((proposalHistory) =>
+            proposalHistory ? res.json(proposalHistory) : res.sendStatus(404)
+        )
+        .catch(next);
+}
+
+// update proposal freelancer comment and rating
+function freelancerJobFeedback(req, res, next) {
+    const id = parseInt(req.params.id);
+
+    ProposalService.updateProposal(id, req.body)
+        .then((proposal) =>
+            proposal ? res.json(proposal) : res.sendStatus(404)
+        )
+        .catch(next);
+}
+
+// update proposal cleint comment and rating and possible status
+// TODO think
+function clientJobFeedback(req, res, next) {
+    const id = parseInt(req.params.id); // proposal id
+
+    ProposalService.updateProposal(id, req.body)
         .then((jobStatus) =>
             jobStatus ? res.json(jobStatus) : res.sendStatus(404)
         )
         .catch(next);
 }
 
-function update(req, res, next) {
-    const id = parseInt(req.params.id);
-    ProposalService.updateJobStatus(id, req.body)
-        .then((jobStatus) =>
-            jobStatus ? res.json(jobStatus) : res.sendStatus(404)
-        )
-        .catch(next);
-}
-
+//
 function deleteJobStatus(req, res, next) {
     // only admin can delete a subscription type
 

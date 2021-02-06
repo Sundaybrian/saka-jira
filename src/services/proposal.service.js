@@ -53,7 +53,8 @@ class ProposalService {
     }
 
     static async updateProposal(id, updateParams) {
-        // job owner will update the bids
+        // job owner will update the bids status and or client comment and rating
+        // user freelancer comment or rating
         try {
             const updatedproposal = await Proposal.query().patchAndFetchById(
                 id,
@@ -84,8 +85,16 @@ class ProposalService {
     }
 
     // helpers
-    static async getProposal(id) {
+    static async getProposal(id, withHistory = true) {
         try {
+            if (!withHistory) {
+                return await Proposal.query()
+                    .where("id", id)
+                    .modify("defaultSelects")
+                    .first();
+            }
+
+            //default
             const proposal = await Proposal.query()
                 .where("id", id)
                 .modify("defaultSelects")
