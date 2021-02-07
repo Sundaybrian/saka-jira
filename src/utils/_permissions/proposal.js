@@ -13,8 +13,9 @@ function canUpdateClientFeedbackProposal(user, job) {
 function setFreelancerProposal(req, res, next) {
     const id = parseInt(req.params.id);
 
-    ProposalService.getJobById(id, false)
+    ProposalService.getProposalHistoryById(id, false)
         .then((proposal) => {
+            if (!proposal) return res.sendStatus(404);
             req.proposal = proposal;
             next();
         })

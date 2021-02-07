@@ -21,7 +21,7 @@ const {
 } = require("../../utils/_permissions/proposal");
 
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
-router.get("/freelancer", Auth([Role.user]), getProposalsFreelancer);
+router.get("/freelancerProposals", Auth([Role.user]), getProposalsFreelancer);
 router.get(
     "/jobProposals",
     Auth([Role.user]),
@@ -30,6 +30,7 @@ router.get(
     authUpdateHiringManagerJob,
     getProposalsByJob
 );
+// TODO NOT WORKING WITH GRAPH FETCHED
 router.get("/:id/proposalHistory", Auth(), getProposalHistory);
 router.patch(
     "/:id/freelancerFeedback",
@@ -83,7 +84,7 @@ function sendProposal(req, res, next) {
 function getProposalsFreelancer(req, res, next) {
     let nextPage = null;
 
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 50;
 
     // initialize with freelancer id
     const match = {

@@ -15,7 +15,6 @@ class ProposalHistory extends Cursor(Model) {
             const { ref } = ProposalHistory;
             query.select(
                 ref("id"),
-                ref("job_id"),
                 ref("proposal_id"),
                 ref("proposal_status_id"),
                 ref("created_at"),

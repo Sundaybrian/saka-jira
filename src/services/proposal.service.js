@@ -87,20 +87,23 @@ class ProposalService {
     // helpers
     static async getProposal(id, withHistory = true) {
         try {
-            if (!withHistory) {
-                return await Proposal.query()
-                    .where("id", id)
-                    .modify("defaultSelects")
-                    .first();
-            }
+            // if (!withHistory) {
+            //     return await Proposal.query()
+            //         .where("id", id)
+            //         .modify("defaultSelects")
+            //         .first();
+            // }
 
             //default
             const proposal = await Proposal.query()
                 .where("id", id)
                 .modify("defaultSelects")
-                .withGraphFetched(`history(defaultSelects)`)
+                // .withGraphFetched(`histories(defaultSelects)`)
                 .first();
 
+            if (!proposal) {
+                return null;
+            }
             return proposal;
         } catch (error) {
             throw error;

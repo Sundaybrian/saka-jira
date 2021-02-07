@@ -75,57 +75,163 @@ describe("POST /api/v1/proposal/", () => {
     });
 });
 
-// get all
-// describe("GET /api/v1/proposal/", () => {
-//     it("Should return an array of  proposals", async () => {
-//         const res = await request(app)
-//             .get("/api/v1/proposal/")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
+// get freelancer proposals
+describe("GET /api/v1/proposal/", () => {
+    beforeEach(function (done) {
+        request(app)
+            .post("api/v1/proposal/")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+            })
+            .end(function (err, res) {
+                if (err) throw err;
+                done();
+            });
+    });
 
-//         expect(res.body.results.length).toBeGreaterThan(0);
-//     });
-// });
+    it("Should return an array of  proposals", async () => {
+        const res = await request(app)
+            .get("/api/v1/proposal/freelancerProposals")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(200);
 
-// // get by id
-// describe("GET /api/v1/proposal/:id", () => {
-//     it("Should find a proposal", async () => {
-//         const res = await request(app)
-//             .get("/api/v1/proposal/2")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(200);
+        expect(res.body.results.length).toBeGreaterThan(0);
+    });
+});
 
-//         expect(res.body.description).toBe("looking for a super developer 2");
-//     });
+// get job proposals hiring Manager
+describe("GET /api/v1/proposal/", () => {
+    beforeEach(function (done) {
+        request(app)
+            .post("api/v1/proposal/")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+            })
+            .end(function (err, res) {
+                if (err) throw err;
+                done();
+            });
+    });
 
-//     it("should fail to find a proposal", async () => {
-//         await request(app)
-//             .get("/api/v1/proposal/100")
-//             .set("Authorization", `Bearer ${token1}`)
-//             .expect(404);
-//     });
-// });
+    it("Should not return proposals for another hiring manager", async () => {
+        const res = await request(app)
+            .get("/api/v1/proposal/jobProposals")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+            })
+            .expect(401);
+    });
 
-// //patch tests
-// describe("PATCH api/v1/proposal/:id", () => {
-//     it("should fail to update another users proposal profile", async () => {
-//         await request(app)
-//             .patch("/api/v1/proposal/3")
+    it("Should return 400 if job_id is missing", async () => {
+        const res = await request(app)
+            .get("/api/v1/proposal/jobProposals")
+            .set("Authorization", `Bearer ${token3}`)
+            .expect(400);
+    });
+    it("Should return an array of  proposals for hiring manager", async () => {
+        const res = await request(app)
+            .get("/api/v1/proposal/jobProposals")
+            .set("Authorization", `Bearer ${token3}`)
+            .send({
+                job_id: 2,
+            })
+            .expect(200);
+
+        expect(res.body.results.length).toBeGreaterThan(0);
+    });
+});
+
+// // get proposal history
+// describe("GET /api/v1/proposal/:id/proposalHistory", () => {
+//     beforeEach(function (done) {
+//         request(app)
+//             .post("api/v1/proposal/")
 //             .set("Authorization", `Bearer ${token2}`)
-//             .expect(401);
+//             .send({
+//                 job_id: 2,
+//             })
+//             .end(function (err, res) {
+//                 if (err) throw err;
+//                 done();
+//             });
 //     });
 
-//     it("should update proposal", async () => {
+//     // it("Should fail to find a proposal history", async () => {
+//     //     const res = await request(app)
+//     //         .get("/api/v1/proposal/100/proposalHistory")
+//     //         .set("Authorization", `Bearer ${token3}`)
+//     //         .expect(404);
+//     // });
+
+//     it("should find proposal and history", async () => {
 //         const res = await request(app)
-//             .patch("/api/v1/proposal/2")
-//             .set("Authorization", `Bearer ${token3}`)
-//             .send({
-//                 title: "updated proposal",
-//             })
+//             .get("/api/v1/proposal/1/proposalHistory")
+//             .set("Authorization", `Bearer ${token2}`)
 //             .expect(200);
-//         expect(res.body.title).toBe("updated proposal");
+//         console.log(res.body);
+//         // expect(res.body.history.length).toBeGreaterThan(0);
 //     });
 // });
+
+//patch tests FREELANCCER FEEDBACK
+describe("PATCH api/v1/proposal/:id", () => {
+    beforeEach(function (done) {
+        request(app)
+            .post("api/v1/proposal/")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+            })
+            .end(function (err, res) {
+                if (err) throw err;
+                done();
+            });
+    });
+    it("should fail to update another users proposal profile", async () => {
+        await request(app)
+            .patch("/api/v1/proposal/1/freelancerFeedback")
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(400);
+    });
+
+    it("should fail to update proposal feedback for another user", async () => {
+        const res = await request(app)
+            .patch("/api/v1/proposal/1/freelancerFeedback")
+            .set("Authorization", `Bearer ${token3}`)
+            .send({
+                job_id: 2,
+                freelancer_comment: "terrible",
+                freelancer_rating: 1,
+            })
+            .expect(401);
+    });
+    it("should update proposal", async () => {
+        const res = await request(app)
+            .patch("/api/v1/proposal/1/freelancerFeedback")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+                freelancer_comment: "terrible",
+                freelancer_rating: 1,
+            })
+            .expect(200);
+    });
+
+    it("should not find a proposal to update", async () => {
+        const res = await request(app)
+            .patch("/api/v1/proposal/2/freelancerFeedback")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+                freelancer_comment: "terrible",
+                freelancer_rating: 1,
+            })
+            .expect(404);
+    });
+});
 
 // describe("DELETE api/v1/proposal/:id", () => {
 //     it("should fail to delete proposal", async () => {
