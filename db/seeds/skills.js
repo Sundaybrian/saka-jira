@@ -18,7 +18,7 @@ exports.seed = async function (knex) {
 
     const jobs = await knex(tableNames.job).insert([
         {
-            title: "python developer wanted",
+            title: "python developer wanted 1",
             description: "looking for a super developer ",
             main_skill: "python",
             industry_id: 1,
@@ -32,7 +32,7 @@ exports.seed = async function (knex) {
             longitude: -1.454646,
         },
         {
-            title: "python developer wanted",
+            title: "python developer wanted hr 2",
             description: "looking for a super developer 2",
             hiring_manager_id: 2,
             main_skill: "python",
@@ -46,7 +46,7 @@ exports.seed = async function (knex) {
             longitude: -1.454646,
         },
         {
-            title: "python developer wanted",
+            title: "python developer wanted some 2",
             description: "looking for a super developer ",
             main_skill: "python",
             industry_id: 1,

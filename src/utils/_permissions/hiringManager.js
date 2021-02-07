@@ -19,7 +19,7 @@ function canUpdateJob(user, job) {
 function setHiringManager(req, res, next) {
     HiringManagerService.fetchHiringManager({ user_id: parseInt(req.user.id) })
         .then((hiringManager) => {
-            if (!hiringManager) return res.sendStaus(404);
+            if (!hiringManager) return res.sendStatus(404);
             req.hiringManager = hiringManager;
             next();
         })
@@ -27,11 +27,24 @@ function setHiringManager(req, res, next) {
 }
 
 function setHiringManagerJob(req, res, next) {
-    const id = parseInt(req.params.id) || parseInt(req.body.job_id);
+    const id = parseInt(req.params.id);
 
     JobService.getJobById(id)
         .then((job) => {
-            if (!job) return res.sendStaus(404);
+            if (!job) return res.sendStatus(404);
+            req.job = job;
+            next();
+        })
+        .catch(next);
+}
+
+function setHiringManagerJobProposal(req, res, next) {
+    const id = parseInt(req.body.job_id);
+
+    JobService.getJobById(id)
+        .then((job) => {
+            if (!job) return res.sendStatus(404);
+
             req.job = job;
             next();
         })
@@ -50,4 +63,5 @@ module.exports = {
     setHiringManager,
     authUpdateHiringManagerJob,
     setHiringManagerJob,
+    setHiringManagerJobProposal,
 };

@@ -11,6 +11,7 @@ const ProposalService = require("../../services/proposal.service");
 const { Auth } = require("../../_middlewares/auth");
 const {
     setHiringManagerJob,
+    setHiringManagerJobProposal,
     authUpdateHiringManagerJob,
 } = require("../../utils/_permissions/hiringManager");
 
@@ -26,7 +27,7 @@ router.get(
     "/jobProposals",
     Auth([Role.user]),
     getJobProposalsSchema,
-    setHiringManagerJob,
+    setHiringManagerJobProposal,
     authUpdateHiringManagerJob,
     getProposalsByJob
 );
@@ -44,7 +45,7 @@ router.patch(
     "/:id/clientFeedback",
     updateSchemaClient,
     Auth([Role.user]),
-    setHiringManagerJob,
+    setHiringManagerJobProposal,
     authUpdateClientFeedBackProposal,
     clientJobFeedback
 );
@@ -61,7 +62,8 @@ router.delete(
     "/:id/rejectProposal",
     rejectProposalSchemaClient,
     Auth([Role.user]),
-    setHiringManagerJob,
+    setHiringManagerJobProposal,
+    authUpdateHiringManagerJob,
     rejectProposal
 );
 
@@ -194,8 +196,9 @@ function rejectProposal(req, res, next) {
     // only hiring managers can delete a proposal type
 
     const id = parseInt(req.params.id);
-    ProposalService._delete(id)
+    ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
+            console.log(proposal);
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);

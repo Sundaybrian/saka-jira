@@ -7,7 +7,7 @@ function canUpdateProposalFreelancer(user, proposal) {
 
 // permissions
 function canUpdateClientFeedbackProposal(user, job) {
-    return job.hiring_manager_id == user.hiringManager.id;
+    return job.hiringManager.user_id == user.id;
 }
 
 function setFreelancerProposal(req, res, next) {

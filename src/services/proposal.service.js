@@ -70,6 +70,7 @@ class ProposalService {
 
     static async _deleteWithdrawProposal(id) {
         // freelancer will withdraw proposal
+        // client will reject/delete proposal
         try {
             const proposal = await Proposal.query().findOne({ id });
 
