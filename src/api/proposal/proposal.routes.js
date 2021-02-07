@@ -25,9 +25,8 @@ const {
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
 router.get("/freelancerProposals", Auth([Role.user]), getProposalsFreelancer);
 router.get(
-    "/jobProposals",
+    "/jobProposals/:job_id",
     Auth([Role.user]),
-    getJobProposalsSchema,
     setHiringManagerJobProposal,
     authUpdateHiringManagerJob,
     getProposalsByJob
@@ -45,7 +44,7 @@ router.patch(
 );
 
 router.patch(
-    "/:id/clientFeedback",
+    "/:id/clientFeedback/:job_id",
     updateSchemaClient,
     Auth([Role.user]),
     setHiringManagerJobProposal,
@@ -62,8 +61,7 @@ router.delete(
 );
 
 router.delete(
-    "/:id/rejectProposal",
-    rejectProposalSchemaClient,
+    "/:id/rejectProposal/:job_id",
     Auth([Role.user]),
     setHiringManagerJobProposal,
     authUpdateHiringManagerJob,
@@ -121,7 +119,7 @@ function getProposalsByJob(req, res, next) {
 
     // initialize with job id
     const match = {
-        job_id: parseInt(req.body.job_id),
+        job_id: parseInt(req.params.job_id),
         current_proposal_status_id: parseInt(req.query.proposalStatus) || 1,
     };
 
@@ -193,6 +191,7 @@ function withdrawProposal(req, res, next) {
     const id = parseInt(req.params.id);
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
+            console.log(proposal, "=================");
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
@@ -205,7 +204,7 @@ function rejectProposal(req, res, next) {
     const id = parseInt(req.params.id);
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
-            console.log(proposal);
+            console.log(proposal, "*******");
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);

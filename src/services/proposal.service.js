@@ -35,6 +35,7 @@ class ProposalService {
             }
             return proposals;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
@@ -78,8 +79,7 @@ class ProposalService {
                 return null;
             }
 
-            await Proposal.query().deleteById(id);
-            return true;
+            return await Proposal.query().deleteById(id);
         } catch (error) {
             throw error;
         }

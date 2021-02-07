@@ -39,7 +39,7 @@ function setHiringManagerJob(req, res, next) {
 }
 
 function setHiringManagerJobProposal(req, res, next) {
-    const id = parseInt(req.body.job_id);
+    const id = parseInt(req.params.job_id);
 
     JobService.getJobById(id)
         .then((job) => {

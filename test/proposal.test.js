@@ -48,7 +48,7 @@ describe("POST /api/v1/proposal/", () => {
             .expect(401);
     });
 
-    it("Should fail create a proposal if fields are missing", async () => {
+    it("Should fail to create a proposal if fields are missing", async () => {
         const res = await request(app)
             .post("/api/v1/proposal/")
             .set("Authorization", `Bearer ${token2}`)
@@ -98,7 +98,7 @@ describe("GET /api/v1/proposal/", () => {
 });
 
 // get job proposals hiring Manager
-describe("GET /api/v1/proposal/jobProposals", () => {
+describe("GET /api/v1/proposal/jobProposals/:job_id", () => {
     beforeEach(function (done) {
         request(app)
             .post("/api/v1/proposal/")
@@ -114,27 +114,15 @@ describe("GET /api/v1/proposal/jobProposals", () => {
 
     it("Should not return proposals for another hiring manager", async () => {
         const res = await request(app)
-            .get("/api/v1/proposal/jobProposals")
+            .get("/api/v1/proposal/jobProposals/2")
             .set("Authorization", `Bearer ${token2}`)
-            .send({
-                job_id: 2,
-            })
             .expect(401);
     });
 
-    it("Should return 400 if job_id is missing", async () => {
-        const res = await request(app)
-            .get("/api/v1/proposal/jobProposals")
-            .set("Authorization", `Bearer ${token3}`)
-            .expect(400);
-    });
     it("Should return an array of  proposals for hiring manager", async () => {
         const res = await request(app)
-            .get("/api/v1/proposal/jobProposals")
+            .get("/api/v1/proposal/jobProposals/2")
             .set("Authorization", `Bearer ${token3}`)
-            .send({
-                job_id: 2,
-            })
             .expect(200);
 
         expect(res.body.results.length).toBeGreaterThan(0);
@@ -180,7 +168,7 @@ describe("PATCH api/v1/proposal/:id/freelancerFeedback", () => {
             .post("/api/v1/proposal/")
             .set("Authorization", `Bearer ${token2}`)
             .send({
-                job_id: 2,
+                job_id: 3,
             })
             .end(function (err, res) {
                 if (err) throw err;
@@ -231,7 +219,7 @@ describe("PATCH api/v1/proposal/:id/freelancerFeedback", () => {
 });
 
 //patch tests client FEEDBACK/rating
-describe("PATCH api/v1/proposal/:id/clientFeedback", () => {
+describe("PATCH api/v1/proposal/:id/clientFeedback/:job_id", () => {
     beforeEach(function (done) {
         request(app)
             .post("/api/v1/proposal/")
@@ -247,18 +235,17 @@ describe("PATCH api/v1/proposal/:id/clientFeedback", () => {
 
     it("should fail to update another clients proposal profile", async () => {
         await request(app)
-            .patch("/api/v1/proposal/1/clientFeedback")
+            .patch("/api/v1/proposal/1/clientFeedback/2")
             .set("Authorization", `Bearer ${token2}`)
-            .expect(400);
+            .expect(401);
     });
 
     it("should fail to update proposal feedback for another user", async () => {
         const res = await request(app)
-            .patch("/api/v1/proposal/1/clientFeedback")
+            .patch("/api/v1/proposal/1/clientFeedback/2")
             .set("Authorization", `Bearer ${token2}`)
             .send({
                 current_proposal_status_id: 4,
-                job_id: 2,
                 client_comment: "terrible",
                 client_rating: 1,
             })
@@ -266,11 +253,10 @@ describe("PATCH api/v1/proposal/:id/clientFeedback", () => {
     });
     it("should update proposal", async () => {
         const res = await request(app)
-            .patch("/api/v1/proposal/1/clientFeedback")
+            .patch("/api/v1/proposal/1/clientFeedback/2")
             .set("Authorization", `Bearer ${token3}`)
             .send({
                 current_proposal_status_id: 4,
-                job_id: 2,
                 client_comment: "nonsense",
                 client_rating: 1,
             })
@@ -322,46 +308,35 @@ describe("DELETE api/v1/proposal/:id/withdrawProposal", () => {
 });
 
 // deleteProposal client
-describe("DELETE api/v1/proposal/:id/rejectProposal", () => {
+describe("DELETE api/v1/proposal/:id/rejectProposal/:job_id", () => {
+    let id;
     beforeEach(function (done) {
         request(app)
             .post("/api/v1/proposal/")
             .set("Authorization", `Bearer ${token2}`)
             .send({
-                job_id: 2,
+                job_id: 3,
             })
             .end(function (err, res) {
                 if (err) throw err;
-                console.log(res.body);
+                id = res.body.id;
+                console.log(res.body, "********** here");
                 done();
             });
     });
 
-    it("should fail to delete proposal", async () => {
-        await request(app)
-            .delete("/api/v1/proposal/1/rejectProposal")
-            .set("Authorization", `Bearer ${token2}`)
-            .expect(400);
-    });
-
     it("should return 401 to delete proposal", async () => {
         await request(app)
-            .delete("/api/v1/proposal/1/rejectProposal")
+            .delete("/api/v1/proposal/1/rejectProposal/3")
             .set("Authorization", `Bearer ${token2}`)
-            .send({
-                job_id: 2,
-            })
             .expect(401);
     });
 
     it("should delete proposal", async () => {
         const res = await request(app)
-            .delete("/api/v1/proposal/1/rejectProposal")
+            .delete(`/api/v1/proposal/${id}/rejectProposal/3`)
             .set("Authorization", `Bearer ${token3}`)
-            .send({
-                job_id: 2,
-            })
             .expect(200);
-        expect(res.body.id).toBe(1);
+        expect(res.body.id).toBe(id);
     });
 });
