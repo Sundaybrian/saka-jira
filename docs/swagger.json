@@ -90,6 +90,32 @@
                                                 "phone_number": {
                                                     "type": "string",
                                                     "example": "0714382366"
+                                                },
+                                                "freelancer": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "user_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        }
+                                                    }
+                                                },
+                                                "hiringManager": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "user_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        }
+                                                    }
                                                 }
                                             }
                                         },
@@ -227,6 +253,32 @@
                                                 "role": {
                                                     "type": "string",
                                                     "example": "user"
+                                                },
+                                                "freelancer": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "user_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        }
+                                                    }
+                                                },
+                                                "hiringManager": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "user_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        }
+                                                    }
                                                 }
                                             }
                                         },
@@ -373,8 +425,29 @@
         "/accounts": {
             "get": {
                 "tags": ["accounts"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "queryparams",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "limit": {
+                                    "type": "integer",
+                                    "example": 20
+                                },
+                                "nextPage": {
+                                    "type": "string",
+                                    "example": "KGRhdGUpMjAyMS0wMi0wM1QyMDozMjo0MC43NTda"
+                                }
+                            }
+                        },
+                        "style": "form",
+                        "explode": true
+                    }
+                ],
                 "summary": "Get a list of all accounts",
-                "description": "Restricted to admin users",
+                "description": "Restricted to admin . Has pagination and can accept query params for rich data querying. By default the endpoint will get all users with with a limit of 10 , nextPage query param will be generated after the first query. A pageInfo will dictate the items left and how to fetch next data",
                 "operationId": "getallaccounts",
                 "security": [
                     {
@@ -387,41 +460,79 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "id": {
-                                                "type": "number",
-                                                "example": 1
-                                            },
-                                            "first_name": {
-                                                "type": "string",
-                                                "example": "sunday"
-                                            },
-                                            "last_name": {
-                                                "type": "string",
-                                                "example": "oliseh"
-                                            },
-                                            "email": {
-                                                "type": "string",
-                                                "example": "sunday@oliseh.com"
-                                            },
-                                            "role": {
-                                                "type": "string",
-                                                "example": "user"
-                                            },
-                                            "phone_number": {
-                                                "type": "string",
-                                                "example": "0714382366"
-                                            },
-                                            "created_at": {
-                                                "type": "string",
-                                                "example": "2020-05-05T09:12:57.848Z"
-                                            },
-                                            "updated_at": {
-                                                "type": "string",
-                                                "example": "2020-05-08T03:11:21.553Z"
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "first_name": {
+                                                        "type": "string",
+                                                        "example": "sunday"
+                                                    },
+                                                    "last_name": {
+                                                        "type": "string",
+                                                        "example": "oliseh"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "sunday@oliseh.com"
+                                                    },
+                                                    "role": {
+                                                        "type": "string",
+                                                        "example": "user"
+                                                    },
+                                                    "phone_number": {
+                                                        "type": "string",
+                                                        "example": "0714382366"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-05T09:12:57.848Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "pageInfo": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 30
+                                                },
+                                                "remaining": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "hasMore": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasPrevious": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNext": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "next": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                                                },
+                                                "previous": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+                                                }
                                             }
                                         }
                                     }
@@ -3046,6 +3157,1188 @@
                     }
                 }
             }
+        },
+        "/job": {
+            "get": {
+                "tags": ["job"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "queryparams",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "industry": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "limit": {
+                                    "type": "integer",
+                                    "example": 20
+                                },
+                                "nextPage": {
+                                    "type": "string",
+                                    "example": "KGRhdGUpMjAyMS0wMi0wM1QyMDozMjo0MC43NTda"
+                                }
+                            }
+                        },
+                        "style": "form",
+                        "explode": true
+                    }
+                ],
+                "summary": "Get a list of all jobs with multiple combinations",
+                "description": "Open to all users. Has pagination and can accept query params for rich data querying. By default the endpoint will get all jobs with with a limit of 10 , to fetch a single industry use it as a query param",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "getalljobs",
+                "responses": {
+                    "200": {
+                        "description": "An object containing the results and the pagInfo obj for cursor pagination",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "python developer wanted"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "looking for a seasoned python developer"
+                                                    },
+                                                    "industry_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "hiring_manager_id": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "main_skill": {
+                                                        "type": "string",
+                                                        "example": "python"
+                                                    },
+                                                    "latitude": {
+                                                        "type": "number",
+                                                        "example": 38.676
+                                                    },
+                                                    "longitude": {
+                                                        "type": "number",
+                                                        "example": -1.566
+                                                    },
+                                                    "job_status_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "budget_range_min": {
+                                                        "type": "integer",
+                                                        "example": 25000
+                                                    },
+                                                    "budget_range_max": {
+                                                        "type": "integer",
+                                                        "example": 50000
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-05T09:12:57.848Z"
+                                                    },
+                                                    "start_date": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    },
+                                                    "end_date": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "pageInfo": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 30
+                                                },
+                                                "remaining": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "hasMore": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasPrevious": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNext": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "next": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                                                },
+                                                "previous": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["job"],
+                "summary": "Post a job",
+                "operationId": "postajob",
+                "description": "Restricted to users.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "js developer"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "a super js developer"
+                                    },
+                                    "industry_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "latitude": {
+                                        "type": "number",
+                                        "example": 36.78678678
+                                    },
+                                    "longitude": {
+                                        "type": "number",
+                                        "example": -1.546567
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "example": "2020-05-08T03:11:21.553Z"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "example": "2020-05-08T03:11:21.553Z"
+                                    },
+                                    "budget_range_min": {
+                                        "type": "integer",
+                                        "example": 25000
+                                    },
+                                    "budget_range_max": {
+                                        "type": "integer",
+                                        "example": 50000
+                                    }
+                                },
+                                "required": [
+                                    "industry_id",
+                                    "title",
+                                    "description",
+                                    "start_date",
+                                    "end_date",
+                                    "latitude",
+                                    "longitude"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "job  was correctly inserted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "js developer"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "a super js developer"
+                                        },
+                                        "industry_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "main_skill": {
+                                            "type": "integer",
+                                            "example": "javascript"
+                                        },
+                                        "latitude": {
+                                            "type": "number",
+                                            "example": 36.78678678
+                                        },
+                                        "longitude": {
+                                            "type": "number",
+                                            "example": -1.546567
+                                        },
+                                        "start_date": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "end_date": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "budget_range_min": {
+                                            "type": "integer",
+                                            "example": 25000
+                                        },
+                                        "budget_range_max": {
+                                            "type": "integer",
+                                            "example": 500007
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError"
+                    }
+                }
+            }
+        },
+        "/job/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "job id",
+                    "required": true,
+                    "example": 1,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }
+            ],
+            "get": {
+                "tags": ["job"],
+                "summary": "Get a job  by id",
+                "description": "Open to all users",
+                "operationId": "getjobByID",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/JobResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["job"],
+                "summary": "Update a job",
+                "description": "Freelancers can update their own job",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "java and javascript developers"
+                                    },
+                                    "industry_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "job_status_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "latitude": {
+                                        "type": "number",
+                                        "example": 36.78678678
+                                    },
+                                    "longitude": {
+                                        "type": "number",
+                                        "example": -1.546567
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "example": "2020-05-08T03:11:21.553Z"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "example": "2020-05-08T03:11:21.553Z"
+                                    },
+                                    "budget_range_min": {
+                                        "type": "integer",
+                                        "example": 25000
+                                    },
+                                    "budget_range_max": {
+                                        "type": "integer",
+                                        "example": 50000
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "job updated successfully. The details of the job are returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "java and javascript developers"
+                                        },
+                                        "industry_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "job_status_id": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "latitude": {
+                                            "type": "number",
+                                            "example": 36.78678678
+                                        },
+                                        "longitude": {
+                                            "type": "number",
+                                            "example": -1.546567
+                                        },
+                                        "start_date": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "end_date": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "budget_range_min": {
+                                            "type": "integer",
+                                            "example": 25000
+                                        },
+                                        "budget_range_max": {
+                                            "type": "integer",
+                                            "example": "50000'"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["job"],
+                "summary": "Delete a job",
+                "description": "Admin users can delete any job, regular users are restricted.",
+                "operationId": "deletejob",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "job deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/proposal": {
+            "post": {
+                "tags": ["proposal"],
+                "summary": "Post a proposal aka place a bid",
+                "operationId": "post a proposal aka bid",
+                "description": "Restricted to users.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "job_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "required": ["job_id"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "proposal aka bid  was correctly inserted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "job_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "freelancer_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "client_comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "freelancer_comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "freelancer_rating": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "client_rating": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "current_proposal_status_id": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequestError"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    }
+                }
+            }
+        },
+        "/proposal/freelancerProposals": {
+            "get": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "queryParams",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nextPage": {
+                                    "type": "string"
+                                },
+                                "limit": {
+                                    "type": "integer",
+                                    "example": 30
+                                },
+                                "proposalStatus": {
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        },
+                        "style": "form",
+                        "explode": true
+                    }
+                ],
+                "summary": "Get all proposals aka bids for a freelancer",
+                "description": "Fetch all freelancer bids, with multiple combinations",
+                "operationId": "getproposalsByFreelancer",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An object containing the results and the pagInfo obj for cursor pagination for the bids",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "job_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "freelancer_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "client_comment": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "freelancer_comment": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "freelancer_rating": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "client_rating": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "current_proposal_status_id": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "pageInfo": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 30
+                                                },
+                                                "remaining": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "hasMore": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasPrevious": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNext": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "next": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                                                },
+                                                "previous": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/proposal/jobProposals/{job_id}": {
+            "get": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "job_id",
+                        "description": "job id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "queryParams",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nextPage": {
+                                    "type": "string"
+                                },
+                                "limit": {
+                                    "type": "integer",
+                                    "example": 30
+                                },
+                                "proposalStatus": {
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        },
+                        "style": "form",
+                        "explode": true
+                    }
+                ],
+                "summary": "Get all  job proposals aka bids for a given job",
+                "description": "Fetch all bids for a given job, with multiple combinations",
+                "operationId": "getjobproposals",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An object containing the results and the pagInfo obj for cursor pagination for the bids",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "job_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "freelancer_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "client_comment": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "freelancer_comment": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "freelancer_rating": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "client_rating": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "current_proposal_status_id": {
+                                                        "type": "number",
+                                                        "example": 1
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "pageInfo": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 30
+                                                },
+                                                "remaining": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "hasMore": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasPrevious": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNext": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "next": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                                                },
+                                                "previous": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/proposal/{id}/freelancerFeedback": {
+            "patch": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "proposal aka bid id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "send a feedback or rating for a job",
+                "operationId": "freelancerfeedback",
+                "description": "Freelancers can submit a feeback after a job is completed",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "freelancer_comment": {
+                                        "type": "string",
+                                        "example": "very bad employer, scam"
+                                    },
+                                    "job_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "freelancer_rating": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "required": ["job_id"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "feedback submitted successfully. The details of the feedback are returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "job_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "freelancer_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "client_comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "freelancer_comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "freelancer_rating": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "client_rating": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "current_proposal_status_id": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/proposal/{id}/clientFeedback/{job_id}": {
+            "patch": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "proposal aka bid id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "job_id",
+                        "description": "job id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "send a feedback or rating for a job",
+                "operationId": "clientfeedback",
+                "description": "Freelancers can submit a feeback after a job is completed",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "client_comment": {
+                                        "type": "string",
+                                        "example": "very bad developer, scam"
+                                    },
+                                    "client_rating": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "feedback submitted successfully. The details of the feedback are returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "job_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "freelancer_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "client_comment": {
+                                            "type": "string",
+                                            "example": "very bad developer, scam"
+                                        },
+                                        "freelancer_comment": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "freelancer_rating": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "client_rating": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "current_proposal_status_id": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2020-05-08T03:11:21.553Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/proposal/{id}/withdrawProposal": {
+            "delete": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "proposal aka bid id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "withdraw a job proposal",
+                "description": "Freelancers can withdraw a bid",
+                "operationId": "withdrawjobproposal",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "proposal deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/proposal/{id}/rejectProposal/{job_id}": {
+            "delete": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "proposal aka bid id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "job_id",
+                        "description": "job id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "withdraw a job proposal",
+                "description": "Hiring Manager users can reject a proposal aka bid",
+                "operationId": "rejectjobproposal",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "proposal deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -3057,8 +4350,8 @@
             }
         },
         "responses": {
-            "CompanyResponse": {
-                "description": "Company Details",
+            "JobResponse": {
+                "description": "Job Details",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -3068,25 +4361,72 @@
                                     "type": "integer",
                                     "example": 1
                                 },
-                                "name": {
-                                    "type": "string",
-                                    "example": "massive dynamic"
+                                "industry": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "industry_name": {
+                                            "type": "string",
+                                            "example": "Programming"
+                                        }
+                                    }
                                 },
-                                "description": {
-                                    "type": "string",
-                                    "example": "we create everything"
+                                "hiringManager": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "user_id": {
+                                            "type": "string",
+                                            "example": 2
+                                        }
+                                    }
                                 },
-                                "logo_url": {
-                                    "type": "string",
-                                    "example": "https://storagebucket.gogle.com/massivedy"
+                                "jobStatus": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "job_status_name": {
+                                            "example": "accepting bids",
+                                            "type": "string"
+                                        }
+                                    }
                                 },
-                                "owner": {
+                                "main_skill": {
                                     "type": "integer",
-                                    "example": 1
+                                    "example": "javascript"
                                 },
-                                "email": {
+                                "latitude": {
+                                    "type": "number",
+                                    "example": 36.78678678
+                                },
+                                "longitude": {
+                                    "type": "number",
+                                    "example": -1.546567
+                                },
+                                "start_date": {
                                     "type": "string",
-                                    "example": "massive.dynamics@info.com"
+                                    "example": "2020-05-08T03:11:21.553Z"
+                                },
+                                "end_date": {
+                                    "type": "string",
+                                    "example": "2020-05-08T03:11:21.553Z"
+                                },
+                                "budget_range_min": {
+                                    "type": "integer",
+                                    "example": 25000
+                                },
+                                "budget_range_max": {
+                                    "type": "integer",
+                                    "example": 50000
                                 }
                             }
                         }

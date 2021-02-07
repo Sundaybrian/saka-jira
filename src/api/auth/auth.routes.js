@@ -9,7 +9,6 @@ const router = require("express").Router();
 const AuthService = require("../../services/auth.service");
 const { Auth } = require("../../_middlewares/auth");
 
-
 module.exports = router;
 
 router.post("/login", signinSchema, login);
@@ -20,7 +19,6 @@ router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
 router.patch("/:id", Auth(), updateSchema, update);
 router.delete("/:id", Auth(), _delete);
-
 
 function login(req, res, next) {
     const { email, password } = req.body;
@@ -67,14 +65,17 @@ function verifyEmail(req, res, next) {
 }
 
 function getAll(req, res, next) {
-   // CHECK FOR NEXTPAGE 
-   let nextPage = null;
+    let nextPage = null; // will be used for cursor pagination
 
-   if(req.body.nextPage){
-    nextPage = req.body.nextPage;
-   }
+    let match = null;
 
-    AuthService.getAll(nextPage)
+    const limit = parseInt(req.query.limit) || 10;
+
+    if (req.query.nextPage) {
+        nextPage = req.query.nextPage;
+    }
+
+    AuthService.getAll(nextPage, match, limit)
         .then((accounts) => res.json(accounts))
         .catch(next);
 }

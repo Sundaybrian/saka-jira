@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const jwt = require("../utils/jwt");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
+const tableNames = require("../constants/tableNames");
 
 class AuthService {
     constructor() {}
@@ -18,10 +19,18 @@ class AuthService {
             throw error;
         }
 
-        const token = await jwt.sign(account.toJSON());
+        const loggedIn = await account
+            .$query()
+            .modify("defaultSelectsWithoutPass")
+            .withGraphFetched(
+                `[freelancer(defaultSelects), hiringManager(defaultSelects)]`
+            )
+            .first();
+
+        const token = await jwt.sign(loggedIn.toJSON());
 
         return {
-            user: this.basicDetails(account),
+            user: loggedIn,
             token,
         };
     }
@@ -39,10 +48,18 @@ class AuthService {
             }
 
             const newUser = await this.insertUser(userInput, origin);
-            const token = await jwt.sign(newUser);
+            const signedUser = await User.query()
+                .where({ id: newUser.id })
+                .modify("defaultSelectsWithoutPass")
+                .withGraphFetched(
+                    `[freelancer(defaultSelects), hiringManager(defaultSelects)]`
+                )
+                .first();
+
+            const token = await jwt.sign(signedUser.toJSON());
 
             return {
-                user: newUser,
+                user: signedUser,
                 token,
             };
         } catch (error) {
@@ -104,16 +121,18 @@ class AuthService {
     }
 
     // TODO MAKE SO IT CAN QUERY FOR DIFFERENT TYPES OF USERS
-    static async getAll(next=null,limit=null, orderBy='created_at') {
+    static async getAll(next = null, match = null, limit) {
+        let accounts = await User.query()
+            .orderBy("created_at")
+            .limit(limit)
+            .cursorPage();
 
-        let accounts = await User.query().orderBy('created_at')
-        .cursorPage();
-
-        if(next){
-           return User.query().orderBy('created_at')
-            .cursorPage(next);
+        if (next) {
+            return User.query()
+                .orderBy("created_at")
+                .limit(limit)
+                .cursorPage(next);
         }
-
 
         return accounts;
     }
@@ -130,6 +149,7 @@ class AuthService {
 
     static async getAccount(params) {
         const account = await User.query()
+            .modify("defaultSelects")
             .where({ ...params })
             .first();
 

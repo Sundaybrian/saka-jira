@@ -1,4 +1,3 @@
-
 const router = require("express").Router();
 const { createSchema, updateSchema } = require("./job.validators");
 const Role = require("../../constants/roles");
@@ -9,21 +8,19 @@ const { Auth } = require("../../_middlewares/auth");
 const {
     setHiringManager,
     authUpdateHiringManagerJob,
-    setHiringManagerJob
+    setHiringManagerJob,
 } = require("../../utils/_permissions/hiringManager");
 
-
-
-router.post("/", Auth([Role.user]), setHiringManager,createSchema, create);
-router.get("/", Auth(),getAllJobs);
-router.get("/:id", Auth(),getJobById);
+router.post("/", Auth([Role.user]), setHiringManager, createSchema, create);
+router.get("/", Auth(), getAllJobs);
+router.get("/:id", Auth(), getJobById);
 router.patch(
     "/:id",
     Auth([Role.user]),
     updateSchema,
     setHiringManagerJob,
     authUpdateHiringManagerJob,
-    updateJob,
+    updateJob
 );
 
 router.delete("/:id", Auth([Role.admin]), deleteJob);
@@ -46,29 +43,28 @@ function create(req, res, next) {
 // GET /jobs?industry=1&limit=3&nextPage=flsdjfjdfjslfjlksdjfl&jobStatus=2
 // GET /jobs?sortBy=created_at:desc //soon
 function getAllJobs(req, res, next) {
-
-    const nextPage = null; // will be used for cursor pagination
+    let nextPage = null; // will be used for cursor pagination
 
     const match = {
-        job_status_id:1 // will rep the initial state of job i.e accepting quotes
+        job_status_id: 1, // will rep the initial state of job i.e accepting quotes
     };
 
-    const limit = parseInt(req.query.limit) || 10;
+    // TODO make modular
+    const limit = parseInt(req.query.limit) || 100;
 
-    if(req.query.industry){
+    if (req.query.industry) {
         match.industry_id = parseInt(req.query.industry);
     }
 
-    if(req.query.jobStatus){
+    if (req.query.jobStatus) {
         match.job_status_id = parseInt(req.query.jobStatus);
     }
 
-    if(req.query.nextPage){
-        nextPage = req.query.nextPage
+    if (req.query.nextPage) {
+        nextPage = req.query.nextPage;
     }
 
-
-    JobService.getAllJobs(nextPage,match,limit)
+    JobService.getAllJobs(nextPage, match, limit)
         .then((jobs) => {
             return jobs ? res.json(jobs) : res.sendStatus(404);
         })
@@ -79,20 +75,16 @@ function getJobById(req, res, next) {
     const id = parseInt(req.params.id);
 
     JobService.getJobById(id)
-        .then((job) =>
-            job ? res.json(job) : res.sendStatus(404)
-        )
+        .then((job) => (job ? res.json(job) : res.sendStatus(404)))
         .catch(next);
 }
 
 function updateJob(req, res, next) {
     const id = parseInt(req.params.id);
-console.log(id);
+    console.log(id);
 
     JobService.updateJob(id, req.body)
-        .then((job) =>
-            job ? res.json(job) : res.sendStatus(404)
-        )
+        .then((job) => (job ? res.json(job) : res.sendStatus(404)))
         .catch(next);
 }
 

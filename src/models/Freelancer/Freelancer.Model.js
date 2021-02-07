@@ -14,6 +14,13 @@ class Freelancer extends Model {
         return schema;
     }
 
+    static modifiers = {
+        defaultSelects(query) {
+            const { ref } = Freelancer;
+            query.select(ref("id"), ref("user_id"));
+        },
+    };
+
     static async afterInsert({ items, inputItems, relation, context }) {
         try {
             // inputs items will be the carry over from userModel freelancer insertions
@@ -36,7 +43,6 @@ class Freelancer extends Model {
         // Importing models here is a one way to avoid require loops.
         const User = require("../User/User.Model");
         const Industry = require("../Industry/Industry.Model");
-        const Skill = require("../Skill/Skill.Model");
         const HasSkill = require("../HasSkill/HasSkill.Model");
 
         return {
@@ -65,7 +71,7 @@ class Freelancer extends Model {
                 modelClass: HasSkill,
                 join: {
                     from: `${tableNames.freelancer}.id`,
-                   
+
                     to: `${tableNames.has_skill}.freelancer_id`,
                 },
             },
