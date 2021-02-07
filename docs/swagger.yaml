@@ -3032,7 +3032,7 @@ paths:
           schema:
             type: integer  
       summary: withdraw a job proposal
-      description: Admin users can delete any job, regular users are restricted.
+      description: Freelancers can withdraw a bid
       operationId: withdrawjobproposal
       security:
         - bearerAuth: []
@@ -3073,7 +3073,7 @@ paths:
           schema:
             type: integer    
       summary: withdraw a job proposal
-      description: Admin users can delete any job, regular users are restricted.
+      description: Hiring Manager users can reject a proposal aka bid
       operationId: rejectjobproposal
       security:
         - bearerAuth: []
