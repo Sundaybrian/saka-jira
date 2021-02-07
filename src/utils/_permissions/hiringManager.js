@@ -19,6 +19,7 @@ function canUpdateJob(user, job) {
 function setHiringManager(req, res, next) {
     HiringManagerService.fetchHiringManager({ user_id: parseInt(req.user.id) })
         .then((hiringManager) => {
+            if (!hiringManager) return res.sendStaus(404);
             req.hiringManager = hiringManager;
             next();
         })
@@ -30,6 +31,7 @@ function setHiringManagerJob(req, res, next) {
 
     JobService.getJobById(id)
         .then((job) => {
+            if (!job) return res.sendStaus(404);
             req.job = job;
             next();
         })

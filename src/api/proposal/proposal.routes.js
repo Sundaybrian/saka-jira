@@ -145,6 +145,7 @@ function getProposalHistory(req, res, next) {
 // update proposal freelancer comment and rating
 function freelancerJobFeedback(req, res, next) {
     const id = parseInt(req.params.id);
+    req.body.current_proposal_status_id = 3; //client feedback
 
     ProposalService.updateProposal(id, req.body)
         .then((proposal) =>
