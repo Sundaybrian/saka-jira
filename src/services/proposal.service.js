@@ -72,7 +72,7 @@ class ProposalService {
         // freelancer will withdraw proposal
         // client will reject/delete proposal
         try {
-            const proposal = await Proposal.query().findOne({ id });
+            const proposal = await Proposal.query().findById(id);
 
             if (!proposal) {
                 return null;

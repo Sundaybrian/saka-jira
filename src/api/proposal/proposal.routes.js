@@ -21,6 +21,7 @@ const {
     authUpdateClientFeedBackProposal,
 } = require("../../utils/_permissions/proposal");
 
+// controllers
 router.post("/", Auth([Role.user]), createSchema, sendProposal);
 router.get("/freelancerProposals", Auth([Role.user]), getProposalsFreelancer);
 router.get(
@@ -33,6 +34,7 @@ router.get(
 );
 // TODO NOT WORKING WITH GRAPH FETCHED
 router.get("/:id/proposalHistory", Auth(), getProposalHistory);
+
 router.patch(
     "/:id/freelancerFeedback",
     updateSchemaFreelancer,
@@ -41,6 +43,7 @@ router.patch(
     authUpdateFreelancerFeedBackProposal,
     freelancerJobFeedback
 );
+
 router.patch(
     "/:id/clientFeedback",
     updateSchemaClient,
@@ -51,7 +54,7 @@ router.patch(
 );
 
 router.delete(
-    "/:id/withdrawProposal",
+    "/:id/withdrawProposal/",
     Auth([Role.user]),
     setFreelancerProposal,
     authUpdateFreelancerFeedBackProposal,
@@ -124,6 +127,10 @@ function getProposalsByJob(req, res, next) {
 
     if (req.query.nextPage) {
         nextPage = req.query.nextPage;
+    }
+
+    if (req.query.proposalStatus) {
+        match.current_proposal_status_id = parseInt(req.query.proposalStatus);
     }
 
     ProposalService.getProposals(nextPage, match, limit)
