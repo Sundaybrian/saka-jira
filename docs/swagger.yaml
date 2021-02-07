@@ -2748,11 +2748,18 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedError"
        
-  /proposal/jobProposals:
+  /proposal/jobProposals/{job_id}:
     get:
       tags:
         - "proposal"
       parameters:
+        - in: path
+          name: job_id
+          description: job id
+          required: true
+          example: 1
+          schema:
+            type: integer
         - in: query
           name: queryParams
           schema:
@@ -2773,18 +2780,7 @@ paths:
       operationId: getjobproposals
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                job_id: 
-                  type: integer
-                  example: 1
-              required:
-                - job_id
+     
       responses:
         "200":
           description: An object containing the results and the pagInfo obj for cursor pagination for the bids
@@ -2938,7 +2934,7 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
           
           
-  /proposal/{id}/clientFeedback:        
+  /proposal/{id}/clientFeedback/{job_id}:        
     patch:
       tags:
         - "proposal"
@@ -2950,6 +2946,14 @@ paths:
           example: 1
           schema:
             type: integer
+        - in: path
+          name: job_id
+          description: job id
+          required: true
+          example: 1
+          schema:
+            type: integer
+            
       summary: send a feedback or rating for a job 
       operationId: clientfeedback
       description: Freelancers can submit a feeback after a job is completed
@@ -2965,14 +2969,10 @@ paths:
                 client_comment:
                   type: string
                   example: "very bad developer, scam"
-                job_id:
-                  type: integer
-                  example: 1
                 client_rating:
                   type: integer
                   example: 1
-              required:
-                - job_id
+            
 
       responses:
         "200":
@@ -3053,7 +3053,7 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
   
   
-  /proposal/{id}/rejectProposal:
+  /proposal/{id}/rejectProposal/{job_id}:
     delete:
       tags:
         - "proposal"
@@ -3065,23 +3065,18 @@ paths:
           example: 1
           schema:
             type: integer  
+        - in: path
+          name: job_id
+          description: job id
+          required: true
+          example: 1
+          schema:
+            type: integer    
       summary: withdraw a job proposal
       description: Admin users can delete any job, regular users are restricted.
       operationId: rejectjobproposal
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                job_id:
-                  type: integer
-                  example: 1
-              required:
-                - job_id
                 
       responses:
         "200":
