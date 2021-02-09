@@ -22,6 +22,7 @@ class ProposalService {
             // a bid is unique bu freelancer_id and job_id
             let proposals = await Proposal.query()
                 .where(match)
+                .withGraphFetched("job")
                 .orderBy("created_at")
                 .limit(limit)
                 .cursorPage();
@@ -29,10 +30,12 @@ class ProposalService {
             if (next) {
                 return await Proposal.query()
                     .where(match)
+                    .withGraphFetched("job")
                     .orderBy("created_at")
                     .limit(limit)
                     .cursorPage(next);
             }
+
             return proposals;
         } catch (error) {
             console.log(error);

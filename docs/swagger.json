@@ -3793,6 +3793,47 @@
                                                         "type": "integer",
                                                         "example": 1
                                                     },
+                                                    "job": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "title": {
+                                                                "type": "string",
+                                                                "example": "js developer"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "example": "a super js developer"
+                                                            },
+                                                            "industry_id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "latitude": {
+                                                                "type": "number",
+                                                                "example": 36.78678678
+                                                            },
+                                                            "longitude": {
+                                                                "type": "number",
+                                                                "example": -1.546567
+                                                            },
+                                                            "start_date": {
+                                                                "type": "string",
+                                                                "example": "2020-05-08T03:11:21.553Z"
+                                                            },
+                                                            "end_date": {
+                                                                "type": "string",
+                                                                "example": "2020-05-08T03:11:21.553Z"
+                                                            },
+                                                            "budget_range_min": {
+                                                                "type": "integer",
+                                                                "example": 25000
+                                                            },
+                                                            "budget_range_max": {
+                                                                "type": "integer",
+                                                                "example": 50000
+                                                            }
+                                                        }
+                                                    },
                                                     "client_rating": {
                                                         "type": "number",
                                                         "example": 1
