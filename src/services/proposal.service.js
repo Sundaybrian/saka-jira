@@ -5,7 +5,7 @@ class ProposalService {
 
     static async sendProposal(params) {
         try {
-            const proposal = await get_or_create(params);
+            const proposal = await this.get_or_create(params);
 
             if (!proposal) throw new Error("You have already submitted a bid");
             return proposal;
@@ -14,7 +14,7 @@ class ProposalService {
         }
     }
 
-    async get_or_create(params) {
+    static async get_or_create(params) {
         // checks for the existence of a proposal
         // if it exists return false
         // if it does not exist it creates one
