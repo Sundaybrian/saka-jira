@@ -207,7 +207,7 @@ describe("PATCH api/v1/proposal/:id/freelancerFeedback", () => {
 
     it("should not find a proposal to update", async () => {
         const res = await request(app)
-            .patch("/api/v1/proposal/2/freelancerFeedback")
+            .patch("/api/v1/proposal/100/freelancerFeedback")
             .set("Authorization", `Bearer ${token2}`)
             .send({
                 job_id: 2,
