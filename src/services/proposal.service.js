@@ -5,12 +5,32 @@ class ProposalService {
 
     static async sendProposal(params) {
         try {
-            const proposal = await Proposal.query().insert(params);
+            const proposal = await get_or_create(params);
 
+            if (!proposal) throw new Error("You have already submitted a bid");
             return proposal;
         } catch (error) {
             throw error;
         }
+    }
+
+    async get_or_create(params) {
+        // checks for the existence of a proposal
+        // if it exists return false
+        // if it does not exist it creates one
+        const { job_id, freelancer_id } = params;
+
+        let proposal = await Proposal.query()
+            .where({ job_id, freelancer_id })
+            .first();
+
+        if (!proposal) {
+            // create one
+            proposal = await Proposal.query().insert(params);
+            return proposal;
+        }
+
+        return false;
     }
 
     static async getProposals(next = null, match, limit) {

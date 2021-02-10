@@ -191,7 +191,6 @@ function withdrawProposal(req, res, next) {
     const id = parseInt(req.params.id);
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
-            console.log(proposal, "=================");
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
