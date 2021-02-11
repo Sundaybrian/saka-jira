@@ -37,7 +37,10 @@ describe("POST /api/v1/freelancer/", () => {
 
 describe("GET /api/v1/freelancer/", () => {
     it("Should find a freelancer arr", async () => {
-        const res = await request(app).get("/api/v1/freelancer/").expect(200);
+        const res = await request(app)
+            .get("/api/v1/freelancer/")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
 
         expect(res.body.results.length).toBeGreaterThan(0);
         expect(res.body).toHaveProperty("pageInfo");
@@ -46,14 +49,20 @@ describe("GET /api/v1/freelancer/", () => {
 
 describe("GET /api/v1/freelancer/:id", () => {
     it("Should find a freelancer", async () => {
-        const res = await request(app).get("/api/v1/freelancer/1").expect(200);
+        const res = await request(app)
+            .get("/api/v1/freelancer/1")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
 
         expect(res.body.industry_id).toBe(1);
         expect(res.body.latitude).toBe(0);
     });
 
     it("should fail to find a freelancer", async () => {
-        await request(app).get("/api/v1/freelancer/100").expect(404);
+        await request(app)
+            .get("/api/v1/freelancer/100")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(404);
     });
 });
 

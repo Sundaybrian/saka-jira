@@ -18,8 +18,8 @@ const router = require("express").Router({
 router.use("/:id/skills", Skills);
 
 router.post("/", Auth(), createSchema, create);
-router.get("/", getAllFreelancers);
-router.get("/:id", getFreelancerById);
+router.get("/", Auth(), getAllFreelancers);
+router.get("/:id", Auth(), getFreelancerById);
 router.patch(
     "/:id",
     Auth(),
