@@ -26,6 +26,10 @@ class User extends Cursor(Model) {
                 ref("phone_number"),
                 ref("active"),
                 ref("image_url"),
+                ref("created_at"),
+                ref("isVerified"),
+                ref("updated_at"),
+                ref("active"),
                 ref("password")
             );
         },
@@ -40,7 +44,10 @@ class User extends Cursor(Model) {
                 ref("email"),
                 ref("phone_number"),
                 ref("active"),
-                ref("image_url")
+                ref("image_url"),
+                ref("created_at"),
+                ref("isVerified"),
+                ref("updated_at")
             );
         },
     };

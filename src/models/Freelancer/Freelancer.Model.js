@@ -20,8 +20,10 @@ class Freelancer extends Cursor(Model) {
             query.select(
                 ref("id"),
                 ref("user_id"),
+                ref("industry_id"),
                 ref("latitude"),
-                ref("longitude")
+                ref("longitude"),
+                ref("description")
             );
         },
     };

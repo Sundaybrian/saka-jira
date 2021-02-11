@@ -100,7 +100,9 @@ class FreelancerService {
             //     "phone_number",
             //     "first_name",
             //     "last_name"
-            .withGraphFetched(`[industry,skills,user]`)
+            .withGraphFetched(
+                `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+            )
             // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
             // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
