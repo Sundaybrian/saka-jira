@@ -37,8 +37,6 @@ class FreelancerService {
                     .cursorPage(next);
             }
 
-            console.log(freelancers, "========+++++++++++");
-
             return freelancers;
         } catch (error) {
             throw error;

@@ -2321,18 +2321,21 @@
                                                         "type": "integer",
                                                         "example": 1
                                                     },
-                                                    "industry": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": 1
-                                                            },
-                                                            "industry_name": {
-                                                                "type": "string",
-                                                                "example": "Computer Programming"
-                                                            }
-                                                        }
+                                                    "latitude": {
+                                                        "type": "number",
+                                                        "example": 38.676
+                                                    },
+                                                    "longitude": {
+                                                        "type": "number",
+                                                        "example": -1.566
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-05T09:12:57.848Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
                                                     },
                                                     "skills": {
                                                         "type": "array",
@@ -2392,24 +2395,21 @@
                                                             "updated_at": {
                                                                 "type": "string",
                                                                 "example": "2021-02-11T10:14:54.742Z"
+                                                            },
+                                                            "industry": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "industry_name": {
+                                                                        "type": "string",
+                                                                        "example": "Computer Programming"
+                                                                    }
+                                                                }
                                                             }
                                                         }
-                                                    },
-                                                    "latitude": {
-                                                        "type": "number",
-                                                        "example": 38.676
-                                                    },
-                                                    "longitude": {
-                                                        "type": "number",
-                                                        "example": -1.566
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "example": "2020-05-05T09:12:57.848Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "example": "2020-05-08T03:11:21.553Z"
                                                     }
                                                 }
                                             }
@@ -4649,6 +4649,21 @@
                                     "type": "integer",
                                     "example": 1
                                 },
+                                "latitude": {
+                                    "type": "number",
+                                    "example": 38.676
+                                },
+                                "longitude": {
+                                    "type": "number",
+                                    "example": -1.566
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "example": "2020-05-05T09:12:57.848Z"
+                                },
+                                "updated_at": {
+                                    "type": "string"
+                                },
                                 "industry": {
                                     "type": "object",
                                     "properties": {
@@ -4722,21 +4737,6 @@
                                             "example": "2021-02-11T10:14:54.742Z"
                                         }
                                     }
-                                },
-                                "latitude": {
-                                    "type": "number",
-                                    "example": 38.676
-                                },
-                                "longitude": {
-                                    "type": "number",
-                                    "example": -1.566
-                                },
-                                "created_at": {
-                                    "type": "string",
-                                    "example": "2020-05-05T09:12:57.848Z"
-                                },
-                                "updated_at": {
-                                    "type": "string"
                                 }
                             }
                         }
