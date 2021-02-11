@@ -14,10 +14,32 @@ class FreelancerService {
         }
     }
 
-    static async getAllFreelancers() {
-        //TODO paginate
-        const freelancers = await Freelancer.query();
-        return freelancers;
+    static async getAllFreelancers(next = null, match, limit) {
+        try {
+            let freelancers = await Freelancer.query()
+                .where(match)
+                .withGraphFetched(
+                    `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+                )
+                .orderBy("id")
+                .limit(limit)
+                .cursorPage();
+
+            if (next) {
+                return await Freelancer.query()
+                    .where(match)
+                    .withGraphFetched(
+                        `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+                    )
+                    .orderBy("id")
+                    .limit(limit)
+                    .cursorPage(next);
+            }
+
+            return freelancers;
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async updateFreelancer(id, updateParams) {
@@ -90,24 +112,10 @@ class FreelancerService {
             .alias("f")
             .where("f.id", id)
             .modify("defaultSelects")
-            // .select(
-            //     "f.id",
-            //     "user_id",
-            //     "latitude",
-            //     "longitude",
-            //     "email",
-            //     )
-            //     "phone_number",
-            //     "first_name",
-            //     "last_name"
             .withGraphFetched(
                 `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
             )
-            // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
-            // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
-
-        console.log(freelancer, "===-----");
 
         return freelancer;
     }
