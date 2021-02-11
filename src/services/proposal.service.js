@@ -18,19 +18,23 @@ class ProposalService {
         // checks for the existence of a proposal
         // if it exists return false
         // if it does not exist it creates one
-        const { job_id, freelancer_id } = params;
+        try {
+            const { job_id, freelancer_id } = params;
 
-        let proposal = await Proposal.query()
-            .where({ job_id, freelancer_id })
-            .first();
+            let proposal = await Proposal.query()
+                .where({ job_id, freelancer_id })
+                .first();
 
-        if (!proposal) {
-            // create one
-            proposal = await Proposal.query().insert(params);
-            return proposal;
+            if (!proposal) {
+                // create one
+                proposal = await Proposal.query().insert(params);
+                return proposal;
+            }
+
+            return false;
+        } catch (error) {
+            throw error;
         }
-
-        return false;
     }
 
     static async getProposals(next = null, match, limit) {

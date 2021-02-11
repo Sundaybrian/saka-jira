@@ -1,11 +1,11 @@
 const { Model } = require("objection");
-
+const Cursor = require("../cursorPagination");
 const tableNames = require("../../constants/tableNames");
 const db = require("../../db");
 const schema = require("./freelancer.schema.json");
 const FreelancerSubscriptionService = require("../../services/freelancerSubscription.service");
 
-class Freelancer extends Model {
+class Freelancer extends Cursor(Model) {
     static get tableName() {
         return tableNames.freelancer;
     }
@@ -17,7 +17,12 @@ class Freelancer extends Model {
     static modifiers = {
         defaultSelects(query) {
             const { ref } = Freelancer;
-            query.select(ref("id"), ref("user_id"));
+            query.select(
+                ref("id"),
+                ref("user_id"),
+                ref("latitude"),
+                ref("longitude")
+            );
         },
     };
 

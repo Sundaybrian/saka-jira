@@ -57,25 +57,31 @@ class FreelancerService {
         return true;
     }
 
-    static async getAllFreelancerSkills(freelancer_id){
+    static async getAllFreelancerSkills(freelancer_id) {
         try {
-            const mySkills = await Freelancer.query().alias("f")
-            .where("f.id", freelancer_id).withGraphFetched('skills(selectNameAndId)')
-            .modifiers({
-                selectNameAndId(builder) {
-                    builder
-                        .select(
-                            "has_skill.freelancer_id",
-                            "skill.skill_name",
-                            "skill.id",
-                            
-                        )
-                        .innerJoin("skill", "has_skill.skill_id", "skill.id");
-                }});
+            const mySkills = await Freelancer.query()
+                .alias("f")
+                .where("f.id", freelancer_id)
+                .withGraphFetched("skills(selectNameAndId)")
+                .modifiers({
+                    selectNameAndId(builder) {
+                        builder
+                            .select(
+                                "has_skill.freelancer_id",
+                                "skill.skill_name",
+                                "skill.id"
+                            )
+                            .innerJoin(
+                                "skill",
+                                "has_skill.skill_id",
+                                "skill.id"
+                            );
+                    },
+                });
 
-            return mySkills
+            return mySkills;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
@@ -83,26 +89,27 @@ class FreelancerService {
         const freelancer = await Freelancer.query()
             .alias("f")
             .where("f.id", id)
-            .select(
-                "f.id",
-                "user_id",
-                "latitude",
-                "longitude",
-                "industry_id",
-                "industry_name",
-                "email",
-                "phone_number",
-                "first_name",
-                "last_name"
-            )
-            .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
-            .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
+            .modify("defaultSelects")
+            // .select(
+            //     "f.id",
+            //     "user_id",
+            //     "latitude",
+            //     "longitude",
+            //     "email",
+            //     )
+            //     "phone_number",
+            //     "first_name",
+            //     "last_name"
+            .withGraphFetched(`[industry,skills,user]`)
+            // .join(`${tableNames.industry} as inda`, "f.industry_id", `inda.id`)
+            // .join(`${tableNames.user} as u`, "f.user_id", `u.id`)
             .first();
+
+        console.log(freelancer, "===-----");
 
         return freelancer;
     }
 
-  
     static async basicDetails(Freelancer) {
         const {
             id,
