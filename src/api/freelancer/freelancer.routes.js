@@ -2,7 +2,6 @@ const { createSchema, updateSchema } = require("./freelancer.validators");
 const Role = require("../../constants/roles");
 const FreelancerService = require("../../services/freelancer.service");
 
-
 const { Auth } = require("../../_middlewares/auth");
 const {
     setFreelancer,
@@ -11,14 +10,12 @@ const {
 
 const Skills = require("../HasSkill/hasSkill.routes");
 
-
 const router = require("express").Router({
     mergeParams: true,
 });
 
 //api/v1/freelancer/:freelancer_id/skills
 router.use("/:id/skills", Skills);
-
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", getAllFreelancers);
@@ -44,15 +41,24 @@ function create(req, res, next) {
         .catch(next);
 }
 
-// fetch all your tasks
-// GET /tasks?completed=true
-// GET /tasks?limit=3&skip=3
-// GET /tasks?sortBy=createdAt:desc
+// fetch all freelancers
+// GET /freelancers?industry=1
+// GET /freelancers?limit=30
 function getAllFreelancers(req, res, next) {
-    // const limit = parseInt(req.query.limit) || 10;
-    // const page = parseInt(req.query.page) || 1;
+    let nextPage = null;
 
-    FreelancerService.getAllFreelancers()
+    const limit = parseInt(req.query.limit) || 30;
+
+    // initialize with job id
+    const match = {
+        industry_id: parseInt(req.params.industry) || 1,
+    };
+
+    if (req.query.nextPage) {
+        nextPage = req.query.nextPage;
+    }
+
+    FreelancerService.getAllFreelancers(nextPage, match, limit)
         .then((freelancers) => {
             return freelancers ? res.json(freelancers) : res.sendStatus(404);
         })

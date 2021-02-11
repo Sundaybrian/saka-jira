@@ -18,6 +18,7 @@ class FreelancerService {
         try {
             let freelancers = await Freelancer.query()
                 .where(match)
+                .modify("defaultSelects")
                 .withGraphFetched(
                     `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
                 )
@@ -26,7 +27,7 @@ class FreelancerService {
                 .cursorPage();
 
             if (next) {
-                return await Freelancer.query()
+                freelancers = await Freelancer.query()
                     .where(match)
                     .withGraphFetched(
                         `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
@@ -35,6 +36,8 @@ class FreelancerService {
                     .limit(limit)
                     .cursorPage(next);
             }
+
+            console.log(freelancers, "========+++++++++++");
 
             return freelancers;
         } catch (error) {

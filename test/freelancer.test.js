@@ -35,6 +35,15 @@ describe("POST /api/v1/freelancer/", () => {
     });
 });
 
+describe("GET /api/v1/freelancer/", () => {
+    it("Should find a freelancer arr", async () => {
+        const res = await request(app).get("/api/v1/freelancer/").expect(200);
+
+        expect(res.body.results.length).toBeGreaterThan(0);
+        expect(res.body).toHaveProperty("pageInfo");
+    });
+});
+
 describe("GET /api/v1/freelancer/:id", () => {
     it("Should find a freelancer", async () => {
         const res = await request(app).get("/api/v1/freelancer/1").expect(200);
