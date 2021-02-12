@@ -83,5 +83,6 @@ exports.seed = async function (knex) {
         { proposal_status_name: "rejected" },
         { proposal_status_name: "feedback freelancer" },
         { proposal_status_name: "feedback client" },
+        { proposal_status_name: "completed" },
     ]);
 };

@@ -1,6 +1,6 @@
 const Proposal = require("../models/Proposal/Proposal.Model");
 
-class ProposalService {
+class ProposalHistoryService {
     constructor() {}
 
     static async sendProposal(params) {
@@ -162,4 +162,4 @@ class ProposalService {
     }
 }
 
-module.exports = ProposalService;
+module.exports = ProposalHistoryService;
