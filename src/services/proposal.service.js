@@ -1,4 +1,6 @@
+const { log } = require("console");
 const Proposal = require("../models/Proposal/Proposal.Model");
+const ProposalStatusService = require("./proposalStatus.service");
 
 class ProposalService {
     constructor() {}
@@ -7,9 +9,11 @@ class ProposalService {
         try {
             const proposal = await this.get_or_create(params);
 
-            if (!proposal) throw new Error("You have already submitted a bid");
+            console.log(proposal, "9090909090909090");
+
             return proposal;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
@@ -25,13 +29,15 @@ class ProposalService {
                 .where({ job_id, freelancer_id })
                 .first();
 
-            if (!proposal) {
+            console.log(proposal, "hapaaaa  imepatikan");
+            if (proposal) {
+                throw new Error("You have already submitted a bid");
+            } else {
                 // create one
                 proposal = await Proposal.query().insert(params);
-                return proposal;
             }
 
-            return false;
+            return proposal;
         } catch (error) {
             throw error;
         }
@@ -97,8 +103,7 @@ class ProposalService {
     }
 
     static async _deleteWithdrawProposal(id) {
-        // freelancer will withdraw proposal
-        // client will reject/delete proposal
+        // freelancer will withdraw proposal aka delete
         try {
             const proposal = await Proposal.query().findById(id);
 

@@ -49,15 +49,17 @@ class ProposalHistory extends Cursor(Model) {
                     from: `${tableNames.proposal_history}.proposal_id`,
                     to: `${tableNames.proposal}.id`,
                 },
-                freelancer: {
-                    // BelongsToOneRelation: Use this relation when the source model has the foreign key
-                    relation: Model.BelongsToOneRelation,
-                    modelClass: Freelancer,
-                    join: {
-                        from: `${tableNames.proposal_history}.freelancer_id`,
-                        to: `${tableNames.freelancer}.id`,
-                    },
+            },
+
+            freelancer: {
+                // BelongsToOneRelation: Use this relation when the source model has the foreign key
+                relation: Model.BelongsToOneRelation,
+                modelClass: Freelancer,
+                join: {
+                    from: `${tableNames.proposal_history}.freelancer_id`,
+                    to: `${tableNames.freelancer}.id`,
                 },
+            },
             proposalStatus: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
