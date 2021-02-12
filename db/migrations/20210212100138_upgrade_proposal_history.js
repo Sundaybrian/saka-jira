@@ -1,8 +1,6 @@
 const tableNames = require("../../src/constants/tableNames");
 
 const {
-    addDefaultColumns,
-    addDefaultGeoLocations,
     references,
     url,
 } = require("../../src/utils/tableUtils");
