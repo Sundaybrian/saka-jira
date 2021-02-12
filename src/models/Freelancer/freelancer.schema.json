@@ -31,6 +31,11 @@
             "type": "number",
             "title": "The latitude of the freelancer."
         },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "string",
+            "title": "The description of the freelancer."
+        },
         "longitude": {
             "$id": "#/properties/longitude",
             "type": "number",
