@@ -46,6 +46,7 @@ class Proposal extends Cursor(Model) {
                 freelancer_comment,
                 website_url,
                 payment_amount,
+                freelancer_rating,
             } = inputItems[0];
 
             const proposal_history = {
@@ -53,12 +54,14 @@ class Proposal extends Cursor(Model) {
                 proposal_id: id,
                 job_id,
                 freelancer_id,
+                freelancer_rating: parseInt(freelancer_rating),
                 client_comment,
-                client_rating,
+                client_rating: parseInt(client_rating),
                 freelancer_comment,
                 website_url,
                 payment_amount,
             };
+
             // creating a history trail on bid submission
             const history = await ProposalHistory.query().insert(
                 proposal_history
@@ -83,6 +86,7 @@ class Proposal extends Cursor(Model) {
                 client_comment,
                 client_rating,
                 freelancer_comment,
+                freelancer_rating,
                 website_url,
                 payment_amount,
             } = inputItems[0];
@@ -92,12 +96,14 @@ class Proposal extends Cursor(Model) {
                 proposal_id: id,
                 job_id,
                 freelancer_id,
+                freelancer_rating: parseInt(freelancer_rating),
                 client_comment,
-                client_rating,
+                client_rating: parseInt(client_rating),
                 freelancer_comment,
                 website_url,
                 payment_amount,
             };
+
             // creating a history trail on bid update
             const history = await ProposalHistory.query().insert(
                 proposal_history
