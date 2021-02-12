@@ -1,5 +1,6 @@
 const Freelancer = require("../models/Freelancer/Freelancer.Model");
-const tableNames = require("../constants/tableNames");
+const Proposal = require("../models/Proposal/Proposal.Model");
+const Job = require("../models/Job/Job.Model");
 
 class FreelancerService {
     constructor() {}
@@ -119,6 +120,45 @@ class FreelancerService {
             .first();
 
         return freelancer;
+    }
+
+    static async freelancerProfileStats(
+        freelancer_id,
+        hiring_manager_id,
+        inprogress_status,
+        completed_status
+    ) {
+        try {
+            const [inprogress, jobsPosted, completed] = await Promise.all([
+                // #inprogressjobs aggregate count(current_proposal_status) where freelancer_id and current_proposal_status == inprogress from proposal
+                Proposal.query()
+                    .where({
+                        current_proposal_status: inprogress_status,
+                        freelancer_id,
+                    })
+                    .count()
+                    .as("inprogress"),
+
+                // #jobsposted aggregate count(hr_id) jobs using where hr_id from table jobs
+                Job.query()
+                    .where({ hiring_manager_id })
+                    .count()
+                    .as("jobsPosted"),
+
+                // #ratingfreelancer aggregate avg(rating) from table proposals where freelancer_id and current_proposal_status == completed
+                Proposal.query()
+                    .where({
+                        freelancer_id,
+                        current_proposal_status: completed_status,
+                    })
+                    .count()
+                    .as("completed"),
+            ]);
+
+            return { inprogress, jobsPosted, completed };
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async basicDetails(Freelancer) {
