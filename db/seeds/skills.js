@@ -12,8 +12,9 @@ exports.seed = async function (knex) {
 
     const job_statuses = await knex(tableNames.job_status).insert([
         { job_status_name: "accepting bids" },
-        { job_status_name: "closed" },
         { job_status_name: "inprogress" },
+        { job_status_name: "closed" },
+        { job_status_name: "completed" },
     ]);
 
     await knex(tableNames.job).insert({
@@ -80,6 +81,7 @@ exports.seed = async function (knex) {
         { proposal_status_name: "accepted" },
         { proposal_status_name: "rejected" },
         { proposal_status_name: "feedback freelancer" },
+        { proposal_status_name: "inprogress" },
         { proposal_status_name: "feedback client" },
         { proposal_status_name: "completed" },
     ]);
