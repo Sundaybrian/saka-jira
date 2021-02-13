@@ -82,7 +82,7 @@ workflows:
             branches:
               only:
                 - develop
-                - /feature.*/
+                # - /feature.*/
           requires:
             - deploy-to-test
 
@@ -92,6 +92,6 @@ workflows:
             branches:
               only:
                 - develop
-                - /feature.*/
+                # - /feature.*/
           requires:
             - dependencies
