@@ -54,17 +54,13 @@ function getAllCompanies(req, res, next) {
 // }
 
 function getCompanyById(req, res, next) {
-    // owner can get his company and the admin can get any company
-    CompanyService.getCompanyById(req.params.id)
-        .then((company) => {
-            if (
-                company.owner_id !== req.user.id &&
-                req.user.role !== Role.admin
-            ) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
+    // TODO owner can get his company and the admin can get any company
 
-            res.json(company);
+    const id = parseInt(req.params.id);
+
+    CompanyService.getCompanyById(id)
+        .then((company) => {
+            return company ? res.json(company) : res.sendStatus(404);
         })
         .catch(next);
 }
