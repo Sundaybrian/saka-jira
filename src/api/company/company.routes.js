@@ -3,8 +3,8 @@ const { Auth } = require("../../_middlewares/auth");
 const Role = require("../../constants/roles");
 const { createSchema, updateSchema } = require("./company.validators");
 const {
-    setOwner,
-    authUpdateOwnerCompany,
+    setCompanyOwner,
+    authUpdateCompany,
 } = require("../../utils/_permissions/company");
 
 const CompanyService = require("../../services/company.service");
@@ -13,7 +13,14 @@ router.post("/", Auth([Role.user]), createSchema, create);
 router.get("/", Auth([Role.admin]), getAllCompanies);
 // router.get("/mine", Auth([Role.user]), getMyCompanies);
 router.get("/:id", Auth(), getCompanyById);
-router.patch("/:id", Auth([Role.user]), updateSchema, update);
+router.patch(
+    "/:id",
+    Auth([Role.user, Role.admin]),
+    setCompanyOwner,
+    authUpdateCompany,
+    updateSchema,
+    update
+);
 router.delete("/:id", Auth([Role.admin, Role.user]), _deleteCompany);
 
 module.exports = router;
