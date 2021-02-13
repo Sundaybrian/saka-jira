@@ -16,15 +16,18 @@ class Freelancer extends Cursor(Model) {
 
     static modifiers = {
         defaultSelects(query) {
-            const { ref } = Freelancer;
-            query.select(
-                ref("id"),
-                ref("user_id"),
-                ref("industry_id"),
-                ref("latitude"),
-                ref("longitude"),
-                ref("description")
-            );
+            query
+                .alias("f")
+                .select(
+                    "f.id",
+                    "f.user_id",
+                    "f.industry_id",
+                    "f.latitude",
+                    "f.longitude",
+                    "f.description",
+                    "hiring_manager.id as hiring_manager_id"
+                )
+                .join("hiring_manager", "f.user_id", "hiring_manager.user_id");
         },
     };
 
