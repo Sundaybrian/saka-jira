@@ -1,4 +1,8 @@
-const { createSchema, updateSchema } = require("./freelancer.validators");
+const {
+    createSchema,
+    updateSchema,
+    getStatsSchema,
+} = require("./freelancer.validators");
 const Role = require("../../constants/roles");
 const FreelancerService = require("../../services/freelancer.service");
 
@@ -19,7 +23,7 @@ router.use("/:id/skills", Skills);
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", Auth(), getAllFreelancers);
-router.get("/freelancerStats", Auth(), freelancerStats);
+router.get("/freelancerStats", Auth(), getStatsSchema, freelancerStats);
 router.get("/:id", Auth(), getFreelancerById);
 router.patch(
     "/:id",

@@ -21,3 +21,13 @@ exports.updateSchema = (req, res, next) => {
 
     validateRequest(req, next, schema);
 };
+
+exports.getStatsSchema = (req, res, next) => {
+    const schema = Joi.object({
+        freelancer_id: Joi.number().integer(),
+        hiring_manager_id: Joi.number().integer(),
+        completed: Joi.number().integer().required(),
+        inprogress: Joi.number().integer().required(),
+    });
+    validateRequest(req, next, schema);
+};
