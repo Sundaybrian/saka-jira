@@ -6,8 +6,11 @@ class CompanyService {
     static async create(params) {
         try {
             // validate if company name exists
-            if (await getCompany({ name: params.name })) {
-                error('Name "' + params.name + '" is already registered');
+            if (await this.getCompany({ name: params.name })) {
+                const error = new Error(
+                    'Name "' + params.name + '" is already registered'
+                );
+                throw error;
             }
 
             const company = await Company.query().insert(params);
@@ -53,7 +56,7 @@ class CompanyService {
 
     static async getCompanyById(id) {
         try {
-            const company = await getCompany({ id });
+            const company = await this.getCompany({ id });
             if (!company) return null;
             return company;
         } catch (error) {
@@ -63,7 +66,7 @@ class CompanyService {
 
     static async updateCompany(queryParams, params) {
         try {
-            const company = await getCompany({ ...queryParams });
+            const company = await this.getCompany({ ...queryParams });
 
             if (!company) {
                 return null;
@@ -73,7 +76,7 @@ class CompanyService {
             if (
                 params.name &&
                 company.name !== params.name &&
-                (await getCompany({ name: params.name }))
+                (await this.getCompany({ name: params.name }))
             ) {
                 const error = new Error(`Name ${params.name} is already taken`);
                 throw error;
@@ -92,12 +95,12 @@ class CompanyService {
         }
     }
 
-    static async _delete(id) {
+    static async _delete(params) {
         try {
-            const tobeDeleted = await getCompany({ id });
+            const tobeDeleted = await this.getCompany({ id: params.id });
 
             if (tobeDeleted) {
-                return await Company.query().deleteById(id);
+                return await Company.query().deleteById(params.id);
             }
 
             return null;
