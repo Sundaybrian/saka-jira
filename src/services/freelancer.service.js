@@ -1,6 +1,7 @@
 const Freelancer = require("../models/Freelancer/Freelancer.Model");
 const Proposal = require("../models/Proposal/Proposal.Model");
 const Job = require("../models/Job/Job.Model");
+const { log } = require("console");
 
 class FreelancerService {
     constructor() {}
@@ -133,7 +134,7 @@ class FreelancerService {
                 // #inprogressjobs aggregate count(current_proposal_status) where freelancer_id and current_proposal_status == inprogress from proposal
                 Proposal.query()
                     .where({
-                        current_proposal_status: inprogress_status,
+                        current_proposal_status_id: inprogress_status,
                         freelancer_id,
                     })
                     .count()
@@ -149,14 +150,24 @@ class FreelancerService {
                 Proposal.query()
                     .where({
                         freelancer_id,
-                        current_proposal_status: completed_status,
+                        current_proposal_status_id: completed_status,
                     })
                     .count()
                     .as("completed"),
             ]);
+            // {
+            //     inprogress: [ { count: '0' } ],
+            //     jobsPosted: [ { count: '1' } ],
+            //     completed: [ { count: '0' } ]
+            // }
 
-            return { inprogress, jobsPosted, completed };
+            return {
+                inprogress: inprogress[0].count,
+                jobsPosted: jobsPosted[0].count,
+                completed: completed[0].count,
+            };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }

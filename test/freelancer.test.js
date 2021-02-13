@@ -47,6 +47,25 @@ describe("GET /api/v1/freelancer/", () => {
     });
 });
 
+// freelancer stats
+describe("GET /api/v1/freelancer/freelancerStats", () => {
+    it("Should return a freelancer stats", async () => {
+        const res = await request(app)
+            .get("/api/v1/freelancer/freelancerStats")
+            .set("Authorization", `Bearer ${token1}`)
+            .send({
+                completed: 7,
+                inprogress: 5,
+                freelancer_id: 1,
+                hiring_manager_id: 1,
+            })
+            .expect(200);
+        console.log(res.body);
+
+        expect(res.body).toHaveProperty("jobsPosted");
+    });
+});
+
 describe("GET /api/v1/freelancer/:id", () => {
     it("Should find a freelancer", async () => {
         const res = await request(app)
