@@ -75,7 +75,7 @@ function update(req, res, next) {
     const id = parseInt(req.params.id);
 
     CompanyService.updateCompany({ id }, req.body)
-        .then((company) => (company ? res.json(company) : res.sendStatus(400)))
+        .then((company) => (company ? res.json(company) : res.sendStatus(404)))
         .catch(next);
 }
 
