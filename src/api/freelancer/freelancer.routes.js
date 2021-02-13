@@ -19,6 +19,7 @@ router.use("/:id/skills", Skills);
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", Auth(), getAllFreelancers);
+router.get("/freelancerStats", Auth(), freelancerStats);
 router.get("/:id", Auth(), getFreelancerById);
 router.patch(
     "/:id",
@@ -62,6 +63,26 @@ function getAllFreelancers(req, res, next) {
         .then((freelancers) => {
             return freelancers ? res.json(freelancers) : res.sendStatus(404);
         })
+        .catch(next);
+}
+
+function freelancerStats(req, res, next) {
+    const {
+        completed: completed_status,
+        inprogress: inprogress_status,
+        freelancer_id,
+        hiring_manager_id,
+    } = req.body;
+
+    const payload = {
+        completed_status,
+        inprogress_status,
+        freelancer_id,
+        hiring_manager_id,
+    };
+
+    FreelancerService.freelancerProfileStats(...payload)
+        .then((stats) => (stats ? res.json(stats) : res.sendStatus(404)))
         .catch(next);
 }
 

@@ -1,6 +1,4 @@
-const { log } = require("console");
 const Proposal = require("../models/Proposal/Proposal.Model");
-const ProposalStatusService = require("./proposalStatus.service");
 
 class ProposalService {
     constructor() {}
