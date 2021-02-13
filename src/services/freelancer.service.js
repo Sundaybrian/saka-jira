@@ -1,7 +1,6 @@
 const Freelancer = require("../models/Freelancer/Freelancer.Model");
 const Proposal = require("../models/Proposal/Proposal.Model");
 const Job = require("../models/Job/Job.Model");
-const { log } = require("console");
 
 class FreelancerService {
     constructor() {}
@@ -31,6 +30,7 @@ class FreelancerService {
             if (next) {
                 freelancers = await Freelancer.query()
                     .where(match)
+                    .modify("defaultSelects")
                     .withGraphFetched(
                         `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
                     )
@@ -111,16 +111,20 @@ class FreelancerService {
     }
 
     static async getFreelancer(id) {
-        const freelancer = await Freelancer.query()
-            .alias("f")
-            .where("f.id", id)
-            .modify("defaultSelects")
-            .withGraphFetched(
-                `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
-            )
-            .first();
+        try {
+            const freelancer = await Freelancer.query()
+                .alias("f")
+                .where("f.id", id)
+                .modify("defaultSelects")
+                .withGraphFetched(
+                    `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+                )
+                .first();
 
-        return freelancer;
+            return freelancer;
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async freelancerProfileStats(
@@ -172,6 +176,7 @@ class FreelancerService {
         }
     }
 
+    // TODO DEPRECATE
     static async basicDetails(Freelancer) {
         const {
             id,

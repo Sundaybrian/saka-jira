@@ -1642,7 +1642,9 @@ paths:
                         industry_id:
                           type: integer
                           example: 1
-                        
+                        hiring_manager_id:
+                          type: integer
+                          example: 1
                         latitude:
                           type: number
                           example: 38.676
@@ -1782,6 +1784,61 @@ paths:
                   longitude:
                     type: number
                     example: -1.5465677     
+  
+  /freelancer/freelancerStats:
+    get:
+      tags:
+        - "freelancer"
+      summary: Get a freelancers stats 
+      description: Open to all users.
+      security:
+      - bearerAuth: []
+      operationId: getfreelancerstats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                freelancer_id:
+                  type: integer
+                  example: 1
+                hiring_manager_id:
+                  type: integer
+                  example: 1
+                completed:
+                  type: integer
+                  example: 7
+                inprogress:
+                  type: integer
+                  example: 5
+              required:
+                - freelancer_id
+                - hiring_manager_id
+                - completed
+                - inprogress
+                
+        
+      responses:
+        "200":
+          description: Freelancer stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inprogress:
+                    type: integer
+                    example: 1
+                  completed:
+                    type: integer
+                    example: 0
+                  jobsPosted:
+                    type: integer
+                    example: 1
+         
+         
     
   /freelancer/{id}:
     parameters:
@@ -1896,7 +1953,7 @@ paths:
     get:
       tags:
         - "freelancer"
-      summary: Get a my skills
+      summary: Get my freelancer skills
       description: Restricted to freeelancer and admin
       operationId: getfreelancerSkills
       security:
@@ -3317,6 +3374,9 @@ components:
                 type: integer
                 example: 1
               industry_id:
+                type: integer
+                example: 1
+              hiring_manager_id:
                 type: integer
                 example: 1
               latitude:
