@@ -12,12 +12,12 @@ const tableNames = require("../../src/constants/tableNames");
 exports.up = async function (knex) {
     await knex.schema.createTable(tableNames.company, (table) => {
         table.increments().notNullable();
-        table.string("name").notNullable();
+        table.string("name").unique().notNullable();
         url(table, "logo_url");
         table.string("description", 1000).notNullable();
         table.boolean("active").defaultTo(true);
         url(table, "website_url");
-        email(table, "email").notNullable();
+        email(table, "email").unique().notNullable();
         table.boolean("active").defaultTo(true);
         references(table, tableNames.user, "owner", true);
         addDefaultColumns(table);
