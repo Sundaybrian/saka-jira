@@ -18,6 +18,7 @@ class Company extends Cursor(Model) {
             query
                 .alias("c")
                 .select(
+                    "c.id",
                     "c.name",
                     "c.logo_url",
                     "c.description",
