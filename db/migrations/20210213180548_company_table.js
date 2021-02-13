@@ -18,7 +18,6 @@ exports.up = async function (knex) {
         table.boolean("active").defaultTo(true);
         url(table, "website_url");
         email(table, "email").unique().notNullable();
-        table.boolean("active").defaultTo(true);
         references(table, tableNames.user, "owner", true);
         addDefaultColumns(table);
     });
