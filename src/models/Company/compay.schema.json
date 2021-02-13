@@ -33,6 +33,7 @@
         },
         "email": {
             "$id": "#/properties/email",
+            "type": "string",
             "title": "The company email.",
             "examples": ["sunday@omwami.com"]
         },
