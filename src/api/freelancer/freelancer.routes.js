@@ -74,14 +74,12 @@ function freelancerStats(req, res, next) {
         hiring_manager_id,
     } = req.body;
 
-    const payload = {
-        completed_status,
-        inprogress_status,
+    FreelancerService.freelancerProfileStats(
         freelancer_id,
         hiring_manager_id,
-    };
-
-    FreelancerService.freelancerProfileStats(...payload)
+        inprogress_status,
+        completed_status
+    )
         .then((stats) => (stats ? res.json(stats) : res.sendStatus(404)))
         .catch(next);
 }
