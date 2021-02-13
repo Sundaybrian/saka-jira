@@ -5,13 +5,13 @@ const { createSchema, updateSchema } = require("./company.validators");
 const {
     setCompanyOwner,
     authUpdateCompany,
+    authDeleteCompany,
 } = require("../../utils/_permissions/company");
 
 const CompanyService = require("../../services/company.service");
 
 router.post("/", Auth([Role.user]), createSchema, create);
 router.get("/", Auth([Role.admin]), getAllCompanies);
-// router.get("/mine", Auth([Role.user]), getMyCompanies);
 router.get("/:id", Auth(), getCompanyById);
 router.patch(
     "/:id",
@@ -21,7 +21,13 @@ router.patch(
     updateSchema,
     update
 );
-router.delete("/:id", Auth([Role.admin, Role.user]), _deleteCompany);
+router.delete(
+    "/:id",
+    Auth([Role.admin, Role.user]),
+    setCompanyOwner,
+    authDeleteCompany,
+    _deleteCompany
+);
 
 module.exports = router;
 
@@ -52,14 +58,6 @@ function getAllCompanies(req, res, next) {
         .catch(next);
 }
 
-// function getMyCompanies(req, res, next) {
-//     CompanyService.getMyCompanies(req.user.id)
-//         .then((companies) =>
-//             companies ? res.json(companies) : res.sendStatus(404)
-//         )
-//         .catch(next);
-// }
-
 function getCompanyById(req, res, next) {
     // TODO owner can get his company and the admin can get any company
 
@@ -73,23 +71,24 @@ function getCompanyById(req, res, next) {
 }
 
 function update(req, res, next) {
-    // only owner can update their company
-    CompanyService.updateCompany(
-        { id: req.params.id, owner_id: req.user.id },
-        req.body
-    )
-        .then((company) => res.json(company))
+    // only owner and admin can update their company
+    const id = parseInt(req.params.id);
+
+    CompanyService.updateCompany({ id }, req.body)
+        .then((company) => (company ? res.json(company) : res.sendStatus(400)))
         .catch(next);
 }
 
 function _deleteCompany(req, res, next) {
-    // only owner delete can delete their company
+    // only owner and admin can delete a company
+
+    const id = parseInt(req.params.id);
+
     CompanyService._delete({
-        id: parseInt(req.params.id),
-        owner_id: req.user.id,
+        id,
     })
-        .then(() => {
-            res.json({ id: parseInt(req.params.id) });
+        .then((company) => {
+            return !company ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
 }
