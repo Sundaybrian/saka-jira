@@ -19,4 +19,5 @@ module.exports = {
     proposal: "proposal",
     proposal_history: " proposal_history",
     contract: "contract",
+    company: "company",
 };
