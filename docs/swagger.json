@@ -2525,7 +2525,7 @@
             }
         },
         "/freelancer/freelancerStats": {
-            "get": {
+            "post": {
                 "tags": ["freelancer"],
                 "summary": "Get a freelancers stats",
                 "description": "Open to all users.",
