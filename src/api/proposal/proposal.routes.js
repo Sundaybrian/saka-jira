@@ -75,7 +75,7 @@ function sendProposal(req, res, next) {
     const payload = {
         job_id: parseInt(req.body.job_id),
         freelancer_id: parseInt(req.user.freelancer.id),
-        current_proposal_status_id: 1, // will set status
+        current_proposal_status_id: 1, // will set status as sent
     };
 
     ProposalService.sendProposal(payload)
@@ -191,7 +191,6 @@ function withdrawProposal(req, res, next) {
     const id = parseInt(req.params.id);
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
-            console.log(proposal, "=================");
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);
@@ -199,12 +198,12 @@ function withdrawProposal(req, res, next) {
 
 //
 function rejectProposal(req, res, next) {
-    // only hiring managers can delete a proposal type
+    // only hiring managers can delete a proposal aka bid
 
     const id = parseInt(req.params.id);
+
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
-            console.log(proposal, "*******");
             return !proposal ? res.sendStatus(404) : res.json({ id });
         })
         .catch(next);

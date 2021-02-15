@@ -64,7 +64,7 @@ function referencesCustomPk(
 }
 
 function url(table, columnName) {
-    table.string(columnName, 2000);
+    table.string(columnName, 2000).defaultTo("");
 }
 
 function email(table, columnName) {

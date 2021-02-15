@@ -18,7 +18,15 @@ class ProposalHistory extends Cursor(Model) {
                 ref("proposal_id"),
                 ref("proposal_status_id"),
                 ref("created_at"),
-                ref("updated_at")
+                ref("updated_at"),
+                ref("job_id"),
+                ref("freelancer_id"),
+                ref("client_comment"),
+                ref("client_rating"),
+                ref("freelancer_comment"),
+                ref("freelancer_rating"),
+                ref("website_url"),
+                ref("payment_amount")
             );
         },
     };
@@ -30,6 +38,7 @@ class ProposalHistory extends Cursor(Model) {
     static get relationMappings() {
         const Proposal = require("../Proposal/Proposal.Model");
         const ProposalStatus = require("../ProposalStatus/ProposalStatus.Model");
+        const Freelancer = require("../Freelancer/Freelancer.Model");
 
         return {
             proposal: {
@@ -37,8 +46,18 @@ class ProposalHistory extends Cursor(Model) {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Proposal,
                 join: {
-                    from: `${tableNames.proposal}.proposal_id`,
+                    from: `${tableNames.proposal_history}.proposal_id`,
                     to: `${tableNames.proposal}.id`,
+                },
+            },
+
+            freelancer: {
+                // BelongsToOneRelation: Use this relation when the source model has the foreign key
+                relation: Model.BelongsToOneRelation,
+                modelClass: Freelancer,
+                join: {
+                    from: `${tableNames.proposal_history}.freelancer_id`,
+                    to: `${tableNames.freelancer}.id`,
                 },
             },
             proposalStatus: {

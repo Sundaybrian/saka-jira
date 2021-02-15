@@ -5,7 +5,35 @@ class ProposalService {
 
     static async sendProposal(params) {
         try {
-            const proposal = await Proposal.query().insert(params);
+            const proposal = await this.get_or_create(params);
+
+            console.log(proposal, "9090909090909090");
+
+            return proposal;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    static async get_or_create(params) {
+        // checks for the existence of a proposal
+        // if it exists return false
+        // if it does not exist it creates one
+        try {
+            const { job_id, freelancer_id } = params;
+
+            let proposal = await Proposal.query()
+                .where({ job_id, freelancer_id })
+                .first();
+
+            console.log(proposal, "hapaaaa  imepatikan");
+            if (proposal) {
+                throw new Error("You have already submitted a bid");
+            } else {
+                // create one
+                proposal = await Proposal.query().insert(params);
+            }
 
             return proposal;
         } catch (error) {
@@ -73,8 +101,7 @@ class ProposalService {
     }
 
     static async _deleteWithdrawProposal(id) {
-        // freelancer will withdraw proposal
-        // client will reject/delete proposal
+        // freelancer will withdraw proposal aka delete
         try {
             const proposal = await Proposal.query().findById(id);
 
@@ -88,16 +115,9 @@ class ProposalService {
         }
     }
 
-    // helpers
+    // helpers =========================================
     static async getProposal(id, withHistory = true) {
         try {
-            // if (!withHistory) {
-            //     return await Proposal.query()
-            //         .where("id", id)
-            //         .modify("defaultSelects")
-            //         .first();
-            // }
-
             //default
             const proposal = await Proposal.query()
                 .where("id", id)

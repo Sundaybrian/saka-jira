@@ -3,6 +3,7 @@ const app = require("../src/app");
 
 // let variables
 let token1;
+let user1;
 
 describe("POST /api/v1/freelancer/", () => {
     beforeEach(function (done) {
@@ -15,6 +16,7 @@ describe("POST /api/v1/freelancer/", () => {
             .end(function (err, res) {
                 if (err) throw err;
                 token1 = res.body.token;
+                user1 = res.body.user;
                 done();
             });
     });
@@ -35,16 +37,49 @@ describe("POST /api/v1/freelancer/", () => {
     });
 });
 
+describe("GET /api/v1/freelancer/", () => {
+    it("Should find a freelancer arr", async () => {
+        const res = await request(app)
+            .get("/api/v1/freelancer/")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
+
+        expect(res.body.results.length).toBeGreaterThan(0);
+        expect(res.body).toHaveProperty("pageInfo");
+    });
+});
+
+// freelancer stats
+describe("POST /api/v1/freelancer/:freelancer_id/freelancerStats/hiring_manager_id", () => {
+    it("Should return a freelancer stats", async () => {
+        const res = await request(app)
+            .get(
+                `/api/v1/freelancer/${user1.freelancer.id}/freelancerStats/${user1.hiringManager.id}`
+            )
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
+        console.log(res.body);
+
+        expect(res.body).toHaveProperty("jobsPosted");
+    });
+});
+
 describe("GET /api/v1/freelancer/:id", () => {
     it("Should find a freelancer", async () => {
-        const res = await request(app).get("/api/v1/freelancer/1").expect(200);
+        const res = await request(app)
+            .get("/api/v1/freelancer/1")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(200);
 
         expect(res.body.industry_id).toBe(1);
         expect(res.body.latitude).toBe(0);
     });
 
     it("should fail to find a freelancer", async () => {
-        await request(app).get("/api/v1/freelancer/100").expect(404);
+        await request(app)
+            .get("/api/v1/freelancer/100")
+            .set("Authorization", `Bearer ${token1}`)
+            .expect(404);
     });
 });
 

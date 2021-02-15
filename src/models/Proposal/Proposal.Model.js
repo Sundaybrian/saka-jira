@@ -36,13 +36,27 @@ class Proposal extends Cursor(Model) {
     static async afterInsert({ items, inputItems, relation, context }) {
         const ProposalHistory = require("../ProposalHistory/ProposalHistory.Model");
         try {
-            const { current_proposal_status_id, id } = inputItems[0];
+            //             {job_id: 4,
+            //   freelancer_id: 1,
+            //   current_proposal_status_id: 1,
+            //   id: 4}
 
+            const {
+                current_proposal_status_id,
+                id,
+                job_id,
+                freelancer_id,
+            } = inputItems[0];
+
+            // creating a history trail on bid submission
             const proposal_history = {
                 proposal_status_id: current_proposal_status_id,
                 proposal_id: id,
+                job_id,
+                freelancer_id,
             };
             // creating a history trail on bid submission
+
             const history = await ProposalHistory.query().insert(
                 proposal_history
             );
@@ -58,12 +72,32 @@ class Proposal extends Cursor(Model) {
             // inputItems: [{ lastName: 'Aniston' }]
             // relation:   none
 
-            const { current_proposal_status_id, id } = inputItems[0];
+            const {
+                current_proposal_status_id,
+                id,
+                job_id,
+                freelancer_id,
+                client_comment,
+                client_rating,
+                freelancer_comment,
+                freelancer_rating,
+                website_url,
+                payment_amount,
+            } = inputItems[0];
 
             const proposal_history = {
                 proposal_status_id: current_proposal_status_id,
                 proposal_id: id,
+                job_id,
+                freelancer_id,
+                freelancer_rating: parseInt(freelancer_rating),
+                client_comment,
+                client_rating: parseInt(client_rating),
+                freelancer_comment,
+                website_url,
+                payment_amount,
             };
+
             // creating a history trail on bid update
             const history = await ProposalHistory.query().insert(
                 proposal_history

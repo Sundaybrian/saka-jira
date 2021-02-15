@@ -64,8 +64,6 @@ describe("POST /api/v1/proposal/", () => {
             })
             .expect(200);
 
-        console.log(res.body);
-
         expect(res.body.job_id).toBe(2);
         expect(res.body.freelancer_id).toBe(1);
         expect(res.body.current_proposal_status_id).toBe(1);
@@ -262,18 +260,6 @@ describe("PATCH api/v1/proposal/:id/clientFeedback/:job_id", () => {
             })
             .expect(200);
     });
-
-    // it("should not find a proposal to update", async () => {
-    //     const res = await request(app)
-    //         .patch("/api/v1/proposal/2/clientFeedback")
-    //         .set("Authorization", `Bearer ${token2}`)
-    //         .send({
-    //             job_id: 2,
-    //             freelancer_comment: "terrible",
-    //             freelancer_rating: 1,
-    //         })
-    //         .expect(404);
-    // });
 });
 
 // withdraw proposal
@@ -309,33 +295,34 @@ describe("DELETE api/v1/proposal/:id/withdrawProposal", () => {
 
 // deleteProposal client
 describe("DELETE api/v1/proposal/:id/rejectProposal/:job_id", () => {
-    let id;
+    let id = null;
+    let job_id = 1;
     beforeEach(function (done) {
         request(app)
             .post("/api/v1/proposal/")
-            .set("Authorization", `Bearer ${token2}`)
+            .set("Authorization", `Bearer ${token3}`)
             .send({
-                job_id: 3,
+                job_id,
             })
             .end(function (err, res) {
                 if (err) throw err;
                 id = res.body.id;
-                console.log(res.body, "********** here");
+                // console.log(res.body, "********** here");
                 done();
             });
     });
 
     it("should return 401 to delete proposal", async () => {
         await request(app)
-            .delete("/api/v1/proposal/1/rejectProposal/3")
-            .set("Authorization", `Bearer ${token2}`)
+            .delete(`/api/v1/proposal/${id}/rejectProposal/${job_id}`)
+            .set("Authorization", `Bearer ${token3}`)
             .expect(401);
     });
 
-    it("should delete proposal", async () => {
+    it("should delete proposal by hiring manaager", async () => {
         const res = await request(app)
-            .delete(`/api/v1/proposal/${id}/rejectProposal/3`)
-            .set("Authorization", `Bearer ${token3}`)
+            .delete(`/api/v1/proposal/${id}/rejectProposal/${job_id}`)
+            .set("Authorization", `Bearer ${token2}`)
             .expect(200);
         expect(res.body.id).toBe(id);
     });

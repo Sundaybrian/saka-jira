@@ -2260,67 +2260,195 @@
         "/freelancer": {
             "get": {
                 "tags": ["freelancer"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "queryParams",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nextPage": {
+                                    "type": "string"
+                                },
+                                "limit": {
+                                    "type": "integer",
+                                    "example": 30
+                                },
+                                "industry": {
+                                    "type": "integer",
+                                    "example": 1
+                                }
+                            }
+                        },
+                        "style": "form",
+                        "explode": true
+                    }
+                ],
                 "summary": "Get a list of all freelancers",
-                "description": "Open to all users, update will have pagination and query params",
+                "description": "Open to all users. You can query using industry and limit to a given",
                 "security": [
                     {
                         "bearerAuth": []
                     }
                 ],
-                "operationId": "getallfreelancer",
+                "operationId": "getallfreelancers",
                 "responses": {
                     "200": {
                         "description": "An array of all freelancers",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "first_name": {
-                                                "type": "string",
-                                                "example": "Sunday"
-                                            },
-                                            "last_name": {
-                                                "type": "string",
-                                                "example": "Owner"
-                                            },
-                                            "industry_id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "industry_name": {
-                                                "type": "string",
-                                                "example": "omputer Programming"
-                                            },
-                                            "latitude": {
-                                                "type": "number",
-                                                "example": 38.676
-                                            },
-                                            "longitude": {
-                                                "type": "number",
-                                                "example": -1.566
-                                            },
-                                            "email": {
-                                                "type": "string",
-                                                "example": "sunday@owner.com"
-                                            },
-                                            "phone_number": {
-                                                "type": "string",
-                                                "example": "0714382366"
-                                            },
-                                            "created_at": {
-                                                "type": "string",
-                                                "example": "2020-05-05T09:12:57.848Z"
-                                            },
-                                            "updated_at": {
-                                                "type": "string",
-                                                "example": "2020-05-08T03:11:21.553Z"
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "super backend engineer"
+                                                    },
+                                                    "industry_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "hiring_manager_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "latitude": {
+                                                        "type": "number",
+                                                        "example": 38.676
+                                                    },
+                                                    "longitude": {
+                                                        "type": "number",
+                                                        "example": -1.566
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-05T09:12:57.848Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2020-05-08T03:11:21.553Z"
+                                                    },
+                                                    "skills": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "skill_name": {
+                                                                    "type": "integer",
+                                                                    "example": "Python"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "user": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "first_name": {
+                                                                "type": "string",
+                                                                "example": "sunday"
+                                                            },
+                                                            "last_name": {
+                                                                "type": "string",
+                                                                "example": "brina"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "brians931@gmail.com"
+                                                            },
+                                                            "phone_number": {
+                                                                "type": "string",
+                                                                "example": "0714382344"
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean",
+                                                                "example": true
+                                                            },
+                                                            "isVerified": {
+                                                                "type": "boolean",
+                                                                "example": false
+                                                            },
+                                                            "image_url": {
+                                                                "type": "string",
+                                                                "example": "https://firebase.com/jhdfkdshfjkfs,.jpeg"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "example": "2021-02-11T10:14:54.742Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "example": "2021-02-11T10:14:54.742Z"
+                                                            },
+                                                            "industry": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "industry_name": {
+                                                                        "type": "string",
+                                                                        "example": "Computer Programming"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "pageInfo": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 30
+                                                },
+                                                "remaining": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "hasMore": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasPrevious": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "hasNext": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "next": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                                                },
+                                                "previous": {
+                                                    "type": "string",
+                                                    "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+                                                }
                                             }
                                         }
                                     }
@@ -2396,6 +2524,71 @@
                 }
             }
         },
+        "/freelancer/{freelancer_id}/freelancerStats/{hiring_manager_id}": {
+            "get": {
+                "tags": ["freelancer"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "freelancer_id",
+                        "description": "freelancer id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "hiring_manager_id",
+                        "description": "hiring_manager_id id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Get a freelancers stats",
+                "description": "Open to all users.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "getfreelancerstats",
+                "responses": {
+                    "200": {
+                        "description": "Freelancer stats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "inprogress": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "completed": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "jobsPosted": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "rating": {
+                                            "type": "integer",
+                                            "example": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/freelancer/{id}": {
             "parameters": [
                 {
@@ -2455,6 +2648,10 @@
                                     "longitude": {
                                         "type": "number",
                                         "example": -1.5465677
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "the best backend developer"
                                     }
                                 }
                             }
@@ -2479,7 +2676,11 @@
                                         },
                                         "longitude": {
                                             "type": "number",
-                                            "example": "-1.546567'"
+                                            "example": -1.546567
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "the best backend developer"
                                         }
                                     }
                                 }
@@ -2545,7 +2746,7 @@
             ],
             "get": {
                 "tags": ["freelancer"],
-                "summary": "Get a my skills",
+                "summary": "Get my freelancer skills",
                 "description": "Restricted to freeelancer and admin",
                 "operationId": "getfreelancerSkills",
                 "security": [
@@ -4380,6 +4581,393 @@
                     }
                 }
             }
+        },
+        "/company": {
+            "post": {
+                "tags": ["company"],
+                "summary": "Create a company",
+                "description": "Restricted to  owners",
+                "operationId": "createcompany",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "massive dynamic"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "we create everything"
+                                    },
+                                    "logo_url": {
+                                        "type": "string",
+                                        "example": "https://storagebucket.gogle.com/massivedy"
+                                    },
+                                    "website_url": {
+                                        "type": "string",
+                                        "example": "https://some.massivedynamics.com"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "massive.dynamics@info.com"
+                                    }
+                                },
+                                "required": ["name", "description", "email"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Company created successfully, detail of the company are returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "massive dynamic"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "we create everything"
+                                        },
+                                        "logo_url": {
+                                            "type": "string",
+                                            "example": "https://storagebucket.gogle.com/massivedy"
+                                        },
+                                        "owner_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "massive.dynamics@info.com"
+                                        },
+                                        "active": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Company name already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Name Massive dynamic is already registered"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["company"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "queryparams",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "limit": {
+                                    "type": "integer",
+                                    "example": 20
+                                },
+                                "nextPage": {
+                                    "type": "string",
+                                    "example": ""
+                                }
+                            }
+                        }
+                    }
+                ],
+                "summary": "Get all companies",
+                "description": "Restricted to admin accounts",
+                "operationId": "getallcompanies",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of objects containing company infos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "results": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "massive dynamic"
+                                                        },
+                                                        "description": {
+                                                            "type": "string",
+                                                            "example": "we create everything"
+                                                        },
+                                                        "logo_url": {
+                                                            "type": "string",
+                                                            "example": "https://storagebucket.gogle.com/massivedy"
+                                                        },
+                                                        "owner_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "massive.dynamics@info.com"
+                                                        },
+                                                        "owner": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "first_name": {
+                                                                    "type": "string",
+                                                                    "example": "sunday"
+                                                                },
+                                                                "last_name": {
+                                                                    "type": "string",
+                                                                    "example": "oliseh"
+                                                                },
+                                                                "email": {
+                                                                    "type": "string",
+                                                                    "example": "sunday@oliseh.com"
+                                                                },
+                                                                "role": {
+                                                                    "type": "string",
+                                                                    "example": "user"
+                                                                },
+                                                                "phone_number": {
+                                                                    "type": "string",
+                                                                    "example": "0714382366"
+                                                                },
+                                                                "active": {
+                                                                    "type": "boolean",
+                                                                    "example": true
+                                                                },
+                                                                "created_at": {
+                                                                    "type": "string",
+                                                                    "example": "2020-05-05T09:12:57.848Z"
+                                                                },
+                                                                "updated_at": {
+                                                                    "type": "string",
+                                                                    "example": "2020-05-05T09:12:57.848Z"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "pageInfo": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "total": {
+                                                        "type": "integer",
+                                                        "example": 30
+                                                    },
+                                                    "remaining": {
+                                                        "type": "integer",
+                                                        "example": 20
+                                                    },
+                                                    "hasMore": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "hasPrevious": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "hasNext": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "next": {
+                                                        "type": "string",
+                                                        "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNa"
+                                                    },
+                                                    "previous": {
+                                                        "type": "string",
+                                                        "example": "KGRhdGUpMjAyMS0wMi0wNFQwMDo1ODoyOS4xODNat"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/company/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "description": "Company ID",
+                    "required": true,
+                    "example": 1,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }
+            ],
+            "get": {
+                "tags": ["company"],
+                "summary": "Get Company by its ID",
+                "description": "Open to all users",
+                "operationId": "getcompanybyid",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CompanyResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["company"],
+                "summary": "Update a Company",
+                "description": "Restricted to owners and admin",
+                "operationId": "updatecompany",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "massive dynamic"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "we create everything"
+                                    },
+                                    "logo_url": {
+                                        "type": "string",
+                                        "example": "https://storagebucket.gogle.com/massivedy"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "massive.dynamics@info.com"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CompanyResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/NameExistsError"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["company"],
+                "summary": "Delete a Company",
+                "description": "Restricted to owners and admin",
+                "operationId": "deletecompany",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Id of the delete company",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4505,21 +5093,21 @@
                                     "type": "integer",
                                     "example": 1
                                 },
-                                "first_name": {
-                                    "type": "string",
-                                    "example": "Sunday"
-                                },
-                                "last_name": {
+                                "description": {
                                     "type": "string",
                                     "example": "Owner"
+                                },
+                                "user_id": {
+                                    "type": "integer",
+                                    "example": 1
                                 },
                                 "industry_id": {
                                     "type": "integer",
                                     "example": 1
                                 },
-                                "industry_name": {
-                                    "type": "string",
-                                    "example": "omputer Programming"
+                                "hiring_manager_id": {
+                                    "type": "integer",
+                                    "example": 1
                                 },
                                 "latitude": {
                                     "type": "number",
@@ -4529,21 +5117,86 @@
                                     "type": "number",
                                     "example": -1.566
                                 },
-                                "email": {
-                                    "type": "string",
-                                    "example": "sunday@owner.com"
-                                },
-                                "phone_number": {
-                                    "type": "string",
-                                    "example": "0714382366"
-                                },
                                 "created_at": {
                                     "type": "string",
                                     "example": "2020-05-05T09:12:57.848Z"
                                 },
                                 "updated_at": {
-                                    "type": "string",
-                                    "example": "2020-05-08T03:11:21.553Z"
+                                    "type": "string"
+                                },
+                                "industry": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "industry_name": {
+                                            "type": "string",
+                                            "example": "Computer Programming"
+                                        }
+                                    }
+                                },
+                                "skills": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "skill_name": {
+                                                "type": "integer",
+                                                "example": "Python"
+                                            }
+                                        }
+                                    }
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "first_name": {
+                                            "type": "string",
+                                            "example": "sunday"
+                                        },
+                                        "last_name": {
+                                            "type": "string",
+                                            "example": "brina"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "brians931@gmail.com"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "example": "0714382344"
+                                        },
+                                        "active": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "isVerified": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://firebase.com/jhdfkdshfjkfs,.jpeg"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2021-02-11T10:14:54.742Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2021-02-11T10:14:54.742Z"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -4570,6 +5223,83 @@
                                     "freelancer_id": {
                                         "type": "integer",
                                         "example": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CompanyResponse": {
+                "description": "Company Details",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "massive dynamic"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "example": "we create everything"
+                                },
+                                "logo_url": {
+                                    "type": "string",
+                                    "example": "https://storagebucket.gogle.com/massivedy"
+                                },
+                                "owner_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "massive.dynamics@info.com"
+                                },
+                                "owner": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "first_name": {
+                                            "type": "string",
+                                            "example": "sunday"
+                                        },
+                                        "last_name": {
+                                            "type": "string",
+                                            "example": "oliseh"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "sunday@oliseh.com"
+                                        },
+                                        "role": {
+                                            "type": "string",
+                                            "example": "user"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "example": "0714382366"
+                                        },
+                                        "active": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2020-05-05T09:12:57.848Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2020-05-05T09:12:57.848Z"
+                                        }
                                     }
                                 }
                             }

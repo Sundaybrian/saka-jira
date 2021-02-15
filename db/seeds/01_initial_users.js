@@ -13,12 +13,11 @@ exports.seed = async function (knex) {
     );
 
     const password = await bcrypt.hash("12345678yh", 10);
+    const passw = await bcrypt.hash("mypassword", 10);
 
     const industry = {
         industry_name: "Computer Programming",
-    }
-    ;
-
+    };
     const userOwner = {
         email: "sunday@owner.com",
         first_name: "sunday",
@@ -65,34 +64,50 @@ exports.seed = async function (knex) {
         phone_number: "0712382368",
     };
 
+    const oderaa = {
+        email: "odera@urady.com",
+        first_name: "admin",
+        last_name: "admin",
+        password: passw,
+        role: Role.user,
+        phone_number: "0700123456",
+        active: true,
+    };
+
     const userr = await knex(tableNames.user).insert(userOwner).returning("*");
-    
+
     // subscription
     await knex(tableNames.subscription_type).insert(subscriptionType);
     const diff = await knex(tableNames.user).insert(diffOwner).returning("*");
 
     await knex(tableNames.user).insert(adminUser);
     await knex(tableNames.user).insert(staff);
+    const odera = await knex(tableNames.user).insert(oderaa).returning("*");
 
     // insert industries
     const industryy = await knex(tableNames.industry)
         .insert(industry)
         .returning("*");
 
-        const ind = await knex(tableNames.industry).insert([{
-            industry_name: "Writing",
-        },{
-            industry_name: "Accounting",
-        },
-        {
-            industry_name: "Electrical",
-        },
-        {
-            industry_name: "Manual Labour",
-        },
-        {
-            industry_name: "Teaching",
-        }]).returning("*")
+    const ind = await knex(tableNames.industry)
+        .insert([
+            {
+                industry_name: "Writing",
+            },
+            {
+                industry_name: "Accounting",
+            },
+            {
+                industry_name: "Electrical",
+            },
+            {
+                industry_name: "Manual Labour",
+            },
+            {
+                industry_name: "Teaching",
+            },
+        ])
+        .returning("*");
 
     // insert freelancers
     await knex(tableNames.freelancer).insert({
@@ -105,6 +120,11 @@ exports.seed = async function (knex) {
         industry_id: industryy[0].id,
     });
 
+    await knex(tableNames.freelancer).insert({
+        user_id: odera[0].id,
+        industry_id: industryy[0].id,
+    });
+
     // insert hiring manager
     await knex(tableNames.hiring_manager).insert({
         user_id: userr[0].id,
@@ -112,5 +132,25 @@ exports.seed = async function (knex) {
 
     await knex(tableNames.hiring_manager).insert({
         user_id: diff[0].id,
+    });
+
+    await knex(tableNames.hiring_manager).insert({
+        user_id: odera[0].id,
+    });
+
+    // insert company
+    await knex(tableNames.company).insert({
+        name: "x-company-113-test",
+        email: "xcompany131=test@gmail.com",
+        description: "x-test company the greatest",
+        owner_id: userr[0].id,
+        active: true,
+    });
+    await knex(tableNames.company).insert({
+        name: "x-company-updates",
+        email: "xcompanyupdated=test@gmail.com",
+        description: "x-updated company the greatest",
+        owner_id: userr[0].id,
+        active: true,
     });
 };

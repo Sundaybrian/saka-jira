@@ -42,12 +42,12 @@ exports.up = async function (knex) {
         );
         // table.unique(["job_id", "freelancer_id"]);
         // 0;
-        table.string("client_comment", 1500);
-        table.enum("client_rating", [1, 2, 3, 4, 5]);
-        table.string("freelancer_comment", 1500);
-        table.enum("freelancer_rating", [1, 2, 3, 4, 5]);
+        table.string("client_comment", 1500).defaultTo("no comment");
+        table.integer("client_rating").defaultTo(1);
+        table.string("freelancer_comment", 1500).defaultTo("no comment");
+        table.integer("freelancer_rating").defaultTo(1);
         url(table, "website_url");
-        table.integer("payment_amount");
+        table.integer("payment_amount").defaultTo(0);
         addDefaultColumns(table);
     });
 

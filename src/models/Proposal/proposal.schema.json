@@ -48,7 +48,7 @@
         },
         "payment_amount": {
             "$id": "#/properties/payment_amount",
-            "type": "string",
+            "type": "integer",
             "title": "The payment_amount of the job has to start ."
         },
 

@@ -14,7 +14,7 @@ function canFetchFreelancerSubscription(user, freelancer) {
 function setFreelancer(req, res, next) {
     FreelancerService.getFreelancerById(parseInt(req.params.id))
         .then((freelancer) => {
-            if (!freelancer) return res.sendStaus(404);
+            if (!freelancer) return res.sendStatus(404);
             req.freelancer = freelancer;
             next();
         })
