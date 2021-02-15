@@ -2524,9 +2524,31 @@
                 }
             }
         },
-        "/freelancer/freelancerStats": {
-            "post": {
+        "/freelancer/{freelancer_id}/freelancerStats/{hiring_manager_id}": {
+            "get": {
                 "tags": ["freelancer"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "freelancer_id",
+                        "description": "freelancer id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "hiring_manager_id",
+                        "description": "hiring_manager_id id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "summary": "Get a freelancers stats",
                 "description": "Open to all users.",
                 "security": [
@@ -2535,40 +2557,6 @@
                     }
                 ],
                 "operationId": "getfreelancerstats",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "freelancer_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "hiring_manager_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "completed": {
-                                        "type": "integer",
-                                        "example": 7
-                                    },
-                                    "inprogress": {
-                                        "type": "integer",
-                                        "example": 5
-                                    }
-                                },
-                                "required": [
-                                    "freelancer_id",
-                                    "hiring_manager_id",
-                                    "completed",
-                                    "inprogress"
-                                ]
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Freelancer stats",
