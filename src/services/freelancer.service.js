@@ -181,13 +181,12 @@ class FreelancerService {
 
             console.log(jobsPosted, rating);
             return {
-                inprogress: inprogress[0].count,
-                jobsPosted: jobsPosted[0].count,
-                completed: completed[0].count,
-                rating: rating[0].avg ? rating[0].avg : 0,
+                inprogress: parseInt(inprogress[0].count),
+                jobsPosted: parseInt(jobsPosted[0].count),
+                completed: parseInt(completed[0].count),
+                rating: rating[0].avg ? parseInt(rating[0].avg) : 0,
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }
