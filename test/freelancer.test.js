@@ -3,6 +3,7 @@ const app = require("../src/app");
 
 // let variables
 let token1;
+let user1;
 
 describe("POST /api/v1/freelancer/", () => {
     beforeEach(function (done) {
@@ -15,6 +16,7 @@ describe("POST /api/v1/freelancer/", () => {
             .end(function (err, res) {
                 if (err) throw err;
                 token1 = res.body.token;
+                user1 = res.body.user;
                 done();
             });
     });
@@ -48,17 +50,13 @@ describe("GET /api/v1/freelancer/", () => {
 });
 
 // freelancer stats
-describe("POST /api/v1/freelancer/freelancerStats", () => {
+describe("POST /api/v1/freelancer/:freelancer_id/freelancerStats/hiring_manager_id", () => {
     it("Should return a freelancer stats", async () => {
         const res = await request(app)
-            .post("/api/v1/freelancer/freelancerStats")
+            .get(
+                `/api/v1/freelancer/${user1.freelancer.id}/freelancerStats/${user1.hiringManager.id}`
+            )
             .set("Authorization", `Bearer ${token1}`)
-            .send({
-                completed: 7,
-                inprogress: 5,
-                freelancer_id: 1,
-                hiring_manager_id: 1,
-            })
             .expect(200);
         console.log(res.body);
 

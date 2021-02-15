@@ -26,7 +26,6 @@ router.get("/", Auth(), getAllFreelancers);
 router.get(
     "/:freelancer_id/freelancerStats/:hiring_manager_id/",
     Auth(),
-    getStatsSchema,
     freelancerStats
 );
 router.get("/:id", Auth(), getFreelancerById);
