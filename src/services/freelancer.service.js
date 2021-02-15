@@ -138,7 +138,7 @@ class FreelancerService {
                 inprogress,
                 jobsPosted,
                 completed,
-                // rating,
+                rating,
             ] = await Promise.all([
                 // #inprogressjobs aggregate count(current_proposal_status) where freelancer_id and current_proposal_status == inprogress from proposal
                 Proposal.query()
@@ -164,25 +164,27 @@ class FreelancerService {
                     .count()
                     .as("completed"),
 
-                // Proposal.query()
-                //     .where({
-                //         freelancer_id,
-                //         current_proposal_status_id: inprogress_status,
-                //     })
-                //     .avg("freelancer_rating")
-                //     .as("rating"),
+                Proposal.query()
+                    .where({
+                        freelancer_id,
+                        current_proposal_status_id: completed_status,
+                    })
+                    .avg("freelancer_rating")
+                    .as("rating"),
             ]);
             // {
             //     inprogress: [ { count: '0' } ],
             //     jobsPosted: [ { count: '1' } ],
             //     completed: [ { count: '0' } ]
+            //     rating: [{avg:'}]
             // }
 
-            // console.log(rating);
+            console.log(jobsPosted, rating);
             return {
                 inprogress: inprogress[0].count,
                 jobsPosted: jobsPosted[0].count,
                 completed: completed[0].count,
+                rating: rating[0].avg ? rating[0].avg : 0,
             };
         } catch (error) {
             console.log(error);
