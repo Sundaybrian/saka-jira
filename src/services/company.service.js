@@ -116,7 +116,7 @@ class CompanyService {
             const company = await Company.query()
                 .where({ ...param })
                 .modify("defaultSelects")
-                .withGraphFetched("owner(defaultSelects)")
+                .withGraphFetched("owner(defaultSelectsWithoutPass)")
                 .first();
             return company;
         } catch (error) {

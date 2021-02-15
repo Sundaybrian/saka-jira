@@ -17,7 +17,7 @@ exports.updateSchema = (req, res, next) => {
         name: Joi.string().empty(""),
         description: Joi.string().empty(""),
         email: Joi.string().email().empty(""),
-        owner: Joi.number().empty(""),
+        // owner: Joi.number().empty(""),
         logo_url: Joi.string().empty(""),
         website_url: Joi.string().empty(""),
     };
