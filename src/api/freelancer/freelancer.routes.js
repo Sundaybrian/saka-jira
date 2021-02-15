@@ -23,7 +23,12 @@ router.use("/:id/skills", Skills);
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", Auth(), getAllFreelancers);
-router.post("/freelancerStats", Auth(), getStatsSchema, freelancerStats);
+router.get(
+    "/:freelancer_id/freelancerStats/:hiring_manager_id/",
+    Auth(),
+    getStatsSchema,
+    freelancerStats
+);
 router.get("/:id", Auth(), getFreelancerById);
 router.patch(
     "/:id",
@@ -71,16 +76,14 @@ function getAllFreelancers(req, res, next) {
 }
 
 function freelancerStats(req, res, next) {
-    const {
-        completed: completed_status,
-        inprogress: inprogress_status,
-        freelancer_id,
-        hiring_manager_id,
-    } = req.body;
+    const completed_status = 7;
+    const inprogress_status = 5;
+
+    const { freelancer_id, hiring_manager_id } = req.params;
 
     FreelancerService.freelancerProfileStats(
-        freelancer_id,
-        hiring_manager_id,
+        parseInt(freelancer_id),
+        parseInt(hiring_manager_id),
         inprogress_status,
         completed_status
     )
