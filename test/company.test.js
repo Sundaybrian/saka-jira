@@ -178,7 +178,6 @@ describe("DELETE api/v1/company/:id", () => {
         const res = await request(app)
             .delete("/api/v1/company/1")
             .set("Authorization", `Bearer ${token3}`)
-            .expect("Content-Type", /json/)
             .expect(401);
     });
 
