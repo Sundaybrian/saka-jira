@@ -48,10 +48,10 @@ describe("GET /api/v1/freelancer/", () => {
 });
 
 // freelancer stats
-describe("GET /api/v1/freelancer/freelancerStats", () => {
+describe("POST /api/v1/freelancer/freelancerStats", () => {
     it("Should return a freelancer stats", async () => {
         const res = await request(app)
-            .get("/api/v1/freelancer/freelancerStats")
+            .post("/api/v1/freelancer/freelancerStats")
             .set("Authorization", `Bearer ${token1}`)
             .send({
                 completed: 7,
