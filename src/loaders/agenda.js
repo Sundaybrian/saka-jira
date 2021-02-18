@@ -7,5 +7,6 @@ module.exports = (mongoConnection) => {
         db: { collection: config.agenda.dbCollection },
         processEvery: config.agenda.pooltime,
         maxConcurrency: config.agenda.concurrency,
+        useUnifiedTopology: true,
     });
 };

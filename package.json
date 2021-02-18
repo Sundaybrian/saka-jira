@@ -28,6 +28,7 @@
     "dependencies": {
         "@joi/date": "^2.0.1",
         "@sendgrid/mail": "^7.4.2",
+        "agenda": "^4.0.1",
         "bcrypt": "^5.0.0",
         "bull": "^3.20.1",
         "compression": "^1.7.4",
