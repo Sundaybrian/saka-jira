@@ -59,6 +59,7 @@ class User extends Cursor(Model) {
             const user = inputItems[0];
             if (user.role == "user") {
                 const freelancer = { user_id: user.id, industry_id: 1 };
+
                 const f = await Freelancer.query().insert(freelancer);
                 const h = await HiringManager.query().insert({
                     user_id: user.id,
@@ -69,6 +70,10 @@ class User extends Cursor(Model) {
                 );
             }
         } catch (error) {
+            // if it gets here something went wrong, we delete the user
+            const undoUser = await this.query().deleteById(user.id);
+
+            console.log(undoUser);
             throw error;
         }
     }

@@ -317,6 +317,8 @@ npm run lint
 
 ```
 npm run test
+
+multiple tests might fail because of the run --inband command, will figure a way around it, so as to isolate the tests..but you can use the command below to run each test file separately
 ```
 
 ```
@@ -335,7 +337,7 @@ npm run dev
 sudo lsof -i :3000
 kill -9 {PID}
 
-## Deployment
+## Deployment  
 
 -   `heroku login` login to your account
 -   `heroku create <your-unique-app-name>` create app name also you can just run `heroku create` and allow heroku generate a name for you
