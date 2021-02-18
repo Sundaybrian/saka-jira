@@ -1,4 +1,4 @@
-const sendEmail = require("../utils/email");
+const EmailClient = require("../utils/email");
 
 class MailService {
     constructor() {}
@@ -23,7 +23,7 @@ class MailService {
             ${message}`,
         };
 
-        await sendEmail(data);
+        await EmailClient(data);
     }
 
     static async sendAlreadyRegisteredEmail(email, origin) {
@@ -41,7 +41,7 @@ class MailService {
                    <p>Your email <strong>${email}</strong> is already registered.</p>
                    ${message}`,
         };
-        await sendEmail(data);
+        await EmailClient(data);
     }
 
     static async sendPasswordResetEmail(account, origin) {
@@ -55,7 +55,7 @@ class MailService {
                        <p><code>${account.resetToken}</code></p>`;
         }
 
-        await sendEmail({
+        await EmailClient({
             to: account.email,
             subject: "Sign-up Verification API - Reset Password",
             html: `<h4>Reset Password Email</h4>

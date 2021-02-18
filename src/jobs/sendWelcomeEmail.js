@@ -3,8 +3,8 @@ const EmailService = require("../services/email.service");
 class SendWelcomeEmail {
 
     async static handler(job, done){
-        const { email}= job.attrs.data;
-        await EmailService.sendVerificationEmail(email);
+        const { account, origin}= job.attrs.data;
+        await EmailService.sendVerificationEmail(account, origin);
         done();
     }
 }
