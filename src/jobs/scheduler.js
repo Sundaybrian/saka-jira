@@ -9,9 +9,13 @@ module.exports = {
     },
 
     scheduleAlreadyRegisteredEmail: async ({ email, origin }) => {
-        await agenda.schedule("in 2 seconds", "send-already-registered-email", {
-            email,
-            origin,
-        });
+        await agenda.schedule(
+            "in 10 minutes",
+            "send-already-registered-email",
+            {
+                email,
+                origin,
+            }
+        );
     },
 };

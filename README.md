@@ -82,7 +82,7 @@ Hosted docs [urady-backend](https://urady.herokuapp.com/api-docs/)
 -   [x] job
 -   [x] proposal
 -   [x] proposal_history
--   [x] contract
+-   [] contract
 
 ## docker commands
 
@@ -131,7 +131,7 @@ module.exports = {
         },
 
         seeds: {
-            directory: __dirname + "/db/seeds",
+            directory: __dirname + "/db/seeds/",
         },
     },
 
@@ -147,7 +147,7 @@ module.exports = {
         },
 
         seeds: {
-            directory: __dirname + "/db/seeds",
+            directory: __dirname + "/db/seeds/production",
         },
     },
 };
@@ -161,6 +161,7 @@ module.exports = {
 -   `npx knex migrate:rollback` rollback migrations
 -   `npx knex seed:make initial` create seed file
 -   `npx knex seed:run` seed db with data
+-   `npx knex:make seed_name --env production`
 -   `npx knex migrate:rollback --env <environment>` rollback db on a given env e.g prod, dev test
 
 ## if psql refuses to expand a table or claim it is not ther
@@ -337,7 +338,7 @@ npm run dev
 sudo lsof -i :3000
 kill -9 {PID}
 
-## Deployment  
+## Deployment
 
 -   `heroku login` login to your account
 -   `heroku create <your-unique-app-name>` create app name also you can just run `heroku create` and allow heroku generate a name for you

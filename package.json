@@ -16,6 +16,7 @@
         "rollback": "knex migrate:rollback",
         "rollback:test": "knex migrate:rollback --env test",
         "seed": "knex seed:run",
+        "seed:prod": "knex seed:run --env production",
         "test:watch": "jest --verbose --watchAll",
         "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app urady"
     },
