@@ -1,4 +1,11 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
+
+const envFound = dotenv.config();
+if (envFound.error) {
+    // This error should crash whole process
+
+    throw new Error("⚠️  Couldn't find .env file  ⚠️");
+}
 
 module.exports = {
     port: process.env.PORT,
@@ -23,4 +30,6 @@ module.exports = {
         pooltime: process.env.AGENDA_POOL_TIME,
         concurrency: parseInt(process.env.AGENDA_CONCURRENCY, 10),
     },
+
+    mongoUri: process.env.MONGODB_URI,
 };

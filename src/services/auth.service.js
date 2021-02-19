@@ -4,6 +4,7 @@ const jwt = require("../utils/jwt");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
 const tableNames = require("../constants/tableNames");
+const agendajs = require("../loaders/agenda");
 
 class AuthService {
     constructor() {}
@@ -39,6 +40,12 @@ class AuthService {
         try {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
+                // schedule to send email after 2mins
+                agendajs.schedule("in 2 minutes", "send-welcome-email", {
+                    account,
+                    origin,
+                });
+
                 await MailerService.sendAlreadyRegisteredEmail(
                     userInput.email,
                     origin
@@ -57,6 +64,12 @@ class AuthService {
                 .first();
 
             const token = await jwt.sign(signedUser.toJSON());
+
+            // schedule to send email after 2mins
+            agendajs.schedule("in 2 minutes", "send-welcome-email", {
+                account,
+                origin,
+            });
 
             return {
                 user: signedUser,
