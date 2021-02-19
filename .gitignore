@@ -208,3 +208,4 @@ restClient/
 jest-stare/
 coverage/
 buildsendgrid.env
+sendgrid.env
