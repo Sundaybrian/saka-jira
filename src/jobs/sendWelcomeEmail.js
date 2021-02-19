@@ -1,6 +1,6 @@
 const EmailService = require("../services/email.service");
 
-const SendWelcomeEmail = async (job, done) => {
+exports.sendWelcomeEmail = async (job, done) => {
     try {
         const { account, origin } = job.attrs.data;
         await EmailService.sendVerificationEmail(account, origin);
@@ -10,4 +10,12 @@ const SendWelcomeEmail = async (job, done) => {
     }
 };
 
-module.exports = SendWelcomeEmail;
+exports.sendAlreadyRegisteredEmail = async (job, done) => {
+    try {
+        const { email, origin } = job.attrs.data;
+        await EmailService.sendAlreadyRegisteredEmail(email, origin);
+        done();
+    } catch (error) {
+        done(error);
+    }
+};

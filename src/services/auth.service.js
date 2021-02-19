@@ -39,15 +39,10 @@ class AuthService {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
                 // schedule to send email after 2mins
-                await scheduler.scheduleWelcomeEmail({
-                    account,
+                await scheduler.scheduleAlreadyRegisteredEmail({
+                    email: userInput.email,
                     origin,
                 });
-
-                // await MailerService.sendAlreadyRegisteredEmail(
-                //     userInput.email,
-                //     origin
-                // );
 
                 throw `Email ${userInput.email} is already registered`;
             }
@@ -63,7 +58,7 @@ class AuthService {
 
             const token = await jwt.sign(signedUser.toJSON());
 
-            // schedule to send email after 5sec
+            // schedule to send verification email 10 minutes
             await scheduler.scheduleWelcomeEmail({
                 account,
                 origin,
@@ -99,7 +94,7 @@ class AuthService {
 
             const account = await this.insertUser(params, origin);
 
-            return this.basicDetails(account);
+            return account;
         } catch (error) {
             throw error;
         }
@@ -194,9 +189,6 @@ class AuthService {
             verified: new Date().toISOString(),
             verification_token,
         });
-
-        // send email
-        // await MailerService.sendVerificationEmail(account, origin);
 
         return account;
     }
