@@ -1,10 +1,8 @@
-const MailerService = require("./email.service");
 const crypto = require("crypto");
 const jwt = require("../utils/jwt");
 const bcrypt = require("bcrypt");
 const User = require("../models/User/User.Model");
-const tableNames = require("../constants/tableNames");
-const agendajs = require("../loaders/agenda");
+const scheduler = require("../jobs/scheduler");
 
 class AuthService {
     constructor() {}
@@ -41,15 +39,15 @@ class AuthService {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
                 // schedule to send email after 2mins
-                agendajs.schedule("in 2 minutes", "send-welcome-email", {
+                await scheduler.scheduleWelcomeEmail({
                     account,
                     origin,
                 });
 
-                await MailerService.sendAlreadyRegisteredEmail(
-                    userInput.email,
-                    origin
-                );
+                // await MailerService.sendAlreadyRegisteredEmail(
+                //     userInput.email,
+                //     origin
+                // );
 
                 throw `Email ${userInput.email} is already registered`;
             }
@@ -65,8 +63,8 @@ class AuthService {
 
             const token = await jwt.sign(signedUser.toJSON());
 
-            // schedule to send email after 2mins
-            agendajs.schedule("in 2 minutes", "send-welcome-email", {
+            // schedule to send email after 5sec
+            await scheduler.scheduleWelcomeEmail({
                 account,
                 origin,
             });
@@ -200,7 +198,7 @@ class AuthService {
         // send email
         // await MailerService.sendVerificationEmail(account, origin);
 
-        return this.basicDetails(account);
+        return account;
     }
 
     static async hash(password) {
@@ -211,6 +209,7 @@ class AuthService {
         return crypto.randomBytes(40).toString("hex");
     }
 
+    // TODO DEPRECATE
     static basicDetails(account) {
         const {
             id,
