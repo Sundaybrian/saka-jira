@@ -30,7 +30,8 @@ class User extends Cursor(Model) {
                 ref("isVerified"),
                 ref("updated_at"),
                 ref("active"),
-                ref("password")
+                ref("password"),
+                ref("verification_token")
             );
         },
 
@@ -47,7 +48,8 @@ class User extends Cursor(Model) {
                 ref("image_url"),
                 ref("created_at"),
                 ref("isVerified"),
-                ref("updated_at")
+                ref("updated_at"),
+                ref("verification_token")
             );
         },
     };
