@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const tableNames = require("../../src/constants/tableNames");
 const Role = require("../../src/constants/roles");
@@ -12,8 +12,8 @@ exports.seed = async function (knex) {
         })
     );
 
-    const password = await bcrypt.hash("12345678yh", 10);
-    const passw = await bcrypt.hash("mypassword", 10);
+    const password = await bcrypt.hash("12345678yh", 8);
+    const passw = await bcrypt.hash("mypassword", 8);
 
     const industry = {
         industry_name: "Computer Programming",

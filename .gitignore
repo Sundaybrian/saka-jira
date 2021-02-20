@@ -209,3 +209,6 @@ jest-stare/
 coverage/
 buildsendgrid.env
 sendgrid.env
+
+## zip files for elasticbean
+*.zip

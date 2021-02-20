@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const tableNames = require("../../../src/constants/tableNames");
 const Role = require("../../../src/constants/roles");
@@ -12,7 +12,7 @@ exports.seed = async function (knex) {
         })
     );
 
-    const password = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+    const password = await bcrypt.hash(process.env.ADMIN_PASSWORD, 8);
 
     const ADMIN = {
         email: "uraditech@gmail.com",

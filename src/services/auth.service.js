@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const jwt = require("../utils/jwt");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User/User.Model");
 const scheduler = require("../jobs/scheduler");
 
@@ -194,7 +194,7 @@ class AuthService {
     }
 
     static async hash(password) {
-        return await bcrypt.hash(password, 10);
+        return await bcrypt.hash(password, 8);
     }
 
     static randomTokenString() {
