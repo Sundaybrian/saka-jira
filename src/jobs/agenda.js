@@ -7,7 +7,8 @@ const {
 
 const agenda = new Agenda({
     db: {
-        address: process.env.MONGODB_URI,
+        address:
+            "mongodb+srv://Administrator:8NGru82Q9tL6UkX@urady.zdq3f.mongodb.net/uradyagendajsjobs?retryWrites=true&w=majority",
         collection: process.env.AGENDA_DB_COLLECTION,
         options: { useUnifiedTopology: true },
     },
