@@ -89,26 +89,6 @@ exports.seed = async function (knex) {
         .insert(industry)
         .returning("*");
 
-    const ind = await knex(tableNames.industry)
-        .insert([
-            {
-                industry_name: "Writing",
-            },
-            {
-                industry_name: "Accounting",
-            },
-            {
-                industry_name: "Electrical",
-            },
-            {
-                industry_name: "Manual Labour",
-            },
-            {
-                industry_name: "Teaching",
-            },
-        ])
-        .returning("*");
-
     // insert freelancers
     await knex(tableNames.freelancer).insert({
         user_id: userr[0].id,
