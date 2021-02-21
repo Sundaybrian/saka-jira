@@ -10,7 +10,7 @@ const agenda = new Agenda({
         collection: process.env.AGENDA_DB_COLLECTION,
         options: { useUnifiedTopology: true },
     },
-    processEvery: process.env.AGENDA_POOL_TIME,
+    processEvery: "20 seconds",
     maxConcurrency: parseInt(process.env.AGENDA_CONCURRENCY, 10),
 });
 
