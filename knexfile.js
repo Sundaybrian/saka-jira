@@ -52,4 +52,20 @@ module.exports = {
             directory: __dirname + "/db/seeds/production",
         },
     },
+
+    awsrds: {
+        client: "pg",
+        connection: process.env.AWS_RDS,
+        pool: {
+            min: 2,
+            max: 10,
+        },
+        migrations: {
+            directory: __dirname + "/db/migrations",
+        },
+
+        seeds: {
+            directory: __dirname + "/db/seeds/production",
+        },
+    },
 };
