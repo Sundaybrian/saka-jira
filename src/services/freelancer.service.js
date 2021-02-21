@@ -15,13 +15,14 @@ class FreelancerService {
         }
     }
 
+    // TODO DEPRECATE WITHGRAPFETCHED SKILLS
     static async getAllFreelancers(next = null, match, limit) {
         try {
             let freelancers = await Freelancer.query()
                 .where(match)
                 .modify("defaultSelects")
                 .withGraphFetched(
-                    `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+                    `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass), customSkills(defaultSelects)]`
                 )
                 .orderBy("id")
                 .limit(limit)
@@ -32,7 +33,7 @@ class FreelancerService {
                     .where(match)
                     .modify("defaultSelects")
                     .withGraphFetched(
-                        `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+                        `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass),customSkills(defaultSelects)]`
                     )
                     .orderBy("id")
                     .limit(limit)
@@ -82,6 +83,7 @@ class FreelancerService {
         return true;
     }
 
+    // TODO DEPRECATE IN FAVOUR OF CUSTOM SKILLS
     static async getAllFreelancerSkills(freelancer_id) {
         try {
             const mySkills = await Freelancer.query()
@@ -117,7 +119,7 @@ class FreelancerService {
                 .where("f.id", id)
                 .modify("defaultSelects")
                 .withGraphFetched(
-                    `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass)]`
+                    `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass),customSkills(defaultSelects)]`
                 )
                 .first();
 

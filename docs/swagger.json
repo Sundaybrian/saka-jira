@@ -1561,6 +1561,7 @@
         "/skill": {
             "get": {
                 "tags": ["skill"],
+                "deprecated": true,
                 "summary": "Get a list of all skill types",
                 "description": "Open to all users",
                 "security": [
@@ -1608,6 +1609,7 @@
             },
             "post": {
                 "tags": ["skill"],
+                "deprecated": true,
                 "summary": "Add a new skill",
                 "operationId": "createskill",
                 "description": "Admin users can create a new skill",
@@ -1668,6 +1670,7 @@
             ],
             "get": {
                 "tags": ["skill"],
+                "deprecated": true,
                 "summary": "Get a single skill by id",
                 "description": "Open to all user",
                 "operationId": "getskillByID",
@@ -1707,6 +1710,7 @@
             },
             "patch": {
                 "tags": ["skill"],
+                "deprecated": true,
                 "summary": "Update a skill name",
                 "description": "Admin users can update any skill",
                 "security": [
@@ -1757,6 +1761,7 @@
             },
             "delete": {
                 "tags": ["skill"],
+                "deprecated": true,
                 "summary": "Delete a skill",
                 "description": "Admin users can delete any skill, regular users are restricted. Future implementation is making sure we dont cascade dependent tables when a skill is removed",
                 "operationId": "deleteskill",
@@ -2731,7 +2736,7 @@
                 }
             }
         },
-        "/freelancer/{id}/skills": {
+        "/freelancer/{id}/customskills": {
             "parameters": [
                 {
                     "in": "path",
@@ -2782,9 +2787,9 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "skill_id": {
+                                    "skill_name": {
                                         "type": "integer",
-                                        "example": 1
+                                        "example": "kufua nguo"
                                     }
                                 }
                             }
@@ -2799,9 +2804,9 @@
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "skill_id": {
+                                        "skill_name": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": "kufua nguo"
                                         },
                                         "freelancer_id": {
                                             "type": "integer",
@@ -2825,7 +2830,7 @@
                 }
             }
         },
-        "/freelancer/{id}/skills/{skill_id}": {
+        "/freelancer/{id}/customSkills/{skill_id}": {
             "parameters": [
                 {
                     "in": "path",
@@ -5216,7 +5221,7 @@
                                         "type": "string",
                                         "example": "Plumbing"
                                     },
-                                    "skill_id": {
+                                    "id": {
                                         "type": "integer",
                                         "example": 1
                                     },
