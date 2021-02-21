@@ -13,13 +13,17 @@ class OtherSkillService {
         }
     }
 
-    static async getAllSkills() {
-        const skills = await OtherSkill.query();
-        return skills;
+    static async getMySkills(freelancer_id) {
+        try {
+            const skills = await OtherSkill.query().where({ freelancer_id });
+            return skills;
+        } catch (error) {
+            throw error;
+        }
     }
 
     // owners can delete skills
-    static async _delete(params) {
+    static async _removeSkill(params) {
         const { id, freelancer_id } = params;
         const skill = await this.getSkill({ id, freelancer_id });
         if (!skill) {
