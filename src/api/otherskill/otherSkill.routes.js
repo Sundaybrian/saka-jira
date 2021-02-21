@@ -1,6 +1,6 @@
 const { createSchema } = require("./otherSkill.validators");
 // const Role = require("../../constants/roles");
-const OtherSkillService = require("../../services/otherSkill.service");
+const OtherSkillService = require("../../services/otherSkills.service");
 const { Auth } = require("../../_middlewares/auth");
 const {
     setFreelancer,

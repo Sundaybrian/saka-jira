@@ -1,4 +1,4 @@
-const OtherSkill = require("../models/OtherSkill/OtherSkill.Model");
+const OtherSkill = require("../models/OtherSkills/OtherSkills.Model");
 
 class OtherSkillService {
     constructor() {}
