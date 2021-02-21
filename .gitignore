@@ -215,7 +215,7 @@ sendgrid.env
 
 
 ## awsebcli
-*.ebextensions
+.ebextensions/*
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
