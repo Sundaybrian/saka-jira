@@ -6,13 +6,13 @@ exports.seed = async function (knex) {
         job_status_name: "accepting bids",
     });
     await knex(tableNames.job_status).insert({
-        job_status_name: "accepting bids",
+        job_status_name: "inprogress",
     });
     await knex(tableNames.job_status).insert({
-        job_status_name: "accepting bids",
+        job_status_name: "closed",
     });
     await knex(tableNames.job_status).insert({
-        job_status_name: "accepting bids",
+        job_status_name: "completed",
     });
 
     // proposal_status catalog must be in order also
@@ -56,9 +56,9 @@ exports.seed = async function (knex) {
         { industry_name: "Animation" },
         { industry_name: "Apparel and Fashion" },
         { industry_name: "Architecture and  Planning" },
-        { industry_name: "Arts and  Crafts" },
+        { industry_name: "Arts and Crafts" },
         { industry_name: "Automotive" },
-        { industry_name: "Aviation and  Aerospace" },
+        { industry_name: "Aviation and Aerospace" },
         { industry_name: "Banking" },
         { industry_name: "Biotechnology" },
         { industry_name: "Broadcast Media" },
@@ -66,10 +66,10 @@ exports.seed = async function (knex) {
         { industry_name: "Business Supplies and  Equipment" },
         { industry_name: "Capital Markets" },
         { industry_name: "Chemicals" },
-        { industry_name: "Civic and  Social Organization" },
+        { industry_name: "Civic and Social Organization" },
         { industry_name: "Civil Engineering" },
         { industry_name: " Commercial Real Estate" },
-        { industry_name: " Computer and  Network Security" },
+        { industry_name: " Computer and Network Security" },
         { industry_name: "Computer Games" },
         { industry_name: "Computer Hardware" },
         { industry_name: "Computer Networking" },
@@ -84,7 +84,7 @@ exports.seed = async function (knex) {
         { industry_name: "Design" },
         { industry_name: "E-learning" },
         { industry_name: "Education Management" },
-        { industry_name: " Electrical and  Electronic Manufacturing" },
+        { industry_name: " Electrical and Electronic Manufacturing" },
         { industry_name: "Entertainment" },
         { industry_name: "Environmental Services" },
         { industry_name: "Events Services" },
