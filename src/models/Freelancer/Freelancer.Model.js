@@ -54,7 +54,7 @@ class Freelancer extends Cursor(Model) {
         const User = require("../User/User.Model");
         const Industry = require("../Industry/Industry.Model");
         const HasSkill = require("../HasSkill/HasSkill.Model");
-        const OtherSkill = require("../OtherSkill/OtherSkill.Model");
+        const OtherSkill = require("../OtherSkills/OtherSkills.Model");
 
         return {
             user: {
