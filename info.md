@@ -188,3 +188,26 @@ See also [gitmoji](https://gitmoji.carloscuesta.me/).
 | Accessibility              | :wheelchair: `:wheelchair:`                               |
 | Move/rename repository     | :truck: `:truck:`                                         |
 | Other                      | [Be creative](http://www.emoji-cheat-sheet.com/)          |
+
+exports.up = function(knex) {
+return knex.schema.alterTable("users", (table) => {
+table.dropForeign("organization_id");
+
+    table
+      .foreign("organization_id")
+      .references("organizations.id")
+      .onDelete("CASCADE");
+
+});
+}
+
+exports.down = function(knex) {
+return knex.schema.alterTable("users", (table) => {
+table.dropForeign("organization_id");
+
+    table
+      .foreign("organization_id")
+      .references("organizations.id")
+      .onDelete("NO ACTION");
+
+});
