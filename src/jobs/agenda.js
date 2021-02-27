@@ -8,7 +8,7 @@ const {
 const url =
     process.env.NODE_ENV == "production"
         ? "mongodb+srv://Administrator:8NGru82Q9tL6UkX@urady.zdq3f.mongodb.net/uradyagendajsjobs?retryWrites=true&w=majority"
-        : process.env.NOMONGO_URI;
+        : process.env.MONGO_URI;
 
 const agenda = new Agenda({
     db: {
