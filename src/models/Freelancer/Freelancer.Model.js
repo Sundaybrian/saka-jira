@@ -45,6 +45,11 @@ class Freelancer extends Cursor(Model) {
                 expiry_date
             );
         } catch (error) {
+            // if it fails remove user
+            // // if it gets here something went wrong, we delete the user
+            // const undoUser = await this.query().deleteById(user.id);
+
+            // console.log(undoUser);
             throw error;
         }
     }
