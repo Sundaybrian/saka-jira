@@ -8,7 +8,7 @@ exports.up = async function (knex) {
     await knex.schema.createTable(tableNames.other_skills, (table) => {
         table.increments().notNullable();
         table.string("skill_name").notNullable();
-        references(table, tableNames.user, "freelancer", true);
+        references(table, tableNames.freelancer, "freelancer", true);
         addDefaultColumns(table);
     });
 };

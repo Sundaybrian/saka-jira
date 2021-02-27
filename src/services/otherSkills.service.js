@@ -6,7 +6,11 @@ class OtherSkillService {
     static async addSkill(params) {
         console.log(params, "-----------");
         try {
-            const skill = await OtherSkill.query().insert(params);
+            const { skill_name, freelancer_id } = params;
+            const skill = await OtherSkill.query().insert({
+                skill_name,
+                freelancer_id,
+            });
 
             return skill;
         } catch (error) {
