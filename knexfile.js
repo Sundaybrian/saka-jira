@@ -22,6 +22,18 @@ module.exports = {
 
     development: {
         client: "pg",
+        connection: process.env.DATABASE_URL,
+        migrations: {
+            directory: __dirname + "/db/migrations",
+        },
+
+        seeds: {
+            directory: __dirname + "/db/seeds",
+        },
+    },
+
+    local: {
+        client: "pg",
         connection: {
             // host: "127.0.0.1",
             database: process.env.POSTGRES_DB,
@@ -47,26 +59,10 @@ module.exports = {
         //     user: process.env.RDS_USERNAME,
         //     password: process.env.RDS_PASSWORD,
         // },
-        pool: {
-            min: 2,
-            max: 10,
-        },
-        migrations: {
-            directory: __dirname + "/db/migrations",
-        },
-
-        seeds: {
-            directory: __dirname + "/db/seeds/production",
-        },
-    },
-
-    awsrds: {
-        client: "pg",
-        connection: process.env.AWS_RDS,
-        pool: {
-            min: 2,
-            max: 10,
-        },
+        // pool: {
+        //     min: 2,
+        //     max: 10,
+        // },
         migrations: {
             directory: __dirname + "/db/migrations",
         },
