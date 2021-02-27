@@ -13,6 +13,10 @@
         {
             "url": "https://urady.herokuapp.com/api/v1",
             "description": "Development Server"
+        },
+        {
+            "url": "https://uradybackend.tech/api/v1",
+            "description": "prod Server"
         }
     ],
     "paths": {

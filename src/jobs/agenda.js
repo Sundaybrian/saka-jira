@@ -5,10 +5,14 @@ const {
     sendAlreadyRegisteredEmail,
 } = require("./sendWelcomeEmail");
 
+const url =
+    process.env.NODE_ENV == "production"
+        ? "mongodb+srv://Administrator:8NGru82Q9tL6UkX@urady.zdq3f.mongodb.net/uradyagendajsjobs?retryWrites=true&w=majority"
+        : process.env.NOMONGO_URI;
+
 const agenda = new Agenda({
     db: {
-        address: process.env.MONGO_URI,
-
+        address: url,
         collection: process.env.AGENDA_DB_COLLECTION,
         options: { useUnifiedTopology: true },
     },
