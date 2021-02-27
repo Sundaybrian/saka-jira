@@ -26,6 +26,10 @@ module.exports = {
         migrations: {
             directory: __dirname + "/db/migrations",
         },
+        pool: {
+            min: 2,
+            max: 10,
+        },
 
         seeds: {
             directory: __dirname + "/db/seeds",
@@ -39,6 +43,10 @@ module.exports = {
             database: process.env.POSTGRES_DB,
             user: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
+        },
+        pool: {
+            min: 2,
+            max: 10,
         },
         migrations: {
             directory: __dirname + "/db/migrations",
