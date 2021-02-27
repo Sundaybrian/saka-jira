@@ -4,7 +4,7 @@ class OtherSkillService {
     constructor() {}
 
     static async addSkill(params) {
-        console.log(paramsSkills, "-----------");
+        console.log(params, "-----------");
         try {
             const skill = await OtherSkill.query().insert(params);
 
