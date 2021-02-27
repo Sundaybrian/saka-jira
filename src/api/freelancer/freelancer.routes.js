@@ -20,7 +20,7 @@ const router = require("express").Router({
 });
 
 //api/v1/freelancer/:freelancer_id/skills
-router.use("/:id/skills", Skills);
+// router.use("/:id/skills", Skills);
 //api/v1/freelancer/:freelancer_id/customSkills
 router.use("/:id/customSkills", OtherSkill);
 
