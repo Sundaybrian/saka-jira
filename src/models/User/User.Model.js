@@ -57,8 +57,8 @@ class User extends Cursor(Model) {
     static async afterInsert({ items, inputItems, relation, context }) {
         const Freelancer = require("../Freelancer/Freelancer.Model");
         const HiringManager = require("../HiringManager/HiringManager.Model");
+        let user = inputItems[0];
         try {
-            const user = inputItems[0];
             if (user.role == "user") {
                 const freelancer = { user_id: user.id, industry_id: 1 };
 
