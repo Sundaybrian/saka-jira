@@ -67,7 +67,7 @@ class FreelancerService {
                 return null;
             }
 
-            return this.basicDetails(freelancer);
+            return freelancer;
         } catch (error) {
             throw error;
         }

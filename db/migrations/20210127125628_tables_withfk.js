@@ -47,7 +47,7 @@ exports.up = async function (knex) {
         table.increments().notNullable();
         references(table, tableNames.freelancer, null, true);
         references(table, tableNames.skill, null, true);
-        table.unique(['freelancer_id',"skill_id"]);
+        table.unique(["freelancer_id", "skill_id"]);
     });
 
     await knex.schema.createTable(tableNames.freelancer_payments, (table) => {
