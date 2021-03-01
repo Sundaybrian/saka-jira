@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const tableNames = require("../../src/constants/tableNames");
 const Role = require("../../src/constants/roles");
@@ -12,8 +12,8 @@ exports.seed = async function (knex) {
         })
     );
 
-    const password = await bcrypt.hash("12345678yh", 10);
-    const passw = await bcrypt.hash("mypassword", 10);
+    const password = await bcrypt.hash("12345678yh", 8);
+    const passw = await bcrypt.hash("mypassword", 8);
 
     const industry = {
         industry_name: "Computer Programming",
@@ -87,26 +87,6 @@ exports.seed = async function (knex) {
     // insert industries
     const industryy = await knex(tableNames.industry)
         .insert(industry)
-        .returning("*");
-
-    const ind = await knex(tableNames.industry)
-        .insert([
-            {
-                industry_name: "Writing",
-            },
-            {
-                industry_name: "Accounting",
-            },
-            {
-                industry_name: "Electrical",
-            },
-            {
-                industry_name: "Manual Labour",
-            },
-            {
-                industry_name: "Teaching",
-            },
-        ])
         .returning("*");
 
     // insert freelancers

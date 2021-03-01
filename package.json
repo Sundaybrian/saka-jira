@@ -1,7 +1,11 @@
 {
-    "name": "express-api-starter",
+    "name": "uradyjobsnodejsapi",
     "version": "1.2.0",
-    "description": " A basic starter for an express.js API",
+    "description": "nodejs Backend for Urady Jobs Api",
+    "engines": {
+        "node": "12.6.0",
+        "npm": "7.5.2"
+    },
     "main": "src/index.js",
     "scripts": {
         "start": "node src/index.js",
@@ -16,11 +20,15 @@
         "rollback": "knex migrate:rollback",
         "rollback:test": "knex migrate:rollback --env test",
         "seed": "knex seed:run",
+        "rollback:prod": "knex migrate:rollback --env production",
+        "migrate:prod": "npx knex migrate:latest --env production",
+        "seed:prod": "knex seed:run --env production",
         "test:watch": "jest --verbose --watchAll",
         "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app urady"
     },
     "keywords": [],
     "author": "Sundaybrian",
+    "license": "ISC",
     "repository": {
         "type": "git",
         "url": ""
@@ -28,8 +36,8 @@
     "dependencies": {
         "@joi/date": "^2.0.1",
         "@sendgrid/mail": "^7.4.2",
-        "bcrypt": "^5.0.0",
-        "bull": "^3.20.1",
+        "agenda": "^4.0.1",
+        "bcryptjs": "^2.4.3",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
@@ -38,28 +46,22 @@
         "express": "^4.17.1",
         "express-rate-limit": "^5.2.3",
         "helmet": "^4.4.1",
-        "http-errors": "^1.8.0",
         "joi": "^17.2.1",
         "jsonwebtoken": "^8.5.1",
         "knex": "^0.21.5-next2",
         "morgan": "^1.10.0",
-        "nodemailer": "^6.4.14",
         "objection": "^2.2.3",
         "objection-cursor": "^1.2.4",
         "objection-filter": "^4.1.1",
         "objection-keyset-pagination": "^0.1.0",
         "objection-soft-delete": "^1.0.7",
         "pg": "^8.3.0",
-        "rootpath": "^0.1.2",
         "swagger-jsdoc": "^6.0.0-rc.3",
-        "swagger-ui-express": "^4.1.4",
-        "typedi": "^0.8.0",
-        "yamljs": "^0.3.0"
+        "swagger-ui-express": "^4.1.4"
     },
     "devDependencies": {
         "@types/helmet": "^4.0.0",
         "@types/node": "^14.14.22",
-        "async": "^3.2.0",
         "eslint": "^7.18.0",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-plugin-import": "^2.22.1",
@@ -68,9 +70,7 @@
         "jest-stare": "^2.2.0",
         "mocha": "^8.2.1",
         "nodemon": "^2.0.7",
-        "sqlite3": "^5.0.0",
         "supertest": "^6.1.1",
-        "tslint": "^5.20.1",
-        "typescript": "^4.1.3"
+        "tslint": "^5.20.1"
     }
 }

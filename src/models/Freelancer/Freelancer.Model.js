@@ -45,6 +45,11 @@ class Freelancer extends Cursor(Model) {
                 expiry_date
             );
         } catch (error) {
+            // if it fails remove user
+            // // if it gets here something went wrong, we delete the user
+            // const undoUser = await this.query().deleteById(user.id);
+
+            // console.log(undoUser);
             throw error;
         }
     }
@@ -54,6 +59,7 @@ class Freelancer extends Cursor(Model) {
         const User = require("../User/User.Model");
         const Industry = require("../Industry/Industry.Model");
         const HasSkill = require("../HasSkill/HasSkill.Model");
+        const OtherSkill = require("../OtherSkills/OtherSkills.Model");
 
         return {
             user: {
@@ -83,6 +89,16 @@ class Freelancer extends Cursor(Model) {
                     from: `${tableNames.freelancer}.id`,
 
                     to: `${tableNames.has_skill}.freelancer_id`,
+                },
+            },
+            customSkills: {
+                // ManyToManyRelation: Use this relation when the model is related to a list of other models through a join table
+                relation: Model.HasManyRelation,
+                modelClass: OtherSkill,
+                join: {
+                    from: `${tableNames.freelancer}.id`,
+
+                    to: `${tableNames.other_skills}.freelancer_id`,
                 },
             },
         };

@@ -22,11 +22,31 @@ module.exports = {
 
     development: {
         client: "pg",
+        connection: process.env.DATABASE_URL,
+        migrations: {
+            directory: __dirname + "/db/migrations",
+        },
+        pool: {
+            min: 2,
+            max: 10,
+        },
+
+        seeds: {
+            directory: __dirname + "/db/seeds",
+        },
+    },
+
+    local: {
+        client: "pg",
         connection: {
             // host: "127.0.0.1",
             database: process.env.POSTGRES_DB,
             user: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
+        },
+        pool: {
+            min: 2,
+            max: 10,
         },
         migrations: {
             directory: __dirname + "/db/migrations",
@@ -39,17 +59,24 @@ module.exports = {
 
     production: {
         client: "pg",
-        connection: process.env.DATABASE_URL,
-        pool: {
-            min: 2,
-            max: 10,
-        },
+        connection:
+            "postgres://uradypostgresu:uradypostgrespass@uradyjobsdbinstance.cl6vfm4enqho.eu-central-1.rds.amazonaws.com:5432/uradyjobsdb",
+        // connection: {
+        //     host: process.env.RDS_HOSTNAME,
+        //     database: process.env.RDS_DB_NAME,
+        //     user: process.env.RDS_USERNAME,
+        //     password: process.env.RDS_PASSWORD,
+        // },
+        // pool: {
+        //     min: 2,
+        //     max: 10,
+        // },
         migrations: {
             directory: __dirname + "/db/migrations",
         },
 
         seeds: {
-            directory: __dirname + "/db/seeds",
+            directory: __dirname + "/db/seeds/production",
         },
     },
 };

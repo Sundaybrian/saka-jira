@@ -51,7 +51,7 @@ exports.up = async function (knex) {
         }),
         knex.schema.createTable(tableNames.skill, (table) => {
             table.increments().notNullable();
-            table.string("skill_name", 50).notNullable();
+            table.string("skill_name", 50).unique().notNullable();
             addDefaultColumns(table);
         }),
         knex.schema.createTable(tableNames.proposal_status, (table) => {

@@ -14,6 +14,7 @@ module.exports = {
     freelancer_subscriptions: "freelancer_subscriptions",
     has_skill: "has_skill",
     freelancer_payments: "freelancer_payments",
+    other_skills: "other_skills",
     // with multiple fk references
     job: "job",
     proposal: "proposal",

@@ -1,9 +1,8 @@
-const MailerService = require("./email.service");
 const crypto = require("crypto");
 const jwt = require("../utils/jwt");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User/User.Model");
-const tableNames = require("../constants/tableNames");
+const scheduler = require("../jobs/scheduler");
 
 class AuthService {
     constructor() {}
@@ -39,10 +38,11 @@ class AuthService {
         try {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
-                await MailerService.sendAlreadyRegisteredEmail(
-                    userInput.email,
-                    origin
-                );
+                // schedule to send email after 2mins
+                await scheduler.scheduleAlreadyRegisteredEmail({
+                    email: userInput.email,
+                    origin,
+                });
 
                 throw `Email ${userInput.email} is already registered`;
             }
@@ -57,6 +57,12 @@ class AuthService {
                 .first();
 
             const token = await jwt.sign(signedUser.toJSON());
+
+            // schedule to send verification email 10 minutes
+            await scheduler.scheduleWelcomeEmail({
+                account,
+                origin,
+            });
 
             return {
                 user: signedUser,
@@ -88,7 +94,7 @@ class AuthService {
 
             const account = await this.insertUser(params, origin);
 
-            return this.basicDetails(account);
+            return account;
         } catch (error) {
             throw error;
         }
@@ -184,20 +190,18 @@ class AuthService {
             verification_token,
         });
 
-        // send email
-        // await MailerService.sendVerificationEmail(account, origin);
-
-        return this.basicDetails(account);
+        return account;
     }
 
     static async hash(password) {
-        return await bcrypt.hash(password, 10);
+        return await bcrypt.hash(password, 8);
     }
 
     static randomTokenString() {
         return crypto.randomBytes(40).toString("hex");
     }
 
+    // TODO DEPRECATE
     static basicDetails(account) {
         const {
             id,

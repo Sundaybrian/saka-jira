@@ -13,13 +13,16 @@ const {
 } = require("../../utils/_permissions/freelancer");
 
 const Skills = require("../HasSkill/hasSkill.routes");
+const OtherSkill = require("../otherskill/otherSkill.routes");
 
 const router = require("express").Router({
     mergeParams: true,
 });
 
 //api/v1/freelancer/:freelancer_id/skills
-router.use("/:id/skills", Skills);
+// router.use("/:id/skills", Skills);
+//api/v1/freelancer/:freelancer_id/customSkills
+router.use("/:id/customSkills", OtherSkill);
 
 router.post("/", Auth(), createSchema, create);
 router.get("/", Auth(), getAllFreelancers);

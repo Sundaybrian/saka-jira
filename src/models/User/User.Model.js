@@ -30,7 +30,8 @@ class User extends Cursor(Model) {
                 ref("isVerified"),
                 ref("updated_at"),
                 ref("active"),
-                ref("password")
+                ref("password"),
+                ref("verification_token")
             );
         },
 
@@ -47,7 +48,8 @@ class User extends Cursor(Model) {
                 ref("image_url"),
                 ref("created_at"),
                 ref("isVerified"),
-                ref("updated_at")
+                ref("updated_at"),
+                ref("verification_token")
             );
         },
     };
@@ -55,10 +57,11 @@ class User extends Cursor(Model) {
     static async afterInsert({ items, inputItems, relation, context }) {
         const Freelancer = require("../Freelancer/Freelancer.Model");
         const HiringManager = require("../HiringManager/HiringManager.Model");
+        let user = inputItems[0];
         try {
-            const user = inputItems[0];
             if (user.role == "user") {
                 const freelancer = { user_id: user.id, industry_id: 1 };
+
                 const f = await Freelancer.query().insert(freelancer);
                 const h = await HiringManager.query().insert({
                     user_id: user.id,
@@ -69,6 +72,10 @@ class User extends Cursor(Model) {
                 );
             }
         } catch (error) {
+            // if it gets here something went wrong, we delete the user
+            const undoUser = await this.query().deleteById(user.id);
+
+            console.log(undoUser);
             throw error;
         }
     }
