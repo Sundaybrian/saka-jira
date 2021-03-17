@@ -9,7 +9,8 @@
     "main": "src/index.js",
     "scripts": {
         "start": "node src/index.js",
-        "dev": "nodemon src/index.js",
+        "dev": "NODE_ENV=development nodemon src/index.js",
+        "local": "NODE_ENV=local nodemon src/index.js",
         "inspect": "nodemon --inspect src/index.js",
         "test": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=O jest --reporters default jest-stare --coverage --detectOpenHandles --runInBand --forceExit --testTimeout=60000",
         "lint": "npm run lint:js ",

@@ -39,6 +39,7 @@ function create(req, res, next) {
 
 // TODO PAGINATE
 // GET /jobs?industry=1&limit=20
+// GET /job?jobStatus=2&hr=1
 // GET /jobs?industry=2
 // GET /jobs?industry=1&limit=3&nextPage=flsdjfjdfjslfjlksdjfl&jobStatus=2
 // GET /jobs?sortBy=created_at:desc //soon
@@ -58,6 +59,10 @@ function getAllJobs(req, res, next) {
 
     if (req.query.jobStatus) {
         match.job_status_id = parseInt(req.query.jobStatus);
+    }
+
+    if (req.query.hr) {
+        match.hiring_manager_id = parseInt(req.query.hr);
     }
 
     if (req.query.nextPage) {
