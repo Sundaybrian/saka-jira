@@ -50,7 +50,25 @@ class ProposalService {
             // a bid is unique bu freelancer_id and job_id
             let proposals = await Proposal.query()
                 .where(match)
-                .withGraphFetched("job")
+                .modify("defaultSelects")
+                .withGraphFetched(
+                    `[job(defaultSelects), freelancer(selectNameAndId)]`
+                )
+                .modifiers({
+                    selectNameAndId(builder) {
+                        builder
+                            .select(
+                                "freelancer.user_id",
+                                "freelancer.description",
+                                "email",
+                                "phone_number",
+                                "first_name",
+                                "last_name",
+                                "image_url"
+                            )
+                            .innerJoin("user", "freelancer.user_id", "user.id");
+                    },
+                })
                 .orderBy("created_at")
                 .limit(limit)
                 .cursorPage();
