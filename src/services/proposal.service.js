@@ -133,6 +133,20 @@ class ProposalService {
         }
     }
 
+    static async _deleteMany(ids) {
+        // bulk delete proposals
+
+        try {
+            const proposals = await Propsoal.query()
+                .delete()
+                .whereIn("id", ids);
+
+            return ids;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // helpers =========================================
     static async getProposal(id, withHistory = true) {
         try {
