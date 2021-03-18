@@ -4,6 +4,7 @@ const {
     updateSchemaClient,
     updateSchemaFreelancer,
     rejectProposalSchemaClient,
+    bulkDeleteProposalsSchema,
 } = require("./proposal.validators");
 const router = require("express").Router();
 const Role = require("../../constants/roles");
@@ -66,6 +67,15 @@ router.delete(
     setHiringManagerJobProposal,
     authUpdateHiringManagerJob,
     rejectProposal
+);
+
+router.post(
+    "/bulkRejectProposal",
+    bulkDeleteProposalsSchema,
+    Auth([Role.user]),
+    // setHiringManagerJobProposal,
+    // authUpdateHiringManagerJob,
+    bulkRejectProposal
 );
 
 module.exports = router;
@@ -205,6 +215,19 @@ function rejectProposal(req, res, next) {
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
             return !proposal ? res.sendStatus(404) : res.json({ id });
+        })
+        .catch(next);
+}
+
+//
+function bulkRejectProposal(req, res, next) {
+    // only hiring managers can delete a proposals aka bid
+
+    const { ids } = req.body;
+
+    ProposalService._deleteMany(ids)
+        .then((proposals) => {
+            return !proposals ? res.sendStatus(404) : res.json({ ids });
         })
         .catch(next);
 }
