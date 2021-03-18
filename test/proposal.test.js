@@ -327,3 +327,36 @@ describe("DELETE api/v1/proposal/:id/rejectProposal/:job_id", () => {
         expect(res.body.id).toBe(id);
     });
 });
+
+
+// bulk delete proposals client
+describe("POST api/v1/proposal/bulkRejectProposals/", () => {
+    let id = null;
+    let job_id = 1;
+    beforeEach(function (done) {
+        request(app)
+            .post("/api/v1/proposal/")
+            .set("Authorization", `Bearer ${token3}`)
+            .send({
+                job_id,
+            })
+            .end(function (err, res) {
+                if (err) throw err;
+                id = res.body.id;
+                // console.log(res.body, "********** here");
+                done();
+            });
+    });
+
+    it("should delete proposal by hiring manaager", async () => {
+        const res = await request(app)
+            .post(`/api/v1/proposal/bulkRejectProposals`)
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                ids:[1]
+            })
+            .expect(200);
+        expect(res.body.ids.length).toBeGreaterThan(0);
+    });
+});
+

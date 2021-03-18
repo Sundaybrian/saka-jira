@@ -137,7 +137,7 @@ class ProposalService {
         // bulk delete proposals
 
         try {
-            const proposals = await Propsoal.query()
+            const proposals = await Proposal.query()
                 .delete()
                 .whereIn("id", ids);
 

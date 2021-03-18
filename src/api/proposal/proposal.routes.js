@@ -70,7 +70,7 @@ router.delete(
 );
 
 router.post(
-    "/bulkRejectProposal",
+    "/bulkRejectProposals",
     bulkDeleteProposalsSchema,
     Auth([Role.user]),
     // setHiringManagerJobProposal,
