@@ -4528,6 +4528,65 @@
                 }
             }
         },
+        "/proposal/bulkRejectProposals": {
+            "post": {
+                "tags": ["proposal"],
+                "summary": "delete multiple job proposals",
+                "description": "Hiring Manager can delete multiple proposals at once",
+                "operationId": "bulkDeleteProposals",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "proposals deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ids": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
         "/proposal/{id}/rejectProposal/{job_id}": {
             "delete": {
                 "tags": ["proposal"],
@@ -4553,7 +4612,7 @@
                         }
                     }
                 ],
-                "summary": "withdraw a job proposal",
+                "summary": "rejecet a job proposal by hring manager",
                 "description": "Hiring Manager users can reject a proposal aka bid",
                 "operationId": "rejectjobproposal",
                 "security": [
