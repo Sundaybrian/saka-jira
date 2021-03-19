@@ -4365,7 +4365,7 @@
             }
         },
         "/proposal/{id}/clientFeedback/{job_id}": {
-            "patch": {
+            "post": {
                 "tags": ["proposal"],
                 "parameters": [
                     {
