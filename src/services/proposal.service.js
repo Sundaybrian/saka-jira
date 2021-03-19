@@ -76,7 +76,9 @@ class ProposalService {
             if (next) {
                 return await Proposal.query()
                     .where(match)
-                    .withGraphFetched("job")
+                    .withGraphFetched(
+                        `[job(defaultSelects), freelancer(selectNameAndId)]`
+                    )
                     .orderBy("created_at")
                     .limit(limit)
                     .cursorPage(next);

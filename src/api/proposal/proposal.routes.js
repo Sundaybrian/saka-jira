@@ -130,7 +130,6 @@ function getProposalsByJob(req, res, next) {
     // initialize with job id
     const match = {
         job_id: parseInt(req.params.job_id),
-        current_proposal_status_id: parseInt(req.query.proposalStatus) || 1,
     };
 
     if (req.query.nextPage) {
