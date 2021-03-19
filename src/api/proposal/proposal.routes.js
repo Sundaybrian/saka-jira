@@ -32,6 +32,9 @@ router.get(
     authUpdateHiringManagerJob,
     getProposalsByJob
 );
+
+router.get("/jobProposalsStats/:job_id", Auth(), getProposalsStatsByJob);
+
 // TODO NOT WORKING WITH GRAPH FETCHED
 router.get("/:id/proposalHistory", Auth(), getProposalHistory);
 
@@ -143,6 +146,17 @@ function getProposalsByJob(req, res, next) {
     ProposalService.getProposals(nextPage, match, limit)
         .then((bids) => {
             return bids ? res.json(bids) : res.sendStatus(404);
+        })
+        .catch(next);
+}
+
+// proposal stats for a given job
+function getProposalsStatsByJob(req, res, next) {
+    const job_id = parseInt(req.params.job_id);
+
+    ProposalService.getProposalStats(job_id)
+        .then((stats) => {
+            return stats ? res.json(stats) : res.sendStatus(404);
         })
         .catch(next);
 }

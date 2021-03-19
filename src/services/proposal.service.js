@@ -91,6 +91,24 @@ class ProposalService {
         }
     }
 
+    static async getProposalStats(job_id) {
+        try {
+            const stats = Proposal.query()
+                .where({
+                    job_id,
+                })
+                .select("current_proposal_status_id")
+                .count("current_proposal_status_id")
+                .groupBy("current_proposal_status_id");
+
+                // i believe it will be an array of this
+                // [ { current_proposal_status_id: 1, count: '1' } ]
+            return stats;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async getProposalHistoryById(id) {
         try {
             const proposal = await this.getProposal(id);
