@@ -44,7 +44,7 @@ router.patch(
     freelancerJobFeedback
 );
 
-router.patch(
+router.post(
     "/:id/clientFeedback/:job_id",
     updateSchemaClient,
     Auth([Role.user]),
