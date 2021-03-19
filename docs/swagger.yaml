@@ -3000,7 +3000,43 @@ paths:
                     $ref: "#/components/responses/NotFoundError"
                 "401":
                     $ref: "#/components/responses/UnauthorizedError"
-
+    /proposal/jobProposalsStats/{job_id}:
+        get:
+            tags:
+                - "proposal"
+            parameters:
+                - in: path
+                  name: job_id
+                  description: job id
+                  required: true
+                  example: 1
+                  schema:
+                      type: integer
+                
+            summary: Get all  job proposals stats for a given job
+            description: Fetch all stats for a given job
+            operationId: getjobproposalsStats
+            security:
+                - bearerAuth: []
+            responses:
+              "200":
+                description: Returns an array containing current proposal status ids and count
+                content:
+                  application/json:
+                    schema:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          current_proposal_status_id:
+                            type: integer
+                            example: 1
+                          count:
+                            type: string
+                            example: 1
+                            
+                    
+                
     /proposal/{id}/freelancerFeedback:
         patch:
             tags:
