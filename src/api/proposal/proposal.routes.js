@@ -174,17 +174,9 @@ function freelancerJobFeedback(req, res, next) {
 function clientJobFeedback(req, res, next) {
     const id = parseInt(req.params.id); // proposal id
 
-    const {
-        current_proposal_status_id,
-        client_comment,
-        client_rating,
-    } = req.body;
+    console.log(req.body, "=======");
 
-    const payload = {
-        current_proposal_status_id,
-        client_comment,
-        client_rating,
-    };
+    const payload = req.body;
 
     ProposalService.updateProposal(id, payload)
         .then((updatedProposal) =>

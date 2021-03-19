@@ -85,6 +85,9 @@ class Proposal extends Cursor(Model) {
                 payment_amount,
             } = inputItems[0];
 
+            console.log("items:     ", items);
+            console.log("inputItems:", inputItems);
+
             const proposal_history = {
                 proposal_status_id: current_proposal_status_id,
                 proposal_id: id,
@@ -106,6 +109,12 @@ class Proposal extends Cursor(Model) {
             throw error;
         }
     }
+
+    // static async beforeUpdate({ items, inputItems, relation }) {
+    //     console.log("items:     ", items);
+    //     console.log("inputItems:", inputItems);
+    //     console.log("relation:  ", relation ? relation.name : "none");
+    // }
 
     static get relationMappings() {
         const Job = require("../Job/Job.Model");

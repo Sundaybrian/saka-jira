@@ -26,8 +26,8 @@
             "type": "string",
             "title": "The client_comment of the client."
         },
-        "current_proposal_status": {
-            "$current_proposal_status": "#/properties/current_proposal_status",
+        "current_proposal_status_id": {
+            "$current_proposal_status_id": "#/properties/current_proposal_status",
             "type": "integer",
             "title": "The current_proposal_status of the job."
         },

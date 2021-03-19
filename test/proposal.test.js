@@ -328,7 +328,6 @@ describe("DELETE api/v1/proposal/:id/rejectProposal/:job_id", () => {
     });
 });
 
-
 // bulk delete proposals client
 describe("POST api/v1/proposal/bulkRejectProposals/", () => {
     let id = null;
@@ -353,10 +352,9 @@ describe("POST api/v1/proposal/bulkRejectProposals/", () => {
             .post(`/api/v1/proposal/bulkRejectProposals`)
             .set("Authorization", `Bearer ${token2}`)
             .send({
-                ids:[1]
+                ids: [1],
             })
             .expect(200);
         expect(res.body.ids.length).toBeGreaterThan(0);
     });
 });
-
