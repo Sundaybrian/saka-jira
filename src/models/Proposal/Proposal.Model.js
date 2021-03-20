@@ -132,6 +132,16 @@ class Proposal extends Cursor(Model) {
                     to: `${tableNames.job}.id`,
                 },
             },
+
+            proposalStatus: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: ProposalStatus,
+                join: {
+                    from: `${tableNames.proposal}.current_proposal_status_id`,
+                    to: `${tableNames.proposal_status}.id`,
+                },
+            },
+
             freelancer: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
@@ -142,19 +152,19 @@ class Proposal extends Cursor(Model) {
                 },
             },
 
-            histories: {
-                relation: Model.HasManyRelation,
-                modelClass: ProposalHistory,
-                join: {
-                    from: `${tableNames.proposal}.id`,
-                    // through: {
-                    //     modelClass: ProposalHistory,
-                    //     from: `${tableNames.proposal_history}.proposal_id`,
-                    //     to: `${tableNames.proposal_history}.proposal_status_id`,
-                    // },
-                    to: `${tableNames.proposal_history}.proposal_id`,
-                },
-            },
+            // histories: {
+            //     relation: Model.HasManyRelation,
+            //     modelClass: ProposalHistory,
+            //     join: {
+            //         from: `${tableNames.proposal}.id`,
+            //         // through: {
+            //         //     modelClass: ProposalHistory,
+            //         //     from: `${tableNames.proposal_history}.proposal_id`,
+            //         //     to: `${tableNames.proposal_history}.proposal_status_id`,
+            //         // },
+            //         to: `${tableNames.proposal_history}.proposal_id`,
+            //     },
+            // },
         };
     }
 }
