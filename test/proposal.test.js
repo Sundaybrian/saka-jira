@@ -148,7 +148,7 @@ describe("GET /api/v1/proposal/jobProposalsStats/:job_id", () => {
             .set("Authorization", `Bearer ${token3}`)
             .expect(200);
 
-        console.log(res.body);
+        console.log(res.body, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5");
         expect(res.body).toBeTruthy();
         // expect(res.body.results.length).toBeGreaterThan(0);
     });

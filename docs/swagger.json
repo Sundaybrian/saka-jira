@@ -4279,7 +4279,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns an array containing current proposal status ids and count",
+                        "description": "Returns an array containing current proposal status and count, if none is found it returns an empty array, so always validate the length",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4287,13 +4287,17 @@
                                     "items": {
                                         "type": "object",
                                         "properties": {
-                                            "current_proposal_status_id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "count": {
+                                            "Applicants": {
                                                 "type": "string",
                                                 "example": 1
+                                            },
+                                            "Accepted": {
+                                                "type": "string",
+                                                "example": 1
+                                            },
+                                            "InReview": {
+                                                "type": "string",
+                                                "example": 0
                                             }
                                         }
                                     }
