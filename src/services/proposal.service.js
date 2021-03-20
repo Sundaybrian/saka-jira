@@ -1,5 +1,7 @@
 const Proposal = require("../models/Proposal/Proposal.Model");
 
+const { buildFilter } = require("objection-filter");
+
 class ProposalService {
     constructor() {}
 
@@ -93,16 +95,41 @@ class ProposalService {
 
     static async getProposalStats(job_id) {
         try {
-            const stats = Proposal.query()
-                .where({
-                    job_id,
-                })
-                .select("current_proposal_status_id")
-                .count("current_proposal_status_id")
-                .groupBy("current_proposal_status_id");
+            const stats = await buildFilter(Proposal).build({
+                eager: {
+                    $aggregations: [
+                        {
+                            type: "count",
+                            alias: "Applicants",
+                            relation: "job",
+                            field: "id", // id field on job table
+                        },
 
-                // i believe it will be an array of this
-                // [ { current_proposal_status_id: 1, count: '1' } ]
+                        {
+                            type: "count",
+                            alias: "Accepted",
+                            relation: "proposalStatus",
+                            field: "id", // id field on table proposal status
+                            $where: {
+                                id: 2, // id of the proposal status
+                            },
+                        },
+                        {
+                            type: "count",
+                            alias: "InReview",
+                            relation: "proposalStatus",
+                            field: "id",
+                            $where: {
+                                id: 5,
+                            },
+                        },
+                    ],
+                    $where: {
+                        job_id: job_id,
+                    },
+                },
+            });
+
             return stats;
         } catch (error) {
             throw error;
