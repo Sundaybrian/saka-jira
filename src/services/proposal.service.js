@@ -66,9 +66,15 @@ class ProposalService {
                                 "phone_number",
                                 "first_name",
                                 "last_name",
-                                "image_url"
+                                "image_url",
+                                "hiring_manager.id as hiring_manager_id"
                             )
-                            .innerJoin("user", "freelancer.user_id", "user.id");
+                            .innerJoin("user", "freelancer.user_id", "user.id")
+                            .join(
+                                "hiring_manager",
+                                "freelancer.user_id",
+                                "hiring_manager.user_id"
+                            );
                     },
                 })
                 .orderBy("created_at")
@@ -81,6 +87,31 @@ class ProposalService {
                     .withGraphFetched(
                         `[job(defaultSelects), freelancer(selectNameAndId)]`
                     )
+                    .modifiers({
+                        selectNameAndId(builder) {
+                            builder
+                                .select(
+                                    "freelancer.user_id",
+                                    "freelancer.description",
+                                    "email",
+                                    "phone_number",
+                                    "first_name",
+                                    "last_name",
+                                    "image_url",
+                                    "hiring_manager.id as hiring_manager_id"
+                                )
+                                .innerJoin(
+                                    "user",
+                                    "freelancer.user_id",
+                                    "user.id"
+                                )
+                                .join(
+                                    "hiring_manager",
+                                    "freelancer.user_id",
+                                    "hiring_manager.user_id"
+                                );
+                        },
+                    })
                     .orderBy("created_at")
                     .limit(limit)
                     .cursorPage(next);
