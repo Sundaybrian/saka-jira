@@ -10,6 +10,7 @@ const HiringManager = require("../../models/HiringManager/HiringManager.Model");
 
 router.post("/", Auth(), createSchema, createHiringManager);
 router.get("/", Auth(), getAllHiringManagers);
+router.get("/hiringManagerStats/:hiringManagerID", Auth(), hiringManagerStats);
 router.get("/:id", Auth(), getHiringManagerById);
 router.patch(
     "/:id",
@@ -62,6 +63,14 @@ function getHiringManagerById(req, res, next) {
         .then((hiringManager) =>
             hiringManager ? res.json(hiringManager) : res.sendStatus(404)
         )
+        .catch(next);
+}
+
+function hiringManagerStats(req, res, next) {
+    const { hiringManagerID } = req.params;
+
+    HiringManagerService.hiringManagerProfileStats(parseInt(hiringManagerID))
+        .then((stats) => (stats ? res.json(stats) : res.sendStatus(404)))
         .catch(next);
 }
 
