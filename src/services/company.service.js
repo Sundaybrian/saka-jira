@@ -48,12 +48,16 @@ class CompanyService {
     }
 
     static async getMyCompany(ownerId) {
-        const companies = await Company.query()
-            .where({
-                owner_id: ownerId,
-            })
-            .first();
-        return companies;
+        try {
+            const companies = await Company.query()
+                .where({
+                    owner_id: ownerId,
+                })
+                .first();
+            return companies;
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async getCompanyById(id) {

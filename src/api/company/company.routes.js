@@ -12,7 +12,7 @@ const CompanyService = require("../../services/company.service");
 
 router.post("/", Auth([Role.user]), createSchema, create);
 router.get("/", Auth([Role.admin]), getAllCompanies);
-router.get("/mine", Auth([Role.user]), getMyCompany);
+router.get("/mine", Auth(), getMyCompany);
 router.get("/:id", Auth(), getCompanyById);
 router.patch(
     "/:id",
@@ -62,8 +62,9 @@ function getAllCompanies(req, res, next) {
 function getMyCompany(req, res, next) {
     const owner_id = parseInt(req.user.id);
 
-    CompanyService.getMyCompany(owner_id)
+    CompanyService.getCompany({ owner_id })
         .then((company) => {
+            console.log(company, "=======================");
             return company ? res.json(company) : res.sendStatus(404);
         })
         .catch(next);

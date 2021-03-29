@@ -4966,6 +4966,30 @@
                 }
             }
         },
+        "/company/mine": {
+            "get": {
+                "tags": ["company"],
+                "summary": "Get myCompany",
+                "description": "Open to all users",
+                "operationId": "getmycompany",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CompanyResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
         "/company/{id}": {
             "parameters": [
                 {
