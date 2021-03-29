@@ -3148,6 +3148,57 @@
                 }
             }
         },
+        "/hiringManager/hiringManagerStats/{hiring_manager_id}": {
+            "get": {
+                "tags": ["hiringManager"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "hiring_manager_id",
+                        "description": "hiring manager id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Get a hiring manager stats",
+                "description": "Open to all users.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "gethiringManagerstats",
+                "responses": {
+                    "200": {
+                        "description": "Hiring manager stats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "jobsCompleted": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "jobsPosted": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "rating": {
+                                            "type": "integer",
+                                            "example": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/freelancerSubscription": {
             "get": {
                 "tags": ["freelancerSubscription"],
