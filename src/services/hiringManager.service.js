@@ -1,6 +1,7 @@
 const HiringManager = require("../models/HiringManager/HiringManager.Model");
 const tableNames = require("../constants/tableNames");
 const Job = require("../models/Job/Job.Model");
+const Proposal = require("../models/Proposal/Proposal.Model");
 
 class HiringManagerService {
     constructor() {}
@@ -133,11 +134,13 @@ class HiringManagerService {
             ]);
 
             return {
-                jobsPosted: parseInt(jobsPosted[0].count),
-                jobsCompleted: parseInt(jobsCompleted[0].count),
+                jobsPosted: parseInt(jobsPosted[0].count) || 0,
+                jobsCompleted: parseInt(jobsCompleted[0].count) || 0,
                 rating: rating[0].avg ? parseInt(rating[0].avg) : 0,
             };
-        } catch (error) {}
+        } catch (error) {
+            throw error;
+        }
     }
     static async basicDetails(HiringManager) {
         const {

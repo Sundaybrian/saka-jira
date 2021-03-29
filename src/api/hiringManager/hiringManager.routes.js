@@ -70,7 +70,7 @@ function hiringManagerStats(req, res, next) {
     const { hiringManagerID } = req.params;
 
     HiringManagerService.hiringManagerProfileStats(parseInt(hiringManagerID))
-        .then((stats) => (stats ? res.json(stats) : res.sendStatus(404)))
+        .then((stats) => res.json(stats))
         .catch(next);
 }
 

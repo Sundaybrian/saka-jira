@@ -1,5 +1,6 @@
 const HiringManagerService = require("../../services/hiringManager.service");
 const JobService = require("../../services/job.service");
+const Role = require("../../constants/roles");
 
 // permissions
 
@@ -7,9 +8,9 @@ const JobService = require("../../services/job.service");
 function canUpdateJob(user, job) {
     return job.hiringManager.user_id == user.id;
 }
-// function canUpdateHiringManager(user, hiring_manager) {
-//     return user.role == Role.admin || user.id == hiring_manager.user_id;
-// }
+function canUpdateHiringManager(user, hiring_manager) {
+    return user.role == Role.admin || user.id == hiring_manager.user_id;
+}
 
 // function canCreateJob(user, hiring_manager) {
 //     return user.role == Role.admin || user.id == freelancer.user_id;
@@ -64,4 +65,5 @@ module.exports = {
     authUpdateHiringManagerJob,
     setHiringManagerJob,
     setHiringManagerJobProposal,
+    canUpdateHiringManager,
 };
