@@ -1,5 +1,6 @@
 const HiringManager = require("../models/HiringManager/HiringManager.Model");
 const tableNames = require("../constants/tableNames");
+const Job = require("../models/Job/Job.Model");
 
 class HiringManagerService {
     constructor() {}
@@ -66,16 +67,16 @@ class HiringManagerService {
         }
     }
 
-
-    static async fetchHiringManager(params){
+    static async fetchHiringManager(params) {
         try {
-            const hiring_manager = await HiringManager.query().where(params).first();
+            const hiring_manager = await HiringManager.query()
+                .where(params)
+                .first();
             return hiring_manager;
         } catch (error) {
             throw error;
         }
     }
-
 
     static async getHiringManager(id) {
         try {
@@ -101,6 +102,43 @@ class HiringManagerService {
         }
     }
 
+    static async hiringManagerProfileStats(hiring_manager_id) {
+        try {
+            const [jobsPosted, jobsCompleted, rating] = await Promise.all([
+                Job.query()
+                    .where({ hiring_manager_id })
+                    .count()
+                    .as("jobsPosted"),
+
+                Job.query()
+                    .where({
+                        hiring_manager_id,
+                        job_status_id: 4, //completed
+                    })
+                    .count()
+                    .as("jobsCompleted"),
+
+                Proposal.query()
+                    .whereIn(
+                        "job_id",
+                        Job.query()
+                            .where({
+                                hiring_manager_id,
+                                job_status_id: 4, //completed
+                            })
+                            .select("id")
+                    )
+                    .avg("client_rating")
+                    .as("rating"),
+            ]);
+
+            return {
+                jobsPosted: parseInt(jobsPosted[0].count),
+                jobsCompleted: parseInt(jobsCompleted[0].count),
+                rating: rating[0].avg ? parseInt(rating[0].avg) : 0,
+            };
+        } catch (error) {}
+    }
     static async basicDetails(HiringManager) {
         const {
             id,
