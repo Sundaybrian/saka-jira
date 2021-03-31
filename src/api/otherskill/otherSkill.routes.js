@@ -19,7 +19,7 @@ router.post(
     createSchema,
     addSkill
 );
-router.get("/", Auth(), setFreelancer, authUpdateFreelancer, getMySkills);
+router.get("/", Auth(),getMySkills);
 router.delete(
     "/:skill_id",
     Auth(),
@@ -43,7 +43,7 @@ function addSkill(req, res, next) {
 }
 
 function getMySkills(req, res, next) {
-    const freelancer_id = parseInt(req.freelancer.id);
+    const freelancer_id = parseInt(req.params.id);
 
     OtherSkillService.getMySkills(freelancer_id)
         .then((freelancer_and_skills) => {

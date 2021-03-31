@@ -3,8 +3,8 @@
     "version": "1.2.0",
     "description": "nodejs Backend for Urady Jobs Api",
     "engines": {
-        "node": "12.6.0",
-        "npm": "7.5.2"
+        "node": "14.6.0",
+        "npm": "7.6.3"
     },
     "main": "src/index.js",
     "scripts": {
