@@ -5,6 +5,9 @@ const { Auth } = require("../../_middlewares/auth");
 // const upload = require("../../utils/multer");
 const multer = require("multer");
 const { uploadFile, getFileStream } = require("../../utils/s3");
+const fs = require("fs");
+const { promisify } = require("util");
+const unlinkFile = promisify(fs.unlink);
 
 module.exports = router;
 
@@ -30,10 +33,17 @@ router.get("/avatar/:key", getAvatar);
 function uploadAvatar(req, res, next) {
     const file = req.file;
 
+    let response;
+
     // upload to s3
     uploadFile(file)
         .then((result) => {
-            const { Location, key } = result;
+            response = result;
+            // delete file from ec2
+            return unlinkFile(file.path);
+        })
+        .then((_) => {
+            const { Location, key } = response;
             res.json({ image_url: `/images/avatar/${key}` });
         })
         .catch(next);
