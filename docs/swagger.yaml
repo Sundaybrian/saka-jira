@@ -532,7 +532,39 @@ paths:
                     $ref: "#/components/responses/NotFoundError"
                 "401":
                     $ref: "#/components/responses/UnauthorizedError"
-
+    /images/avatar:
+      post:
+        tags:
+          - "images"
+        summary: Opload na user avatar
+        operationId: uploadavatar
+        description: Upload avatar form data to s3 and get url. The image form data should have the fieldname image key as avatar
+        requestBody:
+          required: true
+          content:
+            multipart/form-data:
+              schema:
+                type: object
+                properties:
+                  avatar:
+                    type: string
+                    format: binary
+                #   fieldname: 
+                #     type: string
+                #     example: 'avatar'
+        responses: 
+          '200':
+            description: image uploaded successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    image_url:
+                      type: string
+                      example: '/images/avatar/886785568676789568957'
+            
+        
     /subscriptionType/:
         post:
             tags:
