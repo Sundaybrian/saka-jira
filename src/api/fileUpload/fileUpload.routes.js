@@ -4,7 +4,7 @@ const AuthService = require("../../services/auth.service");
 const { Auth } = require("../../_middlewares/auth");
 // const upload = require("../../utils/multer");
 const multer = require("multer");
-const { uploadFile } = require("../../utils/s3");
+const { uploadFile, getFileStream } = require("../../utils/s3");
 
 module.exports = router;
 
@@ -24,6 +24,7 @@ const upload = multer({
 });
 
 router.post("/avatar", upload.single("avatar"), uploadAvatar);
+router.get("/avatar/:key", getAvatar);
 
 // handlers
 function uploadAvatar(req, res, next) {
@@ -31,6 +32,16 @@ function uploadAvatar(req, res, next) {
 
     // upload to s3
     uploadFile(file)
-        .then((result) => res.json(result))
+        .then((result) => {
+            const { Location, key } = result;
+            res.json({ image_url: `/images/avatar/${key}` });
+        })
         .catch(next);
+}
+
+function getAvatar(req, res, next) {
+    const key = req.params.key;
+    const readStream = getFileStream(key);
+
+    readStream.pipe(res);
 }
