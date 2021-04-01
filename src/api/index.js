@@ -31,6 +31,6 @@ router.use(
 router.use("/job", require("./job/job.routes"));
 router.use("/proposal", require("./proposal/proposal.routes"));
 router.use("/company", require("./company/company.routes"));
-router.use("/uploads", require("./fileUpload/fileUpload.routes"));
+router.use("/images", require("./fileUpload/fileUpload.routes"));
 
 module.exports = router;
