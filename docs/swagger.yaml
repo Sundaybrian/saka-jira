@@ -39,6 +39,9 @@ paths:
                                 password:
                                     type: string
                                     example: "myverysuperiorpass"
+                                image_url:
+                                    type: string
+                                    example: "https://jkhasdfjdshfhdsfhjkdssdfjk"    
                             required:
                                 - first_name
                                 - last_name
@@ -71,6 +74,9 @@ paths:
                                             phone_number:
                                                 type: string
                                                 example: "0714382366"
+                                            image_url:
+                                                type: string
+                                                example: ""    
                                             freelancer:
                                                 type: object
                                                 properties:
@@ -184,6 +190,9 @@ paths:
                                             email:
                                                 type: string
                                                 example: "sunday@owner.com"
+                                            image_url:
+                                                type: string
+                                                example: ""     
                                             role:
                                                 type: string
                                                 example: "user"
@@ -345,6 +354,9 @@ paths:
                                                 email:
                                                     type: string
                                                     example: "sunday@oliseh.com"
+                                                image_url:
+                                                    type: string
+                                                    example: ""     
                                                 role:
                                                     type: string
                                                     example: "user"

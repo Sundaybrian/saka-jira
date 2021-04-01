@@ -47,6 +47,10 @@
                                     "password": {
                                         "type": "string",
                                         "example": "myverysuperiorpass"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://jkhasdfjdshfhdsfhjkdssdfjk"
                                     }
                                 },
                                 "required": [
@@ -90,6 +94,10 @@
                                                 "phone_number": {
                                                     "type": "string",
                                                     "example": "0714382366"
+                                                },
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": ""
                                                 },
                                                 "freelancer": {
                                                     "type": "object",
@@ -249,6 +257,10 @@
                                                 "email": {
                                                     "type": "string",
                                                     "example": "sunday@owner.com"
+                                                },
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": ""
                                                 },
                                                 "role": {
                                                     "type": "string",
@@ -482,6 +494,10 @@
                                                     "email": {
                                                         "type": "string",
                                                         "example": "sunday@oliseh.com"
+                                                    },
+                                                    "image_url": {
+                                                        "type": "string",
+                                                        "example": ""
                                                     },
                                                     "role": {
                                                         "type": "string",
