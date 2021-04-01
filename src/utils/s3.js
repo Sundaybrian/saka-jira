@@ -2,7 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const S3 = require("aws-sdk/clients/s3");
 const { promisify } = require("util");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
@@ -18,12 +18,11 @@ const s3 = new S3({
 s3.uploadP = promisify(s3.upload);
 
 // uploads single file to s3
-
 function uploadFile(file) {
-    const imageID = new mongoose.Types.ObjectId();
+    // const imageID = new mongoose.Types.ObjectId();
     const fileStream = fs.createReadStream(file.path);
 
-    console.log(file, imageID);
+    console.log(file);
 
     const uploadParams = {
         Bucket: bucketName,
@@ -31,8 +30,7 @@ function uploadFile(file) {
         Key: file.filename,
     };
 
-    return true;
-    // return s3.uploadP(uploadParams);
+    return s3.uploadP(uploadParams);
 }
 
 module.exports = {
