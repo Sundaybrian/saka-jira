@@ -9,6 +9,8 @@ servers:
       description: Local development server
     - url: https://urady.herokuapp.com/api/v1
       description: Development Server
+    - url: https://uradybackend.tech/api/v1
+      description: Prod Server    
 
 paths:
     /accounts/register:
