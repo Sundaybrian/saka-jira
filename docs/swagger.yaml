@@ -444,6 +444,9 @@ paths:
                                     updated_at:
                                         type: string
                                         example: "2020-05-05T09:12:57.848Z"
+                                    image_url:
+                                        type: string
+                                        example: "https://hhsdjfhjdshfjhdsjkfh.com"    
                                     role:
                                         type: string
                                         example: "user"
@@ -476,6 +479,9 @@ paths:
                                 email:
                                     type: string
                                     example: "michael@smith.com"
+                                image_url:
+                                    type: string
+                                    example: "https://storag.bcket.com"    
                                 password:
                                     type: string
                                     example: "pass12345678"
@@ -505,6 +511,9 @@ paths:
                                     phone_number:
                                         type: string
                                         example: "0733455780"
+                                    image_url:
+                                        type: string
+                                        example: "https://jkdshfdjsfhjdsfjhdhf"    
                                     email:
                                         type: string
                                         example: "michael@smith.com"
