@@ -16,7 +16,7 @@
         },
         {
             "url": "https://uradybackend.tech/api/v1",
-            "description": "prod Server"
+            "description": "Prod Server"
         }
     ],
     "paths": {
@@ -51,6 +51,10 @@
                                     "password": {
                                         "type": "string",
                                         "example": "myverysuperiorpass"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://jkhasdfjdshfhdsfhjkdssdfjk"
                                     }
                                 },
                                 "required": [
@@ -94,6 +98,10 @@
                                                 "phone_number": {
                                                     "type": "string",
                                                     "example": "0714382366"
+                                                },
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": ""
                                                 },
                                                 "freelancer": {
                                                     "type": "object",
@@ -253,6 +261,10 @@
                                                 "email": {
                                                     "type": "string",
                                                     "example": "sunday@owner.com"
+                                                },
+                                                "image_url": {
+                                                    "type": "string",
+                                                    "example": ""
                                                 },
                                                 "role": {
                                                     "type": "string",
@@ -487,6 +499,10 @@
                                                         "type": "string",
                                                         "example": "sunday@oliseh.com"
                                                     },
+                                                    "image_url": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
                                                     "role": {
                                                         "type": "string",
                                                         "example": "user"
@@ -609,6 +625,10 @@
                                             "type": "string",
                                             "example": "2020-05-05T09:12:57.848Z"
                                         },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://hhsdjfhjdshfjhdsjkfh.com"
+                                        },
                                         "role": {
                                             "type": "string",
                                             "example": "user"
@@ -655,6 +675,10 @@
                                         "type": "string",
                                         "example": "michael@smith.com"
                                     },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://storag.bcket.com"
+                                    },
                                     "password": {
                                         "type": "string",
                                         "example": "pass12345678"
@@ -700,6 +724,10 @@
                                         "phone_number": {
                                             "type": "string",
                                             "example": "0733455780"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://jkdshfdjsfhjdsfjhdhf"
                                         },
                                         "email": {
                                             "type": "string",
@@ -762,6 +790,48 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/images/avatar": {
+            "post": {
+                "tags": ["images"],
+                "summary": "Opload na user avatar",
+                "operationId": "uploadavatar",
+                "description": "Upload avatar form data to s3 and get url. The image form data should have the fieldname image key as avatar",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "avatar": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "/images/avatar/886785568676789568957"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -3152,6 +3222,57 @@
                 }
             }
         },
+        "/hiringManager/hiringManagerStats/{hiring_manager_id}": {
+            "get": {
+                "tags": ["hiringManager"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "hiring_manager_id",
+                        "description": "hiring manager id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Get a hiring manager stats",
+                "description": "Open to all users.",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "operationId": "gethiringManagerstats",
+                "responses": {
+                    "200": {
+                        "description": "Hiring manager stats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "jobsCompleted": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "jobsPosted": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "rating": {
+                                            "type": "integer",
+                                            "example": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/freelancerSubscription": {
             "get": {
                 "tags": ["freelancerSubscription"],
@@ -4258,6 +4379,60 @@
                 }
             }
         },
+        "/proposal/jobProposalsStats/{job_id}": {
+            "get": {
+                "tags": ["proposal"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "job_id",
+                        "description": "job id",
+                        "required": true,
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "summary": "Get all  job proposals stats for a given job",
+                "description": "Fetch all stats for a given job",
+                "operationId": "getjobproposalsStats",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns an array containing current proposal status and count, if none is found it returns an empty array, so always validate the length",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "Applicants": {
+                                                "type": "string",
+                                                "example": 1
+                                            },
+                                            "Accepted": {
+                                                "type": "string",
+                                                "example": 1
+                                            },
+                                            "InReview": {
+                                                "type": "string",
+                                                "example": 0
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/proposal/{id}/freelancerFeedback": {
             "patch": {
                 "tags": ["proposal"],
@@ -4369,7 +4544,7 @@
             }
         },
         "/proposal/{id}/clientFeedback/{job_id}": {
-            "patch": {
+            "post": {
                 "tags": ["proposal"],
                 "parameters": [
                     {
@@ -4532,6 +4707,65 @@
                 }
             }
         },
+        "/proposal/bulkRejectProposals": {
+            "post": {
+                "tags": ["proposal"],
+                "summary": "delete multiple job proposals",
+                "description": "Hiring Manager can delete multiple proposals at once",
+                "operationId": "bulkDeleteProposals",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "proposals deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ids": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
         "/proposal/{id}/rejectProposal/{job_id}": {
             "delete": {
                 "tags": ["proposal"],
@@ -4557,7 +4791,7 @@
                         }
                     }
                 ],
-                "summary": "withdraw a job proposal",
+                "summary": "rejecet a job proposal by hring manager",
                 "description": "Hiring Manager users can reject a proposal aka bid",
                 "operationId": "rejectjobproposal",
                 "security": [
@@ -4849,6 +5083,30 @@
                         "$ref": "#/components/responses/UnauthorizedError"
                     },
                     "403": {
+                        "$ref": "#/components/responses/UnauthorizedError"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundError"
+                    }
+                }
+            }
+        },
+        "/company/mine": {
+            "get": {
+                "tags": ["company"],
+                "summary": "Get myCompany",
+                "description": "Open to all users",
+                "operationId": "getmycompany",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CompanyResponse"
+                    },
+                    "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
                     },
                     "404": {

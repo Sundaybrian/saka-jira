@@ -127,6 +127,33 @@ describe("GET /api/v1/proposal/jobProposals/:job_id", () => {
     });
 });
 
+// get job proposals hiring Manager
+describe("GET /api/v1/proposal/jobProposalsStats/:job_id", () => {
+    beforeEach(function (done) {
+        request(app)
+            .post("/api/v1/proposal/")
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                job_id: 2,
+            })
+            .end(function (err, res) {
+                if (err) throw err;
+                done();
+            });
+    });
+
+    it("Should return an array of  proposals for hiring manager", async () => {
+        const res = await request(app)
+            .get("/api/v1/proposal/jobProposalsStats/2")
+            .set("Authorization", `Bearer ${token3}`)
+            .expect(200);
+
+        console.log(res.body, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5");
+        expect(res.body).toBeTruthy();
+        // expect(res.body.results.length).toBeGreaterThan(0);
+    });
+});
+
 // // get proposal history
 // describe("GET /api/v1/proposal/:id/proposalHistory", () => {
 //     beforeEach(function (done) {
@@ -233,14 +260,14 @@ describe("PATCH api/v1/proposal/:id/clientFeedback/:job_id", () => {
 
     it("should fail to update another clients proposal profile", async () => {
         await request(app)
-            .patch("/api/v1/proposal/1/clientFeedback/2")
+            .post("/api/v1/proposal/1/clientFeedback/2")
             .set("Authorization", `Bearer ${token2}`)
             .expect(401);
     });
 
     it("should fail to update proposal feedback for another user", async () => {
         const res = await request(app)
-            .patch("/api/v1/proposal/1/clientFeedback/2")
+            .post("/api/v1/proposal/1/clientFeedback/2")
             .set("Authorization", `Bearer ${token2}`)
             .send({
                 current_proposal_status_id: 4,
@@ -251,7 +278,7 @@ describe("PATCH api/v1/proposal/:id/clientFeedback/:job_id", () => {
     });
     it("should update proposal", async () => {
         const res = await request(app)
-            .patch("/api/v1/proposal/1/clientFeedback/2")
+            .post("/api/v1/proposal/1/clientFeedback/2")
             .set("Authorization", `Bearer ${token3}`)
             .send({
                 current_proposal_status_id: 4,
@@ -325,5 +352,36 @@ describe("DELETE api/v1/proposal/:id/rejectProposal/:job_id", () => {
             .set("Authorization", `Bearer ${token2}`)
             .expect(200);
         expect(res.body.id).toBe(id);
+    });
+});
+
+// bulk delete proposals client
+describe("POST api/v1/proposal/bulkRejectProposals/", () => {
+    let id = null;
+    let job_id = 1;
+    beforeEach(function (done) {
+        request(app)
+            .post("/api/v1/proposal/")
+            .set("Authorization", `Bearer ${token3}`)
+            .send({
+                job_id,
+            })
+            .end(function (err, res) {
+                if (err) throw err;
+                id = res.body.id;
+                // console.log(res.body, "********** here");
+                done();
+            });
+    });
+
+    it("should delete proposal by hiring manaager", async () => {
+        const res = await request(app)
+            .post(`/api/v1/proposal/bulkRejectProposals`)
+            .set("Authorization", `Bearer ${token2}`)
+            .send({
+                ids: [1],
+            })
+            .expect(200);
+        expect(res.body.ids.length).toBeGreaterThan(0);
     });
 });

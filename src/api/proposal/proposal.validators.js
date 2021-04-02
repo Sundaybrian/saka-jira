@@ -47,3 +47,11 @@ exports.updateSchemaFreelancer = (req, res, next) => {
 
     validateRequest(req, next, schema);
 };
+
+exports.bulkDeleteProposalsSchema = (req, res, next) => {
+    const schema = Joi.object({
+        ids: Joi.array().items(Joi.number().integer()),
+    });
+
+    validateRequest(req, next, schema);
+};

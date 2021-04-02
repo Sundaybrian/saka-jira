@@ -1,5 +1,7 @@
 const Proposal = require("../models/Proposal/Proposal.Model");
 
+const { buildFilter } = require("objection-filter");
+
 class ProposalService {
     constructor() {}
 
@@ -50,7 +52,31 @@ class ProposalService {
             // a bid is unique bu freelancer_id and job_id
             let proposals = await Proposal.query()
                 .where(match)
-                .withGraphFetched("job")
+                .modify("defaultSelects")
+                .withGraphFetched(
+                    `[job(defaultSelects), freelancer(selectNameAndId)]`
+                )
+                .modifiers({
+                    selectNameAndId(builder) {
+                        builder
+                            .select(
+                                "freelancer.user_id",
+                                "freelancer.description",
+                                "email",
+                                "phone_number",
+                                "first_name",
+                                "last_name",
+                                "image_url",
+                                "hiring_manager.id as hiring_manager_id"
+                            )
+                            .innerJoin("user", "freelancer.user_id", "user.id")
+                            .join(
+                                "hiring_manager",
+                                "freelancer.user_id",
+                                "hiring_manager.user_id"
+                            );
+                    },
+                })
                 .orderBy("created_at")
                 .limit(limit)
                 .cursorPage();
@@ -58,7 +84,34 @@ class ProposalService {
             if (next) {
                 return await Proposal.query()
                     .where(match)
-                    .withGraphFetched("job")
+                    .withGraphFetched(
+                        `[job(defaultSelects), freelancer(selectNameAndId)]`
+                    )
+                    .modifiers({
+                        selectNameAndId(builder) {
+                            builder
+                                .select(
+                                    "freelancer.user_id",
+                                    "freelancer.description",
+                                    "email",
+                                    "phone_number",
+                                    "first_name",
+                                    "last_name",
+                                    "image_url",
+                                    "hiring_manager.id as hiring_manager_id"
+                                )
+                                .innerJoin(
+                                    "user",
+                                    "freelancer.user_id",
+                                    "user.id"
+                                )
+                                .join(
+                                    "hiring_manager",
+                                    "freelancer.user_id",
+                                    "hiring_manager.user_id"
+                                );
+                        },
+                    })
                     .orderBy("created_at")
                     .limit(limit)
                     .cursorPage(next);
@@ -67,6 +120,49 @@ class ProposalService {
             return proposals;
         } catch (error) {
             console.log(error);
+            throw error;
+        }
+    }
+
+    static async getProposalStats(job_id) {
+        try {
+            const stats = await buildFilter(Proposal).build({
+                eager: {
+                    $aggregations: [
+                        {
+                            type: "count",
+                            alias: "Applicants",
+                            relation: "job",
+                            field: "id", // id field on job table
+                        },
+
+                        {
+                            type: "count",
+                            alias: "Accepted",
+                            relation: "proposalStatus",
+                            field: "id", // id field on table proposal status
+                            $where: {
+                                id: 2, // id of the proposal status
+                            },
+                        },
+                        {
+                            type: "count",
+                            alias: "InReview",
+                            relation: "proposalStatus",
+                            field: "id",
+                            $where: {
+                                id: 5,
+                            },
+                        },
+                    ],
+                    $where: {
+                        job_id: job_id,
+                    },
+                },
+            });
+
+            return stats;
+        } catch (error) {
             throw error;
         }
     }
@@ -110,6 +206,20 @@ class ProposalService {
             }
 
             return await Proposal.query().deleteById(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async _deleteMany(ids) {
+        // bulk delete proposals
+
+        try {
+            const proposals = await Proposal.query()
+                .delete()
+                .whereIn("id", ids);
+
+            return ids;
         } catch (error) {
             throw error;
         }

@@ -3,6 +3,7 @@ const app = require("../src/app");
 
 // let variables
 let token1, token2, token3;
+let user2;
 
 beforeAll(function (done) {
     request(app)
@@ -14,6 +15,7 @@ beforeAll(function (done) {
         .end(function (err, res) {
             if (err) throw err;
             token2 = res.body.token;
+            user2 = res.body.user;
             done();
         });
 });
@@ -30,6 +32,22 @@ describe("GET /api/v1/hiringManager/:id", () => {
 
         expect(res.body.latitude).toBe(0);
         expect(res.body.user_id).toBe(1);
+    });
+});
+
+// stats
+// freelancer stats
+describe("GET /api/v1/hiringManager/hiringManagerStats/:hiringManagerID", () => {
+    it("Should return a hiringManager stats", async () => {
+        const res = await request(app)
+            .get(
+                `/api/v1/hiringManager/hiringManagerStats/${user2.hiringManager.id}`
+            )
+            .set("Authorization", `Bearer ${token2}`)
+            .expect(200);
+        console.log(res.body);
+
+        expect(res.body).toHaveProperty("jobsPosted");
     });
 });
 

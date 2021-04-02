@@ -85,6 +85,9 @@ class Proposal extends Cursor(Model) {
                 payment_amount,
             } = inputItems[0];
 
+            console.log("items:     ", items);
+            console.log("inputItems:", inputItems);
+
             const proposal_history = {
                 proposal_status_id: current_proposal_status_id,
                 proposal_id: id,
@@ -107,6 +110,12 @@ class Proposal extends Cursor(Model) {
         }
     }
 
+    // static async beforeUpdate({ items, inputItems, relation }) {
+    //     console.log("items:     ", items);
+    //     console.log("inputItems:", inputItems);
+    //     console.log("relation:  ", relation ? relation.name : "none");
+    // }
+
     static get relationMappings() {
         const Job = require("../Job/Job.Model");
         const Freelancer = require("../Freelancer/Freelancer.Model");
@@ -123,6 +132,16 @@ class Proposal extends Cursor(Model) {
                     to: `${tableNames.job}.id`,
                 },
             },
+
+            proposalStatus: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: ProposalStatus,
+                join: {
+                    from: `${tableNames.proposal}.current_proposal_status_id`,
+                    to: `${tableNames.proposal_status}.id`,
+                },
+            },
+
             freelancer: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
@@ -133,19 +152,19 @@ class Proposal extends Cursor(Model) {
                 },
             },
 
-            histories: {
-                relation: Model.HasManyRelation,
-                modelClass: ProposalHistory,
-                join: {
-                    from: `${tableNames.proposal}.id`,
-                    // through: {
-                    //     modelClass: ProposalHistory,
-                    //     from: `${tableNames.proposal_history}.proposal_id`,
-                    //     to: `${tableNames.proposal_history}.proposal_status_id`,
-                    // },
-                    to: `${tableNames.proposal_history}.proposal_id`,
-                },
-            },
+            // histories: {
+            //     relation: Model.HasManyRelation,
+            //     modelClass: ProposalHistory,
+            //     join: {
+            //         from: `${tableNames.proposal}.id`,
+            //         // through: {
+            //         //     modelClass: ProposalHistory,
+            //         //     from: `${tableNames.proposal_history}.proposal_id`,
+            //         //     to: `${tableNames.proposal_history}.proposal_status_id`,
+            //         // },
+            //         to: `${tableNames.proposal_history}.proposal_id`,
+            //     },
+            // },
         };
     }
 }

@@ -4,6 +4,7 @@ const {
     updateSchemaClient,
     updateSchemaFreelancer,
     rejectProposalSchemaClient,
+    bulkDeleteProposalsSchema,
 } = require("./proposal.validators");
 const router = require("express").Router();
 const Role = require("../../constants/roles");
@@ -31,6 +32,9 @@ router.get(
     authUpdateHiringManagerJob,
     getProposalsByJob
 );
+
+router.get("/jobProposalsStats/:job_id", Auth(), getProposalsStatsByJob);
+
 // TODO NOT WORKING WITH GRAPH FETCHED
 router.get("/:id/proposalHistory", Auth(), getProposalHistory);
 
@@ -43,7 +47,7 @@ router.patch(
     freelancerJobFeedback
 );
 
-router.patch(
+router.post(
     "/:id/clientFeedback/:job_id",
     updateSchemaClient,
     Auth([Role.user]),
@@ -66,6 +70,15 @@ router.delete(
     setHiringManagerJobProposal,
     authUpdateHiringManagerJob,
     rejectProposal
+);
+
+router.post(
+    "/bulkRejectProposals",
+    bulkDeleteProposalsSchema,
+    Auth([Role.user]),
+    // setHiringManagerJobProposal,
+    // authUpdateHiringManagerJob,
+    bulkRejectProposal
 );
 
 module.exports = router;
@@ -120,7 +133,6 @@ function getProposalsByJob(req, res, next) {
     // initialize with job id
     const match = {
         job_id: parseInt(req.params.job_id),
-        current_proposal_status_id: parseInt(req.query.proposalStatus) || 1,
     };
 
     if (req.query.nextPage) {
@@ -134,6 +146,17 @@ function getProposalsByJob(req, res, next) {
     ProposalService.getProposals(nextPage, match, limit)
         .then((bids) => {
             return bids ? res.json(bids) : res.sendStatus(404);
+        })
+        .catch(next);
+}
+
+// proposal stats for a given job
+function getProposalsStatsByJob(req, res, next) {
+    const job_id = parseInt(req.params.job_id);
+
+    ProposalService.getProposalStats(job_id)
+        .then((stats) => {
+            return stats ? res.json(stats) : res.sendStatus(404);
         })
         .catch(next);
 }
@@ -165,17 +188,9 @@ function freelancerJobFeedback(req, res, next) {
 function clientJobFeedback(req, res, next) {
     const id = parseInt(req.params.id); // proposal id
 
-    const {
-        current_proposal_status_id,
-        client_comment,
-        client_rating,
-    } = req.body;
+    console.log(req.body, "=======");
 
-    const payload = {
-        current_proposal_status_id,
-        client_comment,
-        client_rating,
-    };
+    const payload = req.body;
 
     ProposalService.updateProposal(id, payload)
         .then((updatedProposal) =>
@@ -205,6 +220,19 @@ function rejectProposal(req, res, next) {
     ProposalService._deleteWithdrawProposal(id)
         .then((proposal) => {
             return !proposal ? res.sendStatus(404) : res.json({ id });
+        })
+        .catch(next);
+}
+
+//
+function bulkRejectProposal(req, res, next) {
+    // only hiring managers can delete a proposals aka bid
+
+    const { ids } = req.body;
+
+    ProposalService._deleteMany(ids)
+        .then((proposals) => {
+            return !proposals ? res.sendStatus(404) : res.json({ ids });
         })
         .catch(next);
 }

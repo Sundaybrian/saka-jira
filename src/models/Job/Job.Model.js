@@ -6,42 +6,47 @@ const db = require("../../db");
 const schema = require("./job.schema.json");
 
 class Job extends Cursor(Model) {
-
     static get tableName() {
-        
         return tableNames.job;
     }
 
     static modifiers = {
         defaultSelects(query) {
-          const { ref } = Job;
-          query.select(ref('id'), ref('title'), ref('description'),ref('start_date'),ref('end_date'),ref('latitude'),ref('longitude'), ref('budget_range_min'), ref('budget_range_max'), ref('main_skill'));
+            const { ref } = Job;
+            query.select(
+                ref("id"),
+                ref("title"),
+                ref("description"),
+                ref("start_date"),
+                ref("end_date"),
+                ref("latitude"),
+                ref("longitude"),
+                ref("budget_range_min"),
+                ref("budget_range_max"),
+                ref("main_skill")
+            );
         },
-    
-
-    }
-
-    
+    };
 
     static get jsonSchema() {
         return schema;
     }
 
-    static get relationMappings(){
-
+    static get relationMappings() {
         const HiringManager = require("../HiringManager/HiringManager.Model");
         const JobStatus = require("../JobStatus/JobStatus.Model");
         const Industry = require("../Industry/Industry.Model");
         const PaymentType = require("../PaymentType/PaymentType.Model");
+        const Proposal = require("../Proposal/Proposal.Model");
 
-        return{
+        return {
             hiringManager: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
                 modelClass: HiringManager,
                 join: {
                     from: `${tableNames.job}.hiring_manager_id`,
-                    to:`${tableNames.hiring_manager}.id`,
+                    to: `${tableNames.hiring_manager}.id`,
                 },
             },
             jobStatus: {
@@ -50,27 +55,37 @@ class Job extends Cursor(Model) {
                 modelClass: JobStatus,
                 join: {
                     from: `${tableNames.job}.job_status_id`,
-                    to:`${tableNames.job_status}.id`,
+                    to: `${tableNames.job_status}.id`,
                 },
-            },industry: {
+            },
+            industry: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
                 modelClass: Industry,
                 join: {
                     from: `${tableNames.job}.industry_id`,
-                    to:`${tableNames.industry}.id`,
+                    to: `${tableNames.industry}.id`,
                 },
-            },paymentType: {
+            },
+            paymentType: {
                 // BelongsToOneRelation: Use this relation when the source model has the foreign key
                 relation: Model.BelongsToOneRelation,
                 modelClass: PaymentType,
                 join: {
                     from: `${tableNames.job}.payment_type_id`,
-                    to:`${tableNames.payment_type}.id`,
+                    to: `${tableNames.payment_type}.id`,
                 },
             },
-           
-        }
+
+            proposals: {
+                relation: Model.HasManyRelation,
+                modelClass: Proposal,
+                join: {
+                    from: `${tableNames.job}.id`,
+                    to: `${tableNames.proposal}.job_id`,
+                },
+            },
+        };
     }
 }
 

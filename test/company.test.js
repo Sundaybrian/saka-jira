@@ -106,6 +106,35 @@ describe("GET api/v1/company", () => {
     });
 });
 
+// get my company
+describe("GET api/v1/company/mine", () => {
+    // beforeEach(function (done) {
+    //     request(app)
+    //         .post("/api/v1/company")
+    //         .set("Authorization", `Bearer ${token2}`)
+    //         .send({
+    //             name: "x-company-1477",
+    //             email: "xcompany1177@gmail.com",
+    //             description: "x company the greatest",
+    //         })
+    //         .end(function (err, res) {
+    //             if (err) throw err;
+    //             company = res.body;
+    //             done();
+    //         });
+    // });
+
+    it("should fetch my company ", async () => {
+        const res = await request(app)
+            .get("/api/v1/company/mine")
+            .set("Authorization", `Bearer ${token3}`)
+            .expect("Content-Type", /json/)
+            .expect(200);
+
+        expect(res.body.name).toBe("x-company-113-test");
+    });
+});
+
 // get by id tests
 describe("GET api/v1/company/:id", () => {
     it("should fetch owner company", async () => {

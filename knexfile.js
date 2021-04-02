@@ -1,5 +1,8 @@
 // Update with your config settings.
 require("dotenv").config();
+const parse = require("pg-connection-string").parse;
+const pgconfig = parse(process.env.DATABASE_URL);
+pgconfig.ssl = { rejectUnauthorized: false };
 
 module.exports = {
     test: {
@@ -22,7 +25,7 @@ module.exports = {
 
     development: {
         client: "pg",
-        connection: process.env.DATABASE_URL,
+        connection: pgconfig,
         migrations: {
             directory: __dirname + "/db/migrations",
         },
@@ -61,16 +64,7 @@ module.exports = {
         client: "pg",
         connection:
             "postgres://uradypostgresu:uradypostgrespass@uradyjobsdbinstance.cl6vfm4enqho.eu-central-1.rds.amazonaws.com:5432/uradyjobsdb",
-        // connection: {
-        //     host: process.env.RDS_HOSTNAME,
-        //     database: process.env.RDS_DB_NAME,
-        //     user: process.env.RDS_USERNAME,
-        //     password: process.env.RDS_PASSWORD,
-        // },
-        // pool: {
-        //     min: 2,
-        //     max: 10,
-        // },
+
         migrations: {
             directory: __dirname + "/db/migrations",
         },
