@@ -20,7 +20,7 @@ module.exports = {
     },
 
     schedulePassswordResetEmail: async ({ account, origin }) => {
-        await agenda.schedule("in 5 minutes", "send-password-reset-email", {
+        await agenda.schedule("in 3 minutes", "send-password-reset-email", {
             account,
             origin,
         });
