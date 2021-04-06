@@ -201,6 +201,36 @@ class AuthService {
         return account;
     }
 
+    static async forgotPassword({ email }, origin) {
+        try {
+            const account = await User.query()
+                .where({
+                    email,
+                })
+                .first();
+
+            //always return ok to prevent email enumeration
+            if (!account) return;
+
+            //create reset token that expires after 24hrs
+            const $updatedAccount = await account.$query().patchAndFetch({
+                resetToken: this.randomTokenString(),
+                reset_token_expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            });
+
+            // send email sendPasswordResetEmail via agendajs
+            await scheduler.schedulePassswordResetEmail({
+                account: $updatedAccount,
+                origin,
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async refreshToken() {}
+    // helpers
+
     static async hash(password) {
         return await bcrypt.hash(password, 8);
     }
