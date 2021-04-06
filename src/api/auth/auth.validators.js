@@ -47,3 +47,10 @@ exports.verifyEmailSchema = (req, res, next) => {
     });
     validateRequest(req, next, schema);
 };
+
+exports.resetPasswordEmailSchema = (req, res, next) => {
+    const schema = Joi.object({
+        email: Joi.string().email().required(),
+    });
+    validateRequest(req, next, schema);
+};

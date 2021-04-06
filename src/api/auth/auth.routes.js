@@ -3,6 +3,7 @@ const {
     signupSchema,
     updateSchema,
     verifyEmailSchema,
+    resetPasswordEmailSchema,
 } = require("./auth.validators");
 const Role = require("../../constants/roles");
 const router = require("express").Router();
@@ -14,6 +15,7 @@ module.exports = router;
 router.post("/login", signinSchema, login);
 router.post("/register", signupSchema, register);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
+router.post("/forgot-password", resetPasswordEmailSchema, forgotPassword);
 router.get("/", Auth([Role.admin]), getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
@@ -122,6 +124,18 @@ function _delete(req, res, next) {
             res.json({
                 message: "Account deleted successfully",
                 id: req.params.id,
+            })
+        )
+        .catch(next);
+}
+
+function forgotPassword(req, res, next) {
+    console.log("kwa forgot password", req.get("origin"));
+    AuthService.forgotPassword(req.body, req.get("origin"))
+        .then(() =>
+            res.json({
+                message:
+                    "Please check your email for password reset instructions",
             })
         )
         .catch(next);
