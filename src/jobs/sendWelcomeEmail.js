@@ -18,4 +18,14 @@ exports.sendAlreadyRegisteredEmail = async (job, done) => {
     } catch (error) {
         done(error);
     }
+
+    exports.sendPasswordResetEmail = async (job, done) => {
+        try {
+            const { account, origin } = job.attrs.data;
+            await EmailService.sendPasswordResetEmail(account, origin);
+            done();
+        } catch (error) {
+            done(error);
+        }
+    };
 };

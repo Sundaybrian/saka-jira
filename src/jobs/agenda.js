@@ -1,8 +1,9 @@
 require("dotenv").config();
-const {Agenda} = require("agenda");
+const { Agenda } = require("agenda");
 const {
     sendWelcomeEmail,
     sendAlreadyRegisteredEmail,
+    sendPasswordResetEmail,
 } = require("./sendWelcomeEmail");
 
 const url =
@@ -37,6 +38,12 @@ agenda.define(
     "send-already-registered-email",
     { priority: "low", concurrency: 10 },
     sendAlreadyRegisteredEmail
+);
+
+agenda.define(
+    "send-password-reset-email",
+    { priority: "low", concurrency: 10 },
+    sendPasswordResetEmail
 );
 
 agenda.start();
