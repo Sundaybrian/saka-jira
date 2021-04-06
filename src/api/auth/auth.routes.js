@@ -31,7 +31,6 @@ function login(req, res, next) {
 
 function register(req, res, next) {
     req.body.role = Role.user;
-
     AuthService.register(req.body, req.hostname)
         .then(({ user, token }) => {
             return res.status(201).json({

@@ -104,26 +104,32 @@ class AuthService {
     static async update(id, params) {
         const account = await this.getAccount({ id });
 
-        // validate if email was changed
-        if (
-            params.email &&
-            account.email !== params.email &&
-            (await this.getAccount({ email: params.email }))
-        ) {
-            const error = new Error(`Email ${params.email} is already taken`);
+        try {
+            // validate if email was changed
+            if (
+                params.email &&
+                account.email !== params.email &&
+                (await this.getAccount({ email: params.email }))
+            ) {
+                const error = new Error(
+                    `Email ${params.email} is already taken`
+                );
+                throw error;
+            }
+
+            // hash password if it was entered
+            if (params.password) {
+                params.password = await this.hash(params.password);
+            }
+
+            const updatedUser = await User.query().patchAndFetchById(id, {
+                ...params,
+            });
+
+            return this.basicDetails(updatedUser);
+        } catch (error) {
             throw error;
         }
-
-        // hash password if it was entered
-        if (params.password) {
-            params.password = await this.hash(params.password);
-        }
-
-        const updatedUser = await User.query().patchAndFetchById(id, {
-            ...params,
-        });
-
-        return this.basicDetails(updatedUser);
     }
 
     // TODO MAKE SO IT CAN QUERY FOR DIFFERENT TYPES OF USERS
@@ -170,6 +176,7 @@ class AuthService {
             password,
             role,
             phone_number,
+            image_url,
         } = params;
 
         // hash password and verification token
@@ -183,6 +190,7 @@ class AuthService {
             last_name,
             password: hashedPassword,
             phone_number,
+            image_url,
             role: role,
             active: true,
             isVerified: false,
@@ -213,6 +221,7 @@ class AuthService {
             created,
             updated,
             isVerified,
+            image_url,
         } = account;
         return {
             id,
@@ -224,6 +233,7 @@ class AuthService {
             created,
             updated,
             isVerified,
+            image_url,
         };
     }
 }

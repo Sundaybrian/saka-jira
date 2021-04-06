@@ -31,6 +31,7 @@ function errorHandler(err, req, res, next) {
                 stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
             });
         default:
+            console.log(error);
             return res.status(500).json({
                 message: error,
                 stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
