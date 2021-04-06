@@ -1,5 +1,5 @@
 require("dotenv").config();
-const Agenda = require("agenda");
+const {Agenda} = require("agenda");
 const {
     sendWelcomeEmail,
     sendAlreadyRegisteredEmail,
