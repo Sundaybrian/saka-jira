@@ -438,6 +438,48 @@
                 }
             }
         },
+        "/accounts/forgot-password": {
+            "post": {
+                "tags": ["accounts"],
+                "summary": "Submit Email address to reset the password on an account",
+                "operationId": "forgotPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "sunday@owner.com"
+                                    }
+                                },
+                                "required": ["email"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The requested was received and an email has been sent to the specified address with password reset instructions (if the email is associated with an account)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please check your email for password reset instructions"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/accounts": {
             "get": {
                 "tags": ["accounts"],
