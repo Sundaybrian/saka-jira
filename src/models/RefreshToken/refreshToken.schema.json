@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "Proposal status catalog",
+    "description": "The refresh token schema",
+    "required": ["account_id", "token", "expires", "createdByIp"],
+    "additionalProperties": false,
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "integer",
+            "title": "The database ID of the Proposal status aka Bid."
+        },
+        "account_id": {
+            "$account_id": "#/properties/account_id",
+            "type": "integer",
+            "title": "The database ID of owner of the token"
+        },
+        "token": {
+            "$token": "#/properties/token",
+            "type": "string",
+            "title": "The generated token"
+        },
+        "expires": {
+            "$expires": "#/properties/expires",
+            "type": "string",
+            "title": "The date the token expires"
+        },
+        "revoked": {
+            "$revoked": "#/properties/revoked",
+            "type": "string",
+            "title": "The date token was revoked"
+        },
+        "createdByIp": {
+            "$createdByIp": "#/properties/createdByIp",
+            "type": "string",
+            "title": "The ip address the token was created from"
+        },
+        "revokedByIp": {
+            "$revokedByIp": "#/properties/revokedByIp",
+            "type": "string",
+            "title": "The ip address the token was blocked from"
+        },
+        "replacedByToken": {
+            "$replacedByToken": "#/properties/replacedByToken",
+            "type": "string",
+            "title": "The token replacing the previous token"
+        },
+
+        "created_at": {
+            "$id": "#/properties/created_at",
+            "type": "string",
+            "title": "The creation date when the ticket was created."
+        },
+        "updated_at": {
+            "$id": "#/properties/updated_at",
+            "type": "string",
+            "title": "The date when the ticket was updated."
+        },
+        "deleted_at": {
+            "$id": "#/properties/deleted_at",
+            "type": "string",
+            "title": "The date when the Proposal aka Bid was deleted."
+        }
+    }
+}
