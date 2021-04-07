@@ -130,7 +130,6 @@ function _delete(req, res, next) {
 }
 
 function forgotPassword(req, res, next) {
-    console.log("kwa forgot password", req.get("origin"));
     AuthService.forgotPassword(req.body, req.get("origin"))
         .then(() =>
             res.json({

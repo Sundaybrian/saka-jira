@@ -25,9 +25,12 @@ const agenda = new Agenda({
 
 agenda
     .on("ready", () => console.log("Agenda started!"))
-    .on("error", () => console.log("Agenda connection error!"));
+    .on("error", () => console.log("Agenda connection error!"))
+    .on("fail", (err, job) => {
+        console.log(`Job failed with error: ${err.message}`);
+        console.error(err);
+    });
 
-// defiine jobs to run
 agenda.define(
     "send-welcome-email",
     { priority: "high", concurrency: 10 },
@@ -42,10 +45,14 @@ agenda.define(
 
 agenda.define(
     "send-password-reset-email",
-    { priority: "low", concurrency: 10 },
+    { priority: "high", concurrency: 10 },
     sendPasswordResetEmail
 );
 
 agenda.start();
+
+// (async function () {
+//     // defiine jobs to run
+// })();
 
 module.exports = agenda;
