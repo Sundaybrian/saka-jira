@@ -34,7 +34,8 @@ class RefreshToken extends Model {
                 ref("expires"),
                 ref("revoked"),
                 ref("revokedByIp"),
-                ref("replacedByToken")
+                ref("replacedByToken"),
+                ref("createByIp")
             );
         },
     };
