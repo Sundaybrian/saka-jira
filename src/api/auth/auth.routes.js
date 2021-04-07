@@ -14,8 +14,11 @@ module.exports = router;
 
 router.post("/login", signinSchema, login);
 router.post("/register", signupSchema, register);
+router.post("/refresh-token", refreshToken);
+// router.post('/revoke-token', authorize(), revokeTokenSchema, revokeToken);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
 router.post("/forgot-password", resetPasswordEmailSchema, forgotPassword);
+// router.post('/validate-reset-token', validateResetTokenSchema, validateResetToken);
 router.get("/", Auth([Role.admin]), getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
@@ -46,6 +49,18 @@ function register(req, res, next) {
         })
         .catch(next);
 }
+
+function refreshToken(req, res, next) {
+    const token = req.cookies.refreshToken;
+    const ipAddress = req.ip;
+    AuthService.refreshToken({ token, ipAddress })
+        .then(({ refreshToken, token, user }) => {
+            setTokenCookie(res, refreshToken);
+            res.json({ user, token, refreshToken });
+        })
+        .catch(next);
+}
+
 // TODO DEPRECATE
 function registerStaff(req, res, next) {
     req.body.role = req.body.role || Role.admin;
