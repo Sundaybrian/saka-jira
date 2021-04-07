@@ -2,12 +2,14 @@ const crypto = require("crypto");
 const jwt = require("../utils/jwt");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User/User.Model");
+const RefreshToken = require("../models/RefreshToken/RefreshToken.Model");
 const scheduler = require("../jobs/scheduler");
+const agenda = require("../jobs/agenda");
 
 class AuthService {
     constructor() {}
 
-    static async login(email, password) {
+    static async login(email, password, ipAddress) {
         const account = await this.getAccount({ email });
         if (
             !account ||
@@ -27,10 +29,15 @@ class AuthService {
             .first();
 
         const token = await jwt.sign(loggedIn.toJSON());
+        const refreshToken = await generateRefreshToken(
+            loggedIn.toJSON(),
+            ipAddress
+        );
 
         return {
             user: loggedIn,
             token,
+            refreshToken,
         };
     }
 
@@ -219,7 +226,8 @@ class AuthService {
             });
 
             // send email sendPasswordResetEmail via agendajs
-            await scheduler.schedulePassswordResetEmail({
+
+            await agenda.schedule("in 1 minutes", "send-password-reset-email", {
                 account: $updatedAccount,
                 origin,
             });
@@ -229,8 +237,17 @@ class AuthService {
     }
 
     static async refreshToken() {}
-    // helpers
 
+    // helpers
+    static async generateRefreshToken(account, ipAddress) {
+        //creat a refresh token that expires in 7days
+        return await RefreshToken.query().insert({
+            accountId: account.id,
+            token: randomTokenString(),
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            createdByIp: ipAddress,
+        });
+    }
     static async hash(password) {
         return await bcrypt.hash(password, 8);
     }
