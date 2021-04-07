@@ -24,9 +24,11 @@ router.delete("/:id", Auth(), _delete);
 
 function login(req, res, next) {
     const { email, password } = req.body;
-    AuthService.login(email, password)
-        .then(({ user, token }) => {
-            res.json({ user, token });
+    const ipAddress = req.ip;
+    AuthService.login(email, password, ipAddress)
+        .then(({ user, token, refreshToken }) => {
+            setTokenCookie(res, refreshToken);
+            res.json({ user, token, refreshToken });
         })
         .catch(next);
 }
@@ -138,4 +140,15 @@ function forgotPassword(req, res, next) {
             })
         )
         .catch(next);
+}
+
+// helpers
+function setTokenCookie(res, token) {
+    // create cookie with refresh token that expires in 7days
+    const cookieOptions = {
+        httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    };
+
+    res.cookie("refreshToken", token, cookieOptions);
 }
