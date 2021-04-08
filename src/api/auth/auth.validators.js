@@ -48,6 +48,13 @@ exports.verifyEmailSchema = (req, res, next) => {
     validateRequest(req, next, schema);
 };
 
+exports.refreshTokenSchema = (req, res, next) => {
+    const schema = Joi.object({
+        refreshToken: Joi.string().required(),
+    });
+    validateRequest(req, next, schema);
+};
+
 exports.resetPasswordEmailSchema = (req, res, next) => {
     const schema = Joi.object({
         email: Joi.string().email().required(),
