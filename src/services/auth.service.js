@@ -37,8 +37,19 @@ class AuthService {
         return {
             user: loggedIn,
             token,
-            refreshToken,
+            refreshToken: refreshToken.token,
         };
+    }
+
+    static async refreshToken({ token, ipAddress }) {
+        const refreshToken = await this.getRefreshToken(token);
+        const account = await this.getAccount({ id: refreshToken.account_id });
+
+        // replace old refresh token with a new one and save
+        const newRefreshToken = await this.generateRefreshToken(
+            account,
+            ipAddress
+        );
     }
 
     static async register(userInput, origin) {
@@ -236,17 +247,33 @@ class AuthService {
         }
     }
 
-    static async refreshToken() {}
+    // =========================helpers======================
+    static async getRefreshToken(token) {
+        try {
+            const refreshToken = await RefreshToken.query()
+                .where({ token })
+                .first();
+            if (!refreshToken || !refreshToken.isActive) throw "Invalid token";
+            return refreshToken;
+        } catch (error) {
+            throw error;
+        }
+    }
 
-    // helpers
     static async generateRefreshToken(account, ipAddress) {
         //creat a refresh token that expires in 7days
-        return await RefreshToken.query().insert({
-            accountId: account.id,
-            token: randomTokenString(),
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-            createdByIp: ipAddress,
-        });
+        try {
+            const token = await RefreshToken.query().insert({
+                account_id: account.id,
+                token: randomTokenString(),
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                createdByIp: ipAddress,
+            });
+
+            return token;
+        } catch (error) {
+            throw error;
+        }
     }
     static async hash(password) {
         return await bcrypt.hash(password, 8);
