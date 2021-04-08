@@ -266,8 +266,7 @@ class AuthService {
             });
 
             // send email sendPasswordResetEmail via agendajs
-
-            await agenda.schedule("in 1 minutes", "send-password-reset-email", {
+            await scheduler.schedulePassswordResetEmail({
                 account: $updatedAccount,
                 origin,
             });
