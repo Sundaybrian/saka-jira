@@ -169,6 +169,12 @@ paths:
             responses:
                 "200":
                     description: Accounts details and jwt token
+                    headers:
+                        Set-Cookie:
+                            description: "`refreshToken`"
+                            schema:
+                                type: string
+                                example: refreshToken=534654398597475894375873498758943758743895789347598347597349; Path=/; Expires=Tue, 16 Jun 2021 09:14:17 GMT; HttpOnly
                     content:
                         application/json:
                             schema:
@@ -219,6 +225,9 @@ paths:
                                     token:
                                         type: string
                                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+                                    refreshToken:
+                                        type: string
+                                        example: "8578934875897348ur8rfu3489r8943uf8438rt8r489383489u"    
                 "500":
                     description: Email or password is incorrect
                     content:
@@ -229,7 +238,95 @@ paths:
                                     message:
                                         type: string
                                         example: "Email or password is incorrect"
-
+    /account/refresh-token:
+        post:
+            tags:
+              - "accounts"
+            summary: Use a refresh token to generate a new JWT token and a new refresh token
+            description: The refresh token is sent and returned via cookies and body, in future it will be via cookies only
+            operationId: refreshToken
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                refreshToken:
+                                    type: string
+                                    example: "75698348965689436784376789347679834769734789673489768967983679"
+            responses:
+                "200":
+                    description: Accounts details and jwt token
+                    headers:
+                        Set-Cookie:
+                            description: "`refreshToken`"
+                            schema:
+                                type: string
+                                example: refreshToken=534654398597475894375873498758943758743895789347598347597349; Path=/; Expires=Tue, 16 Jun 2021 09:14:17 GMT; HttpOnly
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    user:
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: integer
+                                                example: 1
+                                            first_name:
+                                                type: string
+                                                example: "sunday"
+                                            last_name:
+                                                type: string
+                                                example: "owner"
+                                            phone_number:
+                                                type: string
+                                                example: "0714382366"
+                                            email:
+                                                type: string
+                                                example: "sunday@owner.com"
+                                            image_url:
+                                                type: string
+                                                example: ""     
+                                            role:
+                                                type: string
+                                                example: "user"
+                                            freelancer:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                        example: 1
+                                                    user_id:
+                                                        type: integer
+                                                        example: 1
+                                            hiringManager:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                        example: 1
+                                                    user_id:
+                                                        type: integer
+                                                        example: 1
+                                    token:
+                                        type: string
+                                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+                                    refreshToken:
+                                        type: string
+                                        example: "8578934875897348ur8rfu3489r8943uf8438rt8r489383489u"    
+                "500":
+                    description: The refresh token is invalid, revoked or expired
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Invalid token"                                            
     /accounts/create-staff:
         post:
             tags:
