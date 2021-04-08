@@ -4,6 +4,7 @@ const {
     updateSchema,
     verifyEmailSchema,
     resetPasswordEmailSchema,
+    refreshTokenSchema,
 } = require("./auth.validators");
 const Role = require("../../constants/roles");
 const router = require("express").Router();
@@ -14,7 +15,7 @@ module.exports = router;
 
 router.post("/login", signinSchema, login);
 router.post("/register", signupSchema, register);
-router.post("/refresh-token", refreshToken);
+router.post("/refresh-token", refreshTokenSchema, refreshToken);
 // router.post('/revoke-token', authorize(), revokeTokenSchema, revokeToken);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
 router.post("/forgot-password", resetPasswordEmailSchema, forgotPassword);
@@ -51,7 +52,7 @@ function register(req, res, next) {
 }
 
 function refreshToken(req, res, next) {
-    const token = req.cookies.refreshToken;
+    const token = req.body.refreshToken;
     const ipAddress = req.ip;
     AuthService.refreshToken({ token, ipAddress })
         .then(({ refreshToken, token, user }) => {
