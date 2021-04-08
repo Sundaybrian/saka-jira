@@ -52,9 +52,10 @@ function register(req, res, next) {
 }
 
 function refreshToken(req, res, next) {
-    const token = req.body.refreshToken;
+    const rftoken = req.body.refreshToken;
+
     const ipAddress = req.ip;
-    AuthService.refreshToken({ token, ipAddress })
+    AuthService.refreshToken({ rftoken, ipAddress })
         .then(({ refreshToken, token, user }) => {
             setTokenCookie(res, refreshToken);
             res.json({ user, token, refreshToken });

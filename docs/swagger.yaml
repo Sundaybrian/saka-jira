@@ -238,7 +238,7 @@ paths:
                                     message:
                                         type: string
                                         example: "Email or password is incorrect"
-    /account/refresh-token:
+    /accounts/refresh-token:
         post:
             tags:
               - "accounts"

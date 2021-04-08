@@ -29,7 +29,7 @@ class AuthService {
             .first();
 
         const token = await jwt.sign(loggedIn.toJSON());
-        const refreshToken = await generateRefreshToken(
+        const refreshToken = await this.generateRefreshToken(
             loggedIn.toJSON(),
             ipAddress
         );
@@ -41,9 +41,9 @@ class AuthService {
         };
     }
 
-    static async refreshToken({ ttoken, ipAddress }) {
+    static async refreshToken({ rftoken, ipAddress }) {
         try {
-            const refreshToken = await this.getRefreshToken(ttoken);
+            const refreshToken = await this.getRefreshToken(rftoken);
             const account = await this.getAccount({
                 id: refreshToken.account_id,
             });
@@ -55,7 +55,7 @@ class AuthService {
             );
 
             const $patchedOldToken = await refreshToken.$query().patch({
-                revoked: Date.now(),
+                revoked: new Date().toISOString(),
                 revokedByIp: ipAddress,
                 replacedByToken: newRefreshToken.token,
             });
@@ -262,7 +262,9 @@ class AuthService {
             //create reset token that expires after 24hrs
             const $updatedAccount = await account.$query().patchAndFetch({
                 resetToken: this.randomTokenString(),
-                reset_token_expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                reset_token_expires: new Date(
+                    Date.now() + 24 * 60 * 60 * 1000
+                ).toISOString(),
             });
 
             // send email sendPasswordResetEmail via agendajs
@@ -293,8 +295,10 @@ class AuthService {
         try {
             const token = await RefreshToken.query().insert({
                 account_id: account.id,
-                token: randomTokenString(),
-                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                token: this.randomTokenString(),
+                expires: new Date(
+                    Date.now() + 7 * 24 * 60 * 60 * 1000
+                ).toISOString(),
                 createdByIp: ipAddress,
             });
 

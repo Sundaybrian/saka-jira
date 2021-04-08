@@ -339,7 +339,7 @@
                 }
             }
         },
-        "/account/refresh-token": {
+        "/accounts/refresh-token": {
             "post": {
                 "tags": ["accounts"],
                 "summary": "Use a refresh token to generate a new JWT token and a new refresh token",

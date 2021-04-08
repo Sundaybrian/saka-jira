@@ -4,6 +4,7 @@ const { references } = require("../../src/utils/tableUtils");
 
 exports.up = async function (knex) {
     await knex.schema.table(tableNames.refresh_token, (table) => {
+        table.increments().notNullable();
         references(table, tableNames.user, "account", true);
         table.index("token");
     });
