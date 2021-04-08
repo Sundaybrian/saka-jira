@@ -41,15 +41,44 @@ class AuthService {
         };
     }
 
-    static async refreshToken({ token, ipAddress }) {
-        const refreshToken = await this.getRefreshToken(token);
-        const account = await this.getAccount({ id: refreshToken.account_id });
+    static async refreshToken({ ttoken, ipAddress }) {
+        try {
+            const refreshToken = await this.getRefreshToken(ttoken);
+            const account = await this.getAccount({
+                id: refreshToken.account_id,
+            });
 
-        // replace old refresh token with a new one and save
-        const newRefreshToken = await this.generateRefreshToken(
-            account,
-            ipAddress
-        );
+            // replace old refresh token with a new one and save
+            const newRefreshToken = await this.generateRefreshToken(
+                account,
+                ipAddress
+            );
+
+            const $patchedOldToken = await refreshToken.$query().patch({
+                revoked: Date.now(),
+                revokedByIp: ipAddress,
+                replacedByToken: newRefreshToken.token,
+            });
+
+            //generate jwt
+            const loggedIn = await account
+                .$query()
+                .modify("defaultSelectsWithoutPass")
+                .withGraphFetched(
+                    `[freelancer(defaultSelects), hiringManager(defaultSelects)]`
+                )
+                .first();
+
+            const token = await jwt.sign(loggedIn.toJSON());
+
+            return {
+                user: loggedIn,
+                token,
+                refreshToken: newRefreshToken.token,
+            };
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async register(userInput, origin) {
