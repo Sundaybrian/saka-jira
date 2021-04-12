@@ -63,7 +63,7 @@ function getAllFreelancers(req, res, next) {
 
     // initialize with job id
     const match = {
-        industry_id: parseInt(req.params.industry) || 1,
+        industry_id: parseInt(req.query.industry) || 1,
     };
 
     if (req.query.nextPage) {
