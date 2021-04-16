@@ -1,22 +1,49 @@
 require("dotenv").config();
-const sgMail = require("@sendgrid/mail");
 
-const apikey =
-    process.env.NODE_ENV == "production"
-        ? "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"
-        : "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";
-
-sgMail.setApiKey(apikey);
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 
 module.exports = sendEmail;
 
-async function sendEmail({ to, subject, html, from = "uradytech@gmail.com" }) {
-    const msg = {
-        to,
-        subject,
-        html,
-        from,
-    };
+// These id's and secrets should come from .env file.
+const CLIENT_ID = "YOUR CLIENT ID";
+const CLIENT_SECRET = "YOUR CLIENT SECRET";
+const REDIRECT_URI = "https://developers.google.com/oauthplayground";
+const REFRESH_TOKEN = "YOUR REFRESH TOKEN";
 
-    await sgMail.send(msg);
+const oAuth2Client = new google.auth.OAuth2(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI
+);
+
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+async function sendEmail({ to, subject, html, from = "Uraditech@gmail.com" }) {
+    try {
+        const msg = {
+            to,
+            subject,
+            html,
+            from,
+        };
+
+        const accessToken = await oAuth2Client.getAccessToken();
+
+        const transport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                type: "OAuth2",
+                user: "yours authorised email address",
+                clientId: CLIENT_ID,
+                clientSecret: CLIENT_SECRET,
+                refreshToken: REFRESH_TOKEN,
+                accessToken: accessToken,
+            },
+        });
+
+        await transport.sendMail(msg);
+    } catch (error) {
+        throw error;
+    }
 }
