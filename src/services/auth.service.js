@@ -3,8 +3,7 @@ const jwt = require("../utils/jwt");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User/User.Model");
 const RefreshToken = require("../models/RefreshToken/RefreshToken.Model");
-const scheduler = require("../jobs/scheduler");
-const agenda = require("../jobs/agenda");
+const EmailService = require("./email.service");
 
 class AuthService {
     constructor() {}
@@ -86,10 +85,11 @@ class AuthService {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
                 // schedule to send email after 2mins
-                await scheduler.scheduleAlreadyRegisteredEmail({
-                    email: userInput.email,
-                    origin,
-                });
+
+                await EmailService.sendAlreadyRegisteredEmail(
+                    userInput.email,
+                    origin
+                );
 
                 throw `Email ${userInput.email} is already registered`;
             }
@@ -105,11 +105,9 @@ class AuthService {
 
             const token = await jwt.sign(signedUser.toJSON());
 
-            // schedule to send verification email 10 minutes
-            await scheduler.scheduleWelcomeEmail({
-                account,
-                origin,
-            });
+            //TODO schedule to send verification email 10 minutes
+
+            await EmailService.sendVerificationEmail(account, origin);
 
             return {
                 user: signedUser,
@@ -267,17 +265,49 @@ class AuthService {
                 ).toISOString(),
             });
 
-            // send email sendPasswordResetEmail via agendajs
-            await scheduler.schedulePassswordResetEmail({
-                account: $updatedAccount,
-                origin,
+            //TODO send email sendPasswordResetEmail via agendajs
+            await EmailService.sendPasswordResetEmail($updatedAccount, origin);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async validateResetToken({ token }) {
+        try {
+            const account = await User.query()
+                .where({
+                    resetToken: token,
+                })
+                .first();
+
+            if (!account) throw "Invalid token";
+            if (!account.isExpired) throw "Reset Token expired";
+
+            console.log(account, "validatereset token");
+            return account;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async resetPassword({ token, password }) {
+        try {
+            const account = await validateResetToken({ token });
+            //create reset token that expires after 24hrs
+            const $updatedAccount = await account.$query().patchAndFetch({
+                resetToken: null,
+                password: await this.hash(password),
+                password_reset: new Date().toISOString(),
             });
+
+            return { message: "passowrd updated" };
         } catch (error) {
             throw error;
         }
     }
 
     // =========================helpers======================
+
     static async getRefreshToken(token) {
         try {
             const refreshToken = await RefreshToken.query()
