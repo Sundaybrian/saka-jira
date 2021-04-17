@@ -1,10 +1,5 @@
 require("dotenv").config();
 const { Agenda } = require("agenda");
-const {
-    sendWelcomeEmail,
-    sendAlreadyRegisteredEmail,
-    sendPasswordResetEmail,
-} = require("./sendWelcomeEmail");
 
 const url =
     process.env.NODE_ENV == "production"
@@ -23,36 +18,22 @@ const agenda = new Agenda({
     maxConcurrency: parseInt(process.env.AGENDA_CONCURRENCY, 10),
 });
 
-agenda
-    .on("ready", () => console.log("Agenda started!"))
-    .on("error", () => console.log("Agenda connection error!"))
-    .on("fail", (err, job) => {
-        console.log(`Job failed with error: ${err.message}`);
-        console.error(err);
-    });
+const jobTypes = process.env.JOB_TYPES ? process.env.JOB_TYPES.split(",") : [];
 
-agenda.define(
-    "send-welcome-email",
-    { priority: "high", concurrency: 10 },
-    sendWelcomeEmail // reference to the handler, but not executing it!
-);
+jobTypes.forEach((type) => {
+    require("./uradyjobs/" + type)(agenda);
+});
 
-agenda.define(
-    "send-already-registered-email",
-    { priority: "low", concurrency: 10 },
-    sendAlreadyRegisteredEmail
-);
+if (jobTypes.length) {
+    agenda
+        .on("ready", () => console.log("Agenda started!"))
+        .on("error", () => console.log("Agenda connection error!"))
+        .on("fail", (err, job) => {
+            console.log(`Job failed with error: ${err.message}`);
+            console.error(err);
+        });
 
-agenda.define(
-    "send-password-reset-email",
-    { priority: "high", concurrency: 10 },
-    sendPasswordResetEmail
-);
-
-agenda.start();
-
-// (async function () {
-//     // defiine jobs to run
-// })();
+    agenda.start(); // Returns a promise, which should be handled appropriately
+}
 
 module.exports = agenda;
