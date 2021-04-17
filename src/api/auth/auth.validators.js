@@ -68,3 +68,12 @@ exports.validateResetTokenSchema = (req, res, next) => {
     });
     validateRequest(req, next, schema);
 };
+
+exports.resetPasswordSchema = (req, res, next) => {
+    const schema = Joi.object({
+        token: Joi.string().required(),
+        password: Joi.string().min(8).required(),
+        confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
+    });
+    validateRequest(req, next, schema);
+};
