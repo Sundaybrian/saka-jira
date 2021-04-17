@@ -4,6 +4,8 @@ const {
     updateSchema,
     verifyEmailSchema,
     resetPasswordEmailSchema,
+    validateResetTokenSchema,
+    resetPasswordSchema,
     refreshTokenSchema,
 } = require("./auth.validators");
 const Role = require("../../constants/roles");
@@ -19,7 +21,12 @@ router.post("/refresh-token", refreshTokenSchema, refreshToken);
 // router.post('/revoke-token', authorize(), revokeTokenSchema, revokeToken);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
 router.post("/forgot-password", resetPasswordEmailSchema, forgotPassword);
-// router.post('/validate-reset-token', validateResetTokenSchema, validateResetToken);
+router.post(
+    "/validate-reset-token",
+    validateResetTokenSchema,
+    validateResetToken
+);
+router.post("/reset-password", resetPasswordSchema, resetPassword);
 router.get("/", Auth([Role.admin]), getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
@@ -154,6 +161,22 @@ function forgotPassword(req, res, next) {
             res.json({
                 message:
                     "Please check your email for password reset instructions",
+            })
+        )
+        .catch(next);
+}
+
+function validateResetToken(req, res, next) {
+    AuthService.validateResetToken(req.body)
+        .then((response) => res.json({ message: "Token is valid" }))
+        .catch(next);
+}
+
+function resetPassword(req, res, next) {
+    AuthService.resetPassword(req.body)
+        .then(() =>
+            res.json({
+                message: "Password reset successful, you can now login",
             })
         )
         .catch(next);
