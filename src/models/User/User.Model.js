@@ -14,6 +14,14 @@ class User extends Cursor(Model) {
         return schema;
     }
 
+    static get virtualAttributes() {
+        return ["isExpired"];
+    }
+
+    get isExpired() {
+        return Date.now() >= this.reset_token_expires;
+    }
+
     static modifiers = {
         defaultSelects(query) {
             const { ref } = User;
