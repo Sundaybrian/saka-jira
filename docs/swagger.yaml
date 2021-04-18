@@ -434,6 +434,92 @@ paths:
                                         type: string
                                         example: "Please check your email for password reset instructions"                    
 
+    /accounts/validate-reset-token:
+        post:
+            tags:
+                - "accounts"
+            summary: Validate the reset password token received by email after submitting to the /accounts/forgot-password route
+            operationId: validateResetToken
+            requestBody:
+                required: true
+                content:
+                  application/json:
+                      schema:
+                        type: object
+                        properties:
+                            token:
+                                type: string
+                                example: "3c7f8d9c4cb348ff95a0b74a1452aa24fc9611bb76768bb9eafeeb826ddae2935f1880bc7713318f"
+                        required:
+                            - token
+            responses:
+                "200":
+                    description: Token is valid
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                  message:
+                                      type: string
+                                      example: "Token is valid"
+                "400":
+                    description: Token is invalid
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                  message:
+                                      type: string
+                                      example: "Invalid token"
+    /accounts/reset-password:
+        post:
+            tags:
+                - "accounts"
+            summary: Reset the password for an account
+            operationId: resetPassword
+            requestBody:
+                required: true
+                content:
+                  application/json:
+                      schema:
+                          type: object
+                          properties:
+                              token:
+                                  type: string
+                                  example: "3c7f8d9c4cb348ff95a0b74a1452aa24fc9611bb76768bb9eafeeb826ddae2935f1880bc7713318f"
+                              password:
+                                  type: string
+                                  example: "newPass123"
+                              confirmPassword:
+                                  type: string
+                                  example: "newPass123"
+                          required:
+                              - token
+                              - password
+                              - confirmPassword
+            responses:
+                "200":
+                    description: Password reset was successful so you can now login to the account with the new password
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                message:
+                                    type: string
+                                    example: "Password reset successful, you can now login"
+                "400":
+                    description: Password reset failed due to an invalid token
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                message:
+                                    type: string
+                                    example: "Invalid token"
 
     /accounts:
         get:

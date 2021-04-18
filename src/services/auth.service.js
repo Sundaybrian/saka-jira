@@ -281,9 +281,9 @@ class AuthService {
                 .first();
 
             if (!account) throw "Invalid token";
+            console.log(account, "validatereset token");
             if (!account.isExpired) throw "Reset Token expired";
 
-            console.log(account, "validatereset token");
             return account;
         } catch (error) {
             throw error;
@@ -300,7 +300,7 @@ class AuthService {
                 password_reset: new Date().toISOString(),
             });
 
-            return { message: "passowrd updated" };
+            return { message: "password updated" };
         } catch (error) {
             throw error;
         }
