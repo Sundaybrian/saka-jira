@@ -1,8 +1,8 @@
 // Update with your config settings.
 require("dotenv").config();
-const parse = require("pg-connection-string").parse;
-const pgconfig = parse(process.env.DATABASE_URL);
-pgconfig.ssl = { rejectUnauthorized: false };
+// const parse = require("pg-connection-string").parse;
+// const pgconfig = parse(process.env.DATABASE_URL);
+// pgconfig.ssl = { rejectUnauthorized: false };
 
 module.exports = {
     test: {
@@ -23,21 +23,21 @@ module.exports = {
         },
     },
 
-    development: {
-        client: "pg",
-        connection: pgconfig,
-        migrations: {
-            directory: __dirname + "/db/migrations",
-        },
-        pool: {
-            min: 2,
-            max: 10,
-        },
+    // development: {
+    //     client: "pg",
+    //     connection: pgconfig,
+    //     migrations: {
+    //         directory: __dirname + "/db/migrations",
+    //     },
+    //     pool: {
+    //         min: 2,
+    //         max: 10,
+    //     },
 
-        seeds: {
-            directory: __dirname + "/db/seeds",
-        },
-    },
+    //     seeds: {
+    //         directory: __dirname + "/db/seeds",
+    //     },
+    // },
 
     local: {
         client: "pg",
