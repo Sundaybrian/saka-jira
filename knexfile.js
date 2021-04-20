@@ -56,7 +56,7 @@ module.exports = {
         },
 
         seeds: {
-            directory: __dirname + "/db/seeds",
+            directory: __dirname + "/db/seeds/production",
         },
     },
 
