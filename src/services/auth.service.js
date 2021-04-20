@@ -281,8 +281,8 @@ class AuthService {
                 .first();
 
             if (!account) throw "Invalid token";
-            console.log(account, "validatereset token");
-            if (!account.isExpired) throw "Reset Token expired";
+            console.log(account, account.isExpired, "validatereset token");
+            if (account.isExpired) throw "Reset Token expired";
 
             return account;
         } catch (error) {
@@ -292,7 +292,7 @@ class AuthService {
 
     static async resetPassword({ token, password }) {
         try {
-            const account = await validateResetToken({ token });
+            const account = await this.validateResetToken({ token });
             //create reset token that expires after 24hrs
             const $updatedAccount = await account.$query().patchAndFetch({
                 resetToken: null,
