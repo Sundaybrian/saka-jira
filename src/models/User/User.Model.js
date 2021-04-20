@@ -19,7 +19,7 @@ class User extends Cursor(Model) {
     }
 
     get isExpired() {
-        return Date.now() >= this.reset_token_expires;
+        return Date.now() >= Date.parse(this.reset_token_expires);
     }
 
     static modifiers = {
