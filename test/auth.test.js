@@ -2,6 +2,47 @@ const request = require("supertest");
 const app = require("../src/app");
 const Role = require("../src/constants/roles");
 
+describe("POST /api/v1/accounts/register", () => {
+    it("Should creata a user", async () => {
+        const res = await request(app)
+            .post("/api/v1/accounts/register")
+            .send({
+                first_name: "sunday",
+                last_name: "oliseh",
+                phone_number: "0714482366",
+                email: "sunday16@oliseh.com",
+                password: "myverysuperiorpass",
+                image_url: "https://jkhasdfjdshfhdsfhjkdssdfjk",
+            })
+            .expect("Content-Type", /json/)
+            .expect(201);
+
+        expect(res.body.user.first_name).toEqual("sunday");
+        expect(res.body.user.verification_token).toBeTruthy();
+    });
+
+    // it("Should not login user with wrong password", async () => {
+    //     await request(app)
+    //         .post("/api/v1/accounts/login")
+    //         .send({
+    //             email: "sunday@owner.com",
+    //             password: "sunday omwami",
+    //         })
+    //         .expect("Content-Type", /json/)
+    //         .expect(500);
+    // });
+
+    // it("Should fail to login for a non existenst user", async () => {
+    //     await request(app)
+    //         .post("/api/v1/accounts/login")
+    //         .send({
+    //             email: "fakeuser@gmail.com",
+    //             password: "eveniamfake",
+    //         })
+    //         .expect(500);
+    // });
+});
+
 describe("POST /api/v1/accounts/login", () => {
     it("Should login user", async () => {
         const res = await request(app)

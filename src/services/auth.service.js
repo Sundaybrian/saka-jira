@@ -107,7 +107,7 @@ class AuthService {
 
             //TODO schedule to send verification email 10 minutes
 
-            await EmailService.sendVerificationEmail(account, origin);
+            await EmailService.sendVerificationEmail(newUser, origin);
 
             return {
                 user: signedUser,
@@ -127,7 +127,7 @@ class AuthService {
         await account.$query().patch({
             verified: Date.now(),
             isVerified: true,
-            verificationToken: null,
+            verification_token: null,
         });
     }
 
