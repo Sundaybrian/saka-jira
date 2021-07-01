@@ -9,7 +9,7 @@ exports.signupSchema = (req, res, next) => {
         image_url: Joi.string().empty(""),
         // role: Joi.string().min(5).required(),
         email: Joi.string().email().required(),
-        password: Joi.string().min(8).required(),
+        password: Joi.string().min(4).required(),
         // confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     });
     validateRequest(req, next, schema);
@@ -18,7 +18,7 @@ exports.signupSchema = (req, res, next) => {
 exports.signinSchema = (req, res, next) => {
     const schema = Joi.object({
         email: Joi.string().email().required(),
-        password: Joi.string().min(8).required(),
+        password: Joi.string().required(),
     });
     validateRequest(req, next, schema);
 };
