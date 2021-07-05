@@ -24,6 +24,8 @@ exports.updateSchema = (req, res, next) => {
     const schema = Joi.object({
         title: Joi.string().max(30).empty(""),
         description: Joi.string().max(1000).empty(""),
+        text_data: Joi.string().empty(""),
+        quill_data: Joi.any().empty(""),
         main_skill: Joi.string().max(100),
         job_status_id: Joi.number().integer().empty(""),
         industry_id: Joi.number().integer().empty(""),
