@@ -77,6 +77,73 @@ describe("POST /api/v1/job/", () => {
                 budget_range_max: 50000,
                 latitude: 38.933354,
                 longitude: -1.454646,
+                quill_data: {
+                    ops: [
+                        {
+                            attributes: {
+                                color: "#e60000",
+                                bold: true,
+                            },
+                            insert: "this is an example ",
+                        },
+                        {
+                            attributes: {
+                                header: 1,
+                            },
+                            insert: "\n",
+                        },
+                        {
+                            insert: "This is editable ",
+                        },
+                        {
+                            attributes: {
+                                bold: true,
+                            },
+                            insert: "rich",
+                        },
+                        {
+                            insert: " text, ",
+                        },
+                        {
+                            attributes: {
+                                italic: true,
+                            },
+                            insert: "much",
+                        },
+                        {
+                            insert: " better than a ",
+                        },
+                        {
+                            attributes: {
+                                code: true,
+                            },
+                            insert: "<textarea>",
+                        },
+                        {
+                            insert: "!\nSince it's rich text, you can do things like turn a selection of text ",
+                        },
+                        {
+                            attributes: {
+                                bold: true,
+                            },
+                            insert: "bold",
+                        },
+                        {
+                            insert: ", or add a semantically rendered block quote in the middle of the page, like this:\n\nA wise quote.",
+                        },
+                        {
+                            attributes: {
+                                blockquote: true,
+                            },
+                            insert: "\n",
+                        },
+                        {
+                            insert: "Try it out for yourself!\n",
+                        },
+                    ],
+                },
+                text_data:
+                    "this is an example \nThis is editable rich text, much better than a <textarea>!\nSince it's rich text, you can do things like turn a selection of text bold, or add a semantically rendered block quote in the middle of the page, like this:\n\nA wise quote.\nTry it out for yourself!\n",
             })
             .expect(200);
 
