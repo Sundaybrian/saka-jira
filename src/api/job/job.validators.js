@@ -6,7 +6,8 @@ exports.createSchema = (req, res, next) => {
         title: Joi.string().max(100).required(),
         description: Joi.string().max(1000).required(),
         main_skill: Joi.string().max(100),
-        // job_status_id: Joi.number().integer().required()
+        text_data: Joi.string().empty(""),
+        quill_data: Joi.any(),
         // hiring_manager_id: Joi.number().integer().required(),,
         industry_id: Joi.number().integer().required(),
         budget_range_min: Joi.number().integer(),

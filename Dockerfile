@@ -1,15 +1,27 @@
 FROM node:12.6.0-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # copy package,json and package .lock to work directory
 COPY package*.json ./
+
+ARG NODE_ENV
+RUN if [ "$NODE_ENV" = "local" ]; \
+  then npm install; \
+  else npm install --only=production; \
+  fi
 
 RUN npm install
 
 # copy everything over to the container
 COPY . .
 
-EXPOSE 5000
+ENV PORT 5001
 
-CMD ["npm", "start"]
+EXPOSE $PORT
+
+ARG NODE_ENV
+RUN if [ "$NODE_ENV" = "local" ]; \
+  then npm run local; \
+  else npm start; \
+  fi
