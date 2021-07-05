@@ -41,7 +41,7 @@ class JobService {
                 return null;
             }
 
-            return this.basicDetails(job);
+            return job;
         } catch (error) {
             throw error;
         }
@@ -74,6 +74,7 @@ class JobService {
     }
 
     static async getJob(id) {
+        //TODO optionally fetch text_data or quill_data
         try {
             const job = await Job.query()
                 .where("id", id)
@@ -110,6 +111,7 @@ class JobService {
         }
     }
 
+    // TODO: deprecate infavour of objection modifiers
     static async basicDetails(Job) {
         const {
             id,

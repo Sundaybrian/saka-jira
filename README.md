@@ -368,7 +368,7 @@ multiple tests might fail because of the run --inband command, will figure a way
 
 ```
 To run a test on a single file use
-jest <filename> NODE_ENV=<environment>
+jest <filename> NODE_ENV=<environment> or add npx in the beginning
 ```
 
 ## Development

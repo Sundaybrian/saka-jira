@@ -17,6 +17,8 @@ class Job extends Cursor(Model) {
                 ref("id"),
                 ref("title"),
                 ref("description"),
+                ref("quill_data"),
+                ref("text_data"),
                 ref("start_date"),
                 ref("end_date"),
                 ref("latitude"),
