@@ -139,6 +139,7 @@ docker rm $(docker ps -aq)
 
 -   `npm i knex` install knex
 -   `npx knex init` initialize knex; aknexfile.js will be created
+- ` npx knex migrate:latest --env production`
 
 ```javascript
 // Update with your config settings.
