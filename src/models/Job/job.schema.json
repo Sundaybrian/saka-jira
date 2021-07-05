@@ -40,6 +40,16 @@
             "type": "string",
             "title": "The description of the job."
         },
+        "quill_data":{
+            "$quill_data": "#/properties/quill_data",
+            "type": "object",
+            "title": "The quill_data representation from the quill editor."
+        },
+        "text_data":{
+            "$text_data": "#/properties/text_data",
+            "type": "string",
+            "title": "The text data of the job from quill editor."
+        },
         "main_skill": {
             "$main_skill": "#/properties/main_skill",
             "type": "string",
