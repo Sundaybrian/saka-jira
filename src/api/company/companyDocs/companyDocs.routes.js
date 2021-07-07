@@ -1,5 +1,5 @@
 const { createSchema } = require("./companyDocs.validators");
-// const Role = require("../../constants/roles");
+const Role = require("../../../constants/roles");
 const CompanyDocsService = require("../../../services/companyDocs.service");
 const { Auth } = require("../../../_middlewares/auth");
 const {
@@ -39,7 +39,7 @@ function addDoc(req, res, next) {
         company_id: parseInt(req.company.id),
     };
 
-    CompanyDocsService.addSkill(payload)
+    CompanyDocsService.addDoc(payload)
         .then((doc) => res.json(doc))
         .catch(next);
 }
