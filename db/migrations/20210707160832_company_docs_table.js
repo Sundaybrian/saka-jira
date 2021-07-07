@@ -16,6 +16,7 @@ exports.up = async function (knex) {
         table.string("document_type").notNullable();
         table.string("description", 500).notNullable();
         table.string("document_number");
+        url(table, "document_url");
         addDefaultColumns(table);
     });
 };
