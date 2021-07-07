@@ -33,6 +33,7 @@ class Company extends Cursor(Model) {
     static get relationMappings() {
         // Importing models here is a one way to avoid require loops.
         const User = require("../User/User.Model");
+        const CompanyDocs = require("./CompanyDocs/CompanyDocs.Model");
 
         return {
             owner: {
@@ -41,6 +42,14 @@ class Company extends Cursor(Model) {
                 join: {
                     from: `${tableNames.company}.owner_id`,
                     to: `${tableNames.user}.id`,
+                },
+            },
+            docs: {
+                relation: Model.HasManyRelation,
+                modelClass: CompanyDocs,
+                join: {
+                    from: `${tableNames.company}.id`,
+                    to: `${tableNames.company_docs}.company_id`,
                 },
             },
         };
