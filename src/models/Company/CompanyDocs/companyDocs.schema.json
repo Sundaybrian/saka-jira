@@ -3,7 +3,7 @@
   "type": "object",
   "title": "company docs",
   "description": "Company docs table",
-  "required": ["document_type","description"],
+  "required": ["document_type","description","document_url"],
   "additionalProperties": true,
   "properties": {
       "id": {
@@ -26,6 +26,11 @@
           "type": "string",
           "title": "The document_number of the document."
       },
+      "document_url": {
+        "$id": "#/properties/document_url",
+        "type": "string",
+        "title": "The document_url of the document."
+    },
       "company_id": {
           "$id": "#/properties/company_id",
           "type": "integer",
