@@ -46,6 +46,7 @@ function uploadAvatar(req, res, next) {
             const { Location, key } = response;
             res.json({
                 image_url: `https://uradybackend.tech/api/v1/images/avatar/${key}`,
+                Location,
             });
         })
         .catch(next);
