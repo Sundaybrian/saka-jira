@@ -1,6 +1,6 @@
-## Urady
+## Saka Ajira
 
-Backend for the urady jobs module
+Backend for the Saka Ajira Jobs module
 
 # Express API Starter
 
