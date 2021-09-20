@@ -1,7 +1,7 @@
 {
-    "name": "uradyjobsnodejsapi",
+    "name": "ajirajobsnodejsapi",
     "version": "1.2.0",
-    "description": "nodejs Backend for Urady Jobs Api",
+    "description": "nodejs Backend for Ajira Jobs Api",
     "engines": {
         "node": "12.6.0",
         "npm": "7.5.2"
@@ -28,7 +28,7 @@
         "migrate:prod": "npx knex migrate:latest --env production",
         "seed:prod": "knex seed:run --env production",
         "test:watch": "jest --verbose --watchAll",
-        "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app urady",
+        "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app ajira",
         "compose:up": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
     "compose:build": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml up  --build",
     "compose:down-v": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v",
