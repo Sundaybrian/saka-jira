@@ -1,22 +1,14 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Urady API",
-    "description": "Apis for urady jobs module",
+    "title": "Ajira API",
+    "description": "Apis for Saka Ajira jobs module",
     "version": "1.0.0"
   },
   "servers": [
     {
       "url": "http://localhost:5000/api/v1",
       "description": "Local development server"
-    },
-    {
-      "url": "https://urady.herokuapp.com/api/v1",
-      "description": "Development Server"
-    },
-    {
-      "url": "https://uradybackend.tech/api/v1",
-      "description": "Prod Server"
     }
   ],
   "paths": {
