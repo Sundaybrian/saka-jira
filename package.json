@@ -1,7 +1,7 @@
 {
-    "name": "uradyjobsnodejsapi",
+    "name": "ajirajobsnodejsapi",
     "version": "1.2.0",
-    "description": "nodejs Backend for Urady Jobs Api",
+    "description": "nodejs Backend for Ajira Jobs Api",
     "engines": {
         "node": "12.6.0",
         "npm": "7.5.2"
@@ -21,11 +21,18 @@
         "rollback": "knex migrate:rollback",
         "rollback:test": "knex migrate:rollback --env test",
         "seed": "knex seed:run",
+        "seed:local": "knex seed:run --env local",
+        "rollback:local": "knex migrate:rollback --env local",
+        "migrate:local": "npx knex migrate:latest --env local",
         "rollback:prod": "knex migrate:rollback --env production",
         "migrate:prod": "npx knex migrate:latest --env production",
         "seed:prod": "knex seed:run --env production",
         "test:watch": "jest --verbose --watchAll",
-        "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app urady"
+        "pg:push": "heroku pg:reset --confirm urady && heroku pg:push urady DATABASE_URL --app ajira",
+        "compose:up": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "compose:build": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml up  --build",
+    "compose:down-v": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v",
+    "compose:down": "NODE_ENV=local docker-compose -f docker-compose.yml -f docker-compose.dev.yml down "
     },
     "keywords": [],
     "author": "Sundaybrian",
@@ -37,7 +44,7 @@
     "dependencies": {
         "@joi/date": "^2.0.1",
         "@sendgrid/mail": "^7.4.2",
-        "agenda": "^4.0.1",
+        "agenda": "^4.1.2",
         "aws-sdk": "^2.877.0",
         "bcryptjs": "^2.4.3",
         "compression": "^1.7.4",
@@ -48,12 +55,14 @@
         "env-cmd": "^10.1.0",
         "express": "^4.17.1",
         "express-rate-limit": "^5.2.3",
+        "googleapis": "^71.0.0",
         "helmet": "^4.4.1",
         "joi": "^17.2.1",
         "jsonwebtoken": "^8.5.1",
         "knex": "^0.21.5-next2",
         "morgan": "^1.10.0",
         "multer": "^1.4.2",
+        "nodemailer": "^6.5.0",
         "objection": "^2.2.3",
         "objection-cursor": "^1.2.4",
         "objection-filter": "^4.1.1",

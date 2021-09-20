@@ -1,14 +1,17 @@
+require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
+
 const apikey =
     process.env.NODE_ENV == "production"
-        ? "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"
-        : process.env.SENDGRID_API_KEY;
+        ? "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"
+        : "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";
 
 sgMail.setApiKey(apikey);
 
 module.exports = sendEmail;
 
-async function sendEmail({ to, subject, html, from = "uradytech@gmail.com" }) {
+async function sendEmail({ to, subject, html, from = "Uraditech@gmail.com" }) {
+try {
     const msg = {
         to,
         subject,
@@ -17,4 +20,8 @@ async function sendEmail({ to, subject, html, from = "uradytech@gmail.com" }) {
     };
 
     await sgMail.send(msg);
+} catch (error) {
+    throw error
+}
+
 }

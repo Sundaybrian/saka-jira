@@ -3,6 +3,10 @@ const {
     signupSchema,
     updateSchema,
     verifyEmailSchema,
+    resetPasswordEmailSchema,
+    validateResetTokenSchema,
+    resetPasswordSchema,
+    refreshTokenSchema,
 } = require("./auth.validators");
 const Role = require("../../constants/roles");
 const router = require("express").Router();
@@ -13,7 +17,16 @@ module.exports = router;
 
 router.post("/login", signinSchema, login);
 router.post("/register", signupSchema, register);
+router.post("/refresh-token", refreshTokenSchema, refreshToken);
+// router.post('/revoke-token', authorize(), revokeTokenSchema, revokeToken);
 router.post("/verify-email", verifyEmailSchema, verifyEmail);
+router.post("/forgot-password", resetPasswordEmailSchema, forgotPassword);
+router.post(
+    "/validate-reset-token",
+    validateResetTokenSchema,
+    validateResetToken
+);
+router.post("/reset-password", resetPasswordSchema, resetPassword);
 router.get("/", Auth([Role.admin]), getAll);
 router.get("/:id", Auth(), getById);
 router.post("/create-staff", Auth([Role.admin]), signupSchema, create);
@@ -22,16 +35,17 @@ router.delete("/:id", Auth(), _delete);
 
 function login(req, res, next) {
     const { email, password } = req.body;
-    AuthService.login(email, password)
-        .then(({ user, token }) => {
-            res.json({ user, token });
+    const ipAddress = req.ip;
+    AuthService.login(email, password, ipAddress)
+        .then(({ user, token, refreshToken }) => {
+            setTokenCookie(res, refreshToken);
+            res.json({ user, token, refreshToken });
         })
         .catch(next);
 }
 
 function register(req, res, next) {
     req.body.role = Role.user;
-
     AuthService.register(req.body, req.hostname)
         .then(({ user, token }) => {
             return res.status(201).json({
@@ -43,6 +57,19 @@ function register(req, res, next) {
         })
         .catch(next);
 }
+
+function refreshToken(req, res, next) {
+    const rftoken = req.body.refreshToken;
+
+    const ipAddress = req.ip;
+    AuthService.refreshToken({ rftoken, ipAddress })
+        .then(({ refreshToken, token, user }) => {
+            setTokenCookie(res, refreshToken);
+            res.json({ user, token, refreshToken });
+        })
+        .catch(next);
+}
+
 // TODO DEPRECATE
 function registerStaff(req, res, next) {
     req.body.role = req.body.role || Role.admin;
@@ -126,4 +153,42 @@ function _delete(req, res, next) {
             })
         )
         .catch(next);
+}
+
+function forgotPassword(req, res, next) {
+    AuthService.forgotPassword(req.body, req.get("origin"))
+        .then(() =>
+            res.json({
+                message:
+                    "Please check your email for password reset instructions",
+            })
+        )
+        .catch(next);
+}
+
+function validateResetToken(req, res, next) {
+    AuthService.validateResetToken(req.body)
+        .then((response) => res.json({ message: "Token is valid" }))
+        .catch(next);
+}
+
+function resetPassword(req, res, next) {
+    AuthService.resetPassword(req.body)
+        .then(() =>
+            res.json({
+                message: "Password reset successful, you can now login",
+            })
+        )
+        .catch(next);
+}
+
+// helpers
+function setTokenCookie(res, token) {
+    // create cookie with refresh token that expires in 7days
+    const cookieOptions = {
+        httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    };
+
+    res.cookie("refreshToken", token, cookieOptions);
 }

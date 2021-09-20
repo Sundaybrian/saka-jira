@@ -2,12 +2,13 @@ const crypto = require("crypto");
 const jwt = require("../utils/jwt");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User/User.Model");
-const scheduler = require("../jobs/scheduler");
+const RefreshToken = require("../models/RefreshToken/RefreshToken.Model");
+const EmailService = require("./email.service");
 
 class AuthService {
     constructor() {}
 
-    static async login(email, password) {
+    static async login(email, password, ipAddress) {
         const account = await this.getAccount({ email });
         if (
             !account ||
@@ -27,11 +28,56 @@ class AuthService {
             .first();
 
         const token = await jwt.sign(loggedIn.toJSON());
+        const refreshToken = await this.generateRefreshToken(
+            loggedIn.toJSON(),
+            ipAddress
+        );
 
         return {
             user: loggedIn,
             token,
+            refreshToken: refreshToken.token,
         };
+    }
+
+    static async refreshToken({ rftoken, ipAddress }) {
+        try {
+            const refreshToken = await this.getRefreshToken(rftoken);
+            const account = await this.getAccount({
+                id: refreshToken.account_id,
+            });
+
+            // replace old refresh token with a new one and save
+            const newRefreshToken = await this.generateRefreshToken(
+                account,
+                ipAddress
+            );
+
+            const $patchedOldToken = await refreshToken.$query().patch({
+                revoked: new Date().toISOString(),
+                revokedByIp: ipAddress,
+                replacedByToken: newRefreshToken.token,
+            });
+
+            //generate jwt
+            const loggedIn = await account
+                .$query()
+                .modify("defaultSelectsWithoutPass")
+                .withGraphFetched(
+                    `[freelancer(defaultSelects), hiringManager(defaultSelects)]`
+                )
+                .first();
+
+            const token = await jwt.sign(loggedIn.toJSON());
+
+            return {
+                user: loggedIn,
+                token,
+                refreshToken: newRefreshToken.token,
+            };
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async register(userInput, origin) {
@@ -39,10 +85,11 @@ class AuthService {
             const account = await this.getAccount({ email: userInput.email });
             if (account) {
                 // schedule to send email after 2mins
-                await scheduler.scheduleAlreadyRegisteredEmail({
-                    email: userInput.email,
-                    origin,
-                });
+
+                await EmailService.sendAlreadyRegisteredEmail(
+                    userInput.email,
+                    origin
+                );
 
                 throw `Email ${userInput.email} is already registered`;
             }
@@ -58,11 +105,9 @@ class AuthService {
 
             const token = await jwt.sign(signedUser.toJSON());
 
-            // schedule to send verification email 10 minutes
-            await scheduler.scheduleWelcomeEmail({
-                account,
-                origin,
-            });
+            //TODO schedule to send verification email 10 minutes
+
+            await EmailService.sendVerificationEmail(newUser, origin);
 
             return {
                 user: signedUser,
@@ -82,7 +127,7 @@ class AuthService {
         await account.$query().patch({
             verified: Date.now(),
             isVerified: true,
-            verificationToken: null,
+            verification_token: null,
         });
     }
 
@@ -104,26 +149,32 @@ class AuthService {
     static async update(id, params) {
         const account = await this.getAccount({ id });
 
-        // validate if email was changed
-        if (
-            params.email &&
-            account.email !== params.email &&
-            (await this.getAccount({ email: params.email }))
-        ) {
-            const error = new Error(`Email ${params.email} is already taken`);
+        try {
+            // validate if email was changed
+            if (
+                params.email &&
+                account.email !== params.email &&
+                (await this.getAccount({ email: params.email }))
+            ) {
+                const error = new Error(
+                    `Email ${params.email} is already taken`
+                );
+                throw error;
+            }
+
+            // hash password if it was entered
+            if (params.password) {
+                params.password = await this.hash(params.password);
+            }
+
+            const updatedUser = await User.query().patchAndFetchById(id, {
+                ...params,
+            });
+
+            return this.basicDetails(updatedUser);
+        } catch (error) {
             throw error;
         }
-
-        // hash password if it was entered
-        if (params.password) {
-            params.password = await this.hash(params.password);
-        }
-
-        const updatedUser = await User.query().patchAndFetchById(id, {
-            ...params,
-        });
-
-        return this.basicDetails(updatedUser);
     }
 
     // TODO MAKE SO IT CAN QUERY FOR DIFFERENT TYPES OF USERS
@@ -170,6 +221,7 @@ class AuthService {
             password,
             role,
             phone_number,
+            image_url,
         } = params;
 
         // hash password and verification token
@@ -183,6 +235,7 @@ class AuthService {
             last_name,
             password: hashedPassword,
             phone_number,
+            image_url,
             role: role,
             active: true,
             isVerified: false,
@@ -193,6 +246,97 @@ class AuthService {
         return account;
     }
 
+    static async forgotPassword({ email }, origin) {
+        try {
+            const account = await User.query()
+                .where({
+                    email,
+                })
+                .first();
+
+            //always return ok to prevent email enumeration
+            if (!account) return;
+
+            //create reset token that expires after 24hrs
+            const $updatedAccount = await account.$query().patchAndFetch({
+                resetToken: this.randomTokenString(),
+                reset_token_expires: new Date(
+                    Date.now() + 24 * 60 * 60 * 1000
+                ).toISOString(),
+            });
+
+            //TODO send email sendPasswordResetEmail via agendajs
+            await EmailService.sendPasswordResetEmail($updatedAccount, origin);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async validateResetToken({ token }) {
+        try {
+            const account = await User.query()
+                .where({
+                    resetToken: token,
+                })
+                .first();
+
+            if (!account) throw "Invalid token";
+            console.log(account, account.isExpired, "validatereset token");
+            if (account.isExpired) throw "Reset Token expired";
+
+            return account;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async resetPassword({ token, password }) {
+        try {
+            const account = await this.validateResetToken({ token });
+            //create reset token that expires after 24hrs
+            const $updatedAccount = await account.$query().patchAndFetch({
+                resetToken: null,
+                password: await this.hash(password),
+                password_reset: new Date().toISOString(),
+            });
+
+            return { message: "password updated" };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // =========================helpers======================
+
+    static async getRefreshToken(token) {
+        try {
+            const refreshToken = await RefreshToken.query()
+                .where({ token })
+                .first();
+            if (!refreshToken || !refreshToken.isActive) throw "Invalid token";
+            return refreshToken;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async generateRefreshToken(account, ipAddress) {
+        //creat a refresh token that expires in 7days
+        try {
+            const token = await RefreshToken.query().insert({
+                account_id: account.id,
+                token: this.randomTokenString(),
+                expires: new Date(
+                    Date.now() + 7 * 24 * 60 * 60 * 1000
+                ).toISOString(),
+                createdByIp: ipAddress,
+            });
+
+            return token;
+        } catch (error) {
+            throw error;
+        }
+    }
     static async hash(password) {
         return await bcrypt.hash(password, 8);
     }
@@ -213,6 +357,7 @@ class AuthService {
             created,
             updated,
             isVerified,
+            image_url,
         } = account;
         return {
             id,
@@ -224,6 +369,7 @@ class AuthService {
             created,
             updated,
             isVerified,
+            image_url,
         };
     }
 }

@@ -6,7 +6,7 @@ class MailService {
     static async sendVerificationEmail(account, origin) {
         let message;
         if (origin) {
-            const verifyUrl = `${origin}/api/v1/accounts/verify-email?token=${account.verification_token}`;
+            const verifyUrl = `${origin}/verify-email?token=${account.verification_token}`;
             message = `<p> Please click the below link to verify your email address:</p>
             <p><a href="${verifyUrl}">${verifyUrl}</a></p>
             `;
@@ -29,7 +29,7 @@ class MailService {
     static async sendAlreadyRegisteredEmail(email, origin) {
         let message;
         if (origin) {
-            message = `<p>If you don't know your password please visit the <a href="${origin}/api/v1/accounts/forgot-password">forgot password</a> page.</p>`;
+            message = `<p>If you don't know your password please visit the <a href="https://portal.urady.tech/forgot-password">forgot password</a> page.</p>`;
         } else {
             message = `<p>If you don't know your password you can reset it via the <code>/accounts/forgot-password</code> api route.</p>`;
         }
@@ -47,7 +47,7 @@ class MailService {
     static async sendPasswordResetEmail(account, origin) {
         let message;
         if (origin) {
-            const resetUrl = `${origin}/api/v1/accounts/reset-password?token=${account.resetToken}`;
+            const resetUrl = `https://portal.urady.tech/reset-password?token=${account.resetToken}`;
             message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
                        <p><a href="${resetUrl}">${resetUrl}</a></p>`;
         } else {

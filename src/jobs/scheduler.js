@@ -1,4 +1,4 @@
-const agenda = require("./agenda");
+let agenda = require("./agenda.js");
 
 module.exports = {
     scheduleWelcomeEmail: async ({ account, origin }) => {
@@ -17,5 +17,14 @@ module.exports = {
                 origin,
             }
         );
+    },
+
+    schedulePassswordResetEmail: async ({ account, origin }) => {
+        await agenda.schedule("in 1 minutes", "send-password-reset-email", {
+            account,
+            origin,
+        });
+
+        // console.log(res, "schedulerr");
     },
 };

@@ -1,8 +1,8 @@
 // Update with your config settings.
 require("dotenv").config();
-const parse = require("pg-connection-string").parse;
-const pgconfig = parse(process.env.DATABASE_URL);
-pgconfig.ssl = { rejectUnauthorized: false };
+// const parse = require("pg-connection-string").parse;
+// const pgconfig = parse(process.env.DATABASE_URL);
+// pgconfig.ssl = { rejectUnauthorized: false };
 
 module.exports = {
     test: {
@@ -23,26 +23,25 @@ module.exports = {
         },
     },
 
-    development: {
-        client: "pg",
-        connection: pgconfig,
-        migrations: {
-            directory: __dirname + "/db/migrations",
-        },
-        pool: {
-            min: 2,
-            max: 10,
-        },
+    // development: {
+    //     client: "pg",
+    //     connection: pgconfig,
+    //     migrations: {
+    //         directory: __dirname + "/db/migrations",
+    //     },
+    //     pool: {
+    //         min: 2,
+    //         max: 10,
+    //     },
 
-        seeds: {
-            directory: __dirname + "/db/seeds",
-        },
-    },
+    //     seeds: {
+    //         directory: __dirname + "/db/seeds",
+    //     },
+    // },
 
     local: {
         client: "pg",
         connection: {
-            // host: "127.0.0.1",
             database: process.env.POSTGRES_DB,
             user: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
@@ -56,7 +55,7 @@ module.exports = {
         },
 
         seeds: {
-            directory: __dirname + "/db/seeds",
+            directory: __dirname + "/db/seeds/production",
         },
     },
 

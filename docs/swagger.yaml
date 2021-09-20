@@ -1,16 +1,12 @@
 openapi: 3.0.0
 info:
-    title: Urady API
-    description: Apis for urady jobs module
+    title: Ajira Apis
+    description: Apis for Ajira jobs module
     version: 1.0.0
 
 servers:
     - url: http://localhost:5000/api/v1
-      description: Local development server
-    - url: https://urady.herokuapp.com/api/v1
-      description: Development Server
-    - url: https://uradybackend.tech/api/v1
-      description: Prod Server    
+      description: Local development server  
 
 paths:
     /accounts/register:
@@ -169,6 +165,12 @@ paths:
             responses:
                 "200":
                     description: Accounts details and jwt token
+                    headers:
+                        Set-Cookie:
+                            description: "`refreshToken`"
+                            schema:
+                                type: string
+                                example: refreshToken=534654398597475894375873498758943758743895789347598347597349; Path=/; Expires=Tue, 16 Jun 2021 09:14:17 GMT; HttpOnly
                     content:
                         application/json:
                             schema:
@@ -219,6 +221,9 @@ paths:
                                     token:
                                         type: string
                                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+                                    refreshToken:
+                                        type: string
+                                        example: "8578934875897348ur8rfu3489r8943uf8438rt8r489383489u"    
                 "500":
                     description: Email or password is incorrect
                     content:
@@ -229,7 +234,95 @@ paths:
                                     message:
                                         type: string
                                         example: "Email or password is incorrect"
-
+    /accounts/refresh-token:
+        post:
+            tags:
+              - "accounts"
+            summary: Use a refresh token to generate a new JWT token and a new refresh token
+            description: The refresh token is sent and returned via cookies and body, in future it will be via cookies only
+            operationId: refreshToken
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                refreshToken:
+                                    type: string
+                                    example: "75698348965689436784376789347679834769734789673489768967983679"
+            responses:
+                "200":
+                    description: Accounts details and jwt token
+                    headers:
+                        Set-Cookie:
+                            description: "`refreshToken`"
+                            schema:
+                                type: string
+                                example: refreshToken=534654398597475894375873498758943758743895789347598347597349; Path=/; Expires=Tue, 16 Jun 2021 09:14:17 GMT; HttpOnly
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    user:
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: integer
+                                                example: 1
+                                            first_name:
+                                                type: string
+                                                example: "sunday"
+                                            last_name:
+                                                type: string
+                                                example: "owner"
+                                            phone_number:
+                                                type: string
+                                                example: "0714382366"
+                                            email:
+                                                type: string
+                                                example: "sunday@owner.com"
+                                            image_url:
+                                                type: string
+                                                example: ""     
+                                            role:
+                                                type: string
+                                                example: "user"
+                                            freelancer:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                        example: 1
+                                                    user_id:
+                                                        type: integer
+                                                        example: 1
+                                            hiringManager:
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        type: integer
+                                                        example: 1
+                                                    user_id:
+                                                        type: integer
+                                                        example: 1
+                                    token:
+                                        type: string
+                                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWIxMmUxOTdlMDZhNzZjY2RlZmMxMjEiLCJpZCI6IjVlYjEyZTE5N2UwNmE3NmNjZGVmYzEyMSIsImlhdCI6MTU4ODc1ODE1N30.xR9H0STbFOpSkuGA9jHNZOJ6eS7umHHqKRhI807YT1Y"
+                                    refreshToken:
+                                        type: string
+                                        example: "8578934875897348ur8rfu3489r8943uf8438rt8r489383489u"    
+                "500":
+                    description: The refresh token is invalid, revoked or expired
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Invalid token"                                            
     /accounts/create-staff:
         post:
             tags:
@@ -307,6 +400,122 @@ paths:
                     $ref: "#/components/responses/UnauthorizedError"
                 "403":
                     $ref: "#/components/responses/AccessDenied"
+    /accounts/forgot-password:
+        post:
+            tags:
+                - "accounts"
+            summary: Submit Email address to reset the password on an account
+            operationId: forgotPassword
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email: 
+                                    type: string
+                                    example: "sunday@owner.com"
+                            required:
+                                - email
+            responses:
+                "200":
+                    description: The requested was received and an email has been sent to the specified address with password reset instructions (if the email is associated with an account)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Please check your email for password reset instructions"                    
+
+    /accounts/validate-reset-token:
+        post:
+            tags:
+                - "accounts"
+            summary: Validate the reset password token received by email after submitting to the /accounts/forgot-password route
+            operationId: validateResetToken
+            requestBody:
+                required: true
+                content:
+                  application/json:
+                      schema:
+                        type: object
+                        properties:
+                            token:
+                                type: string
+                                example: "3c7f8d9c4cb348ff95a0b74a1452aa24fc9611bb76768bb9eafeeb826ddae2935f1880bc7713318f"
+                        required:
+                            - token
+            responses:
+                "200":
+                    description: Token is valid
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                  message:
+                                      type: string
+                                      example: "Token is valid"
+                "400":
+                    description: Token is invalid
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                  message:
+                                      type: string
+                                      example: "Invalid token"
+    /accounts/reset-password:
+        post:
+            tags:
+                - "accounts"
+            summary: Reset the password for an account
+            operationId: resetPassword
+            requestBody:
+                required: true
+                content:
+                  application/json:
+                      schema:
+                          type: object
+                          properties:
+                              token:
+                                  type: string
+                                  example: "3c7f8d9c4cb348ff95a0b74a1452aa24fc9611bb76768bb9eafeeb826ddae2935f1880bc7713318f"
+                              password:
+                                  type: string
+                                  example: "newPass123"
+                              confirmPassword:
+                                  type: string
+                                  example: "newPass123"
+                          required:
+                              - token
+                              - password
+                              - confirmPassword
+            responses:
+                "200":
+                    description: Password reset was successful so you can now login to the account with the new password
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                message:
+                                    type: string
+                                    example: "Password reset successful, you can now login"
+                "400":
+                    description: Password reset failed due to an invalid token
+                    content:
+                        application/json:
+                          schema:
+                              type: object
+                              properties:
+                                message:
+                                    type: string
+                                    example: "Invalid token"
 
     /accounts:
         get:
@@ -3596,6 +3805,8 @@ paths:
                 "404":
                     $ref: "#/components/responses/NotFoundError"
                     
+                    
+                    
     /company/mine:
 
         get:
@@ -3698,7 +3909,160 @@ paths:
                     $ref: "#/components/responses/NotFoundError"
                 "401":
                     $ref: "#/components/responses/UnauthorizedError"
-
+                    
+    /company/{id}/company-docs:
+        parameters:
+            - in: path
+              name: id
+              description: Company ID
+              required: true
+              example: 1
+              schema:
+                  type: integer
+                  
+        get:
+            tags:
+                - "company"
+            summary: Get Company docs by its ID
+            description: Open to all users and admins
+            operationId: getcompanydocsbyid
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Company docs fetched successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: integer
+                                            example: 1
+                                        document_type:
+                                            type: string
+                                            example: "kra pin"
+                                        description:
+                                            type: string
+                                            example: "kra pin for company x"
+                                        document_number:
+                                            type: string
+                                            example: "A007yrjfbui"
+                                        document_url:
+                                            type: string
+                                            example: "https://some.massivedynamics.com"
+                "401":
+                    $ref: "#/components/responses/UnauthorizedError"
+                "404":
+                    $ref: "#/components/responses/NotFoundError"          
+        post:
+            tags:
+                - "company"
+            summary: Create a company document
+            description: Restricted to  owners
+            operationId: createcompanydocument
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                document_type:
+                                    type: string
+                                    example: "kra pin"
+                                description:
+                                    type: string
+                                    example: "kra pin for company x"
+                                document_number:
+                                    type: string
+                                    example: "A007yrjfbui"
+                                document_url:
+                                    type: string
+                                    example: "https://some.massivedynamics.com"
+                                
+                            required:
+                                - document_type
+                                - description
+                                - document_url
+            responses:
+                "200":
+                    description: Company created successfully, detail of the company are returned
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                        example: 1
+                                    document_type:
+                                        type: string
+                                        example: "kra pin"
+                                    description:
+                                        type: string
+                                        example: "kra pin for company x"
+                                    document_number:
+                                        type: string
+                                        example: "A007yrjfbui"
+                                    document_url:
+                                        type: string
+                                        example: "https://some.massivedynamics.com"
+                "500":
+                    description: Description is missing
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Description is required"                
+    /company/{id}/company-docs/{doc_id}:
+        parameters:
+            - in: path
+              name: id
+              description: Company ID
+              required: true
+              example: 1
+              schema:
+                  type: integer
+            - in: path
+              name: doc_id
+              description: document id
+              required: true
+              example: 1
+              schema:
+                  type: integer
+                  
+                  
+        delete:
+            tags:
+                - "company"
+            summary: Delete Company docs by its ID
+            description: Open to admins
+            operationId: deletecompanydocsbyid
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: Id of the deleted company doc
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                        example: 1
+                "404":
+                    $ref: "#/components/responses/NotFoundError"
+                "401":
+                    $ref: "#/components/responses/UnauthorizedError"
 components:
     securitySchemes:
         bearerAuth:

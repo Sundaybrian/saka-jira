@@ -18,7 +18,7 @@ const upload = multer({
         fileSize: 1000000,
     },
     fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|doc|docx|pdf)$/)) {
             return cb(new Error("please upload an image"));
         }
 
@@ -46,6 +46,7 @@ function uploadAvatar(req, res, next) {
             const { Location, key } = response;
             res.json({
                 image_url: `https://uradybackend.tech/api/v1/images/avatar/${key}`,
+                Location,
             });
         })
         .catch(next);

@@ -19,23 +19,25 @@ class FreelancerService {
     static async getAllFreelancers(next = null, match, limit) {
         try {
             let freelancers = await Freelancer.query()
+                .alias("f")
                 .where(match)
                 .modify("defaultSelects")
                 .withGraphFetched(
                     `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass), customSkills(defaultSelects)]`
                 )
-                .orderBy("id")
+                .orderBy("f.id")
                 .limit(limit)
                 .cursorPage();
 
             if (next) {
                 freelancers = await Freelancer.query()
+                    .alias("f")
                     .where(match)
                     .modify("defaultSelects")
                     .withGraphFetched(
                         `[industry(defaultSelects),skills(defaultSelects),user(defaultSelectsWithoutPass),customSkills(defaultSelects)]`
                     )
-                    .orderBy("id")
+                    .orderBy("f.id")
                     .limit(limit)
                     .cursorPage(next);
             }
@@ -179,9 +181,7 @@ class FreelancerService {
             //     jobsPosted: [ { count: '1' } ],
             //     completed: [ { count: '0' } ]
             //     rating: [{avg:'}]
-            // }
-
-            console.log(jobsPosted, rating);
+            // } console.log(jobsPosted, rating);
             return {
                 inprogress: parseInt(inprogress[0].count),
                 jobsPosted: parseInt(jobsPosted[0].count),

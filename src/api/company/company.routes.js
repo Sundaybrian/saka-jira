@@ -1,4 +1,3 @@
-const router = require("express").Router();
 const { Auth } = require("../../_middlewares/auth");
 const Role = require("../../constants/roles");
 const { createSchema, updateSchema } = require("./company.validators");
@@ -9,6 +8,14 @@ const {
 } = require("../../utils/_permissions/company");
 
 const CompanyService = require("../../services/company.service");
+
+const CompanyDocs = require("./companyDocs/companyDocs.routes");
+
+const router = require("express").Router({
+    mergeParams: true,
+});
+
+router.use("/:id/company-docs", CompanyDocs);
 
 router.post("/", Auth([Role.user]), createSchema, create);
 router.get("/", Auth([Role.admin]), getAllCompanies);
